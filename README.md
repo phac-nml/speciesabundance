@@ -1,10 +1,11 @@
 [![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A523.04.3-brightgreen.svg)](https://www.nextflow.io/)
 
-# Example Pipeline for IRIDA Next
+# SpeciesAbundance Pipeline
 
-This is an example pipeline to be used for integration with IRIDA Next.
+This is the in-development nf-core-based pipeline for SpeciesAbundance.
+This pipeline is adapted from the existing [SpeciesAbundance plugin] (https://github.com/Public-Health-Bioinformatics/irida-plugin-species-abundance) and [Nextflow pipeline] (https://github.com/BCCDC-PHL/taxon-abundance) developed by Dan Fornika.
 
-# Input
+# Input (in development)
 
 The input to the pipeline is a standard sample sheet (passed as `--input samplesheet.csv`) that looks like:
 
@@ -14,13 +15,13 @@ The input to the pipeline is a standard sample sheet (passed as `--input samples
 
 The structure of this file is defined in [assets/schema_input.json](assets/schema_input.json). Validation of the sample sheet is performed by [nf-validation](https://nextflow-io.github.io/nf-validation/).
 
-# Parameters
+# Parameters (in development)
 
 The main parameters are `--input` as defined above and `--output` for specifying the output results directory. You may wish to provide `-profile singularity` to specify the use of singularity containers and `-r [branch]` to specify which GitHub branch you would like to run.
 
 Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](nextflow_schmea.json).
 
-# Running
+# Running (in development)
 
 To run the pipeline, please do:
 
@@ -30,7 +31,7 @@ nextflow run phac-nml/speciesabundance -profile singularity -r main -latest --in
 
 Where the `samplesheet.csv` is structured as specified in the [Input](#input) section.
 
-# Output
+# Output (in development)
 
 A JSON file for loading metadata into IRIDA Next is output by this pipeline. The format of this JSON file is specified in our [Pipeline Standards for the IRIDA Next JSON](https://github.com/phac-nml/pipeline-standards#32-irida-next-json). This JSON file is written directly within the `--outdir` provided to the pipeline with the name `iridanext.output.json.gz` (ex: `[outdir]/iridanext.output.json.gz`).
 
@@ -85,7 +86,7 @@ Within the `files` section of this JSON file, all of the output paths are relati
 
 There is also a pipeline execution summary output file provided (specified in the above JSON as `"global": [{"path":"summary/summary.txt.gz"}]`). However, there is no formatting specification for this file.
 
-## Test profile
+## Test profile (in development)
 
 To run with the test profile, please do:
 
