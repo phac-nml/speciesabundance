@@ -3,7 +3,8 @@
 # SpeciesAbundance Pipeline
 
 This is the in-development nf-core-based pipeline for SpeciesAbundance.
-This pipeline is adapted from the existing [SpeciesAbundance plugin] (https://github.com/Public-Health-Bioinformatics/irida-plugin-species-abundance) and [Nextflow pipeline] (https://github.com/BCCDC-PHL/taxon-abundance) developed by Dan Fornika.
+
+This pipeline is adapted from the existing [SpeciesAbundance plugin](https://github.com/Public-Health-Bioinformatics/irida-plugin-species-abundance) and [Nextflow pipeline](https://github.com/BCCDC-PHL/taxon-abundance) developed by Dan Fornika.
 
 # Input (in development)
 

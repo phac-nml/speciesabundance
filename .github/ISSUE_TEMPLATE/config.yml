@@ -1,0 +1,4 @@
+contact_links:
+  - name: "GitHub"
+    url: https://github.com/phac-nml/speciesabundance
+    about: The GitHub page for development.
