@@ -17,7 +17,7 @@ process SAMPLESHEET_CHECK {
     when:
     task.ext.when == null || task.ext.when
 
-    script: // This script is bundled with the pipeline, in phac-nml/iridanextexample/bin/
+    script: // This script is bundled with the pipeline, in phac-nml/speciesabundance/bin/
     """
     check_samplesheet.py \\
         $samplesheet \\
