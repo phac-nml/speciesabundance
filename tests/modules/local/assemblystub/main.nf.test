@@ -1,0 +1,38 @@
+nextflow_process {
+
+    name "Test Process ASSEMBLY_STUB"
+    script "modules/local/assemblystub/main.nf"
+    process "ASSEMBLY_STUB"
+
+    test("Basic execution, check output.") {
+
+        when {
+            params {
+                outdir = "tests/results"
+            }
+            process {
+                """
+                input[0] = new Tuple(["id": "SAMPLE1"], [file("sample1_R1.fastq.gz"), file("sample1_R2.fastq.gz")])
+                """
+            }
+        }
+
+        then {
+            assert process.success
+
+            with(process.out) {
+                // check if emitted output has been created
+                assert assembly.size() == 1
+
+                // parse assembly file
+                def assembly_header = path(assembly.get(0)[1]).linesGzip[0]
+                def assembly_body = path(assembly.get(0)[1]).linesGzip[1]
+
+                assert assembly_header.equals(">SAMPLE1-stub-assembly")
+                assert assembly_body.equals("ACGTAACCGGTTAAACCCGGGTTTAAAACCCCGGGGTTTTAAAAACCCCCGGGGGTTTTT")
+            }
+        }
+
+    }
+
+}

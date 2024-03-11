@@ -1,0 +1,51 @@
+nextflow_process {
+
+    name "Test Process IRIDA_NEXT_OUTPUT"
+    script "modules/local/iridanextoutput/main.nf"
+    process "IRIDA_NEXT_OUTPUT"
+
+    test("Basic execution, check output.") {
+
+        when {
+            params {
+                outdir = "tests/results"
+            }
+            process {
+                """
+                input[0] = [file("$baseDir/tests/data/SAMPLE1.simple.json.gz"), file("$baseDir/tests/data/SAMPLE2.simple.json.gz"), file("$baseDir/tests/data/SAMPLE3.simple.json.gz")]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+
+            with(process.out) {
+                // check if emitted output has been created
+                assert output_json.size() == 1
+
+                // parse output json file
+                def json_string = path(output_json.get(0)).linesGzip.join("\n")
+                def parser = new groovy.json.JsonSlurper()
+                def irida_json = parser.parseText(json_string)
+
+                assert irida_json.files.global[0].path.equals("summary/summary.txt.gz")
+
+                assert irida_json.files.samples.SAMPLE1[0].path.equals("assembly/SAMPLE1.assembly.fa.gz")
+                assert irida_json.files.samples.SAMPLE2[0].path.equals("assembly/SAMPLE2.assembly.fa.gz")
+                assert irida_json.files.samples.SAMPLE3[0].path.equals("assembly/SAMPLE3.assembly.fa.gz")
+
+                assert irida_json.metadata.samples.SAMPLE1.'reads.1'.equals("sample1_R1.fastq.gz")
+                assert irida_json.metadata.samples.SAMPLE1.'reads.2'.equals("sample1_R2.fastq.gz")
+
+                assert irida_json.metadata.samples.SAMPLE2.'reads.1'.equals("sample2_R1.fastq.gz")
+                assert irida_json.metadata.samples.SAMPLE2.'reads.2'.equals("sample2_R2.fastq.gz")
+
+                assert irida_json.metadata.samples.SAMPLE3.'reads.1'.equals("sample1_R1.fastq.gz")
+                assert irida_json.metadata.samples.SAMPLE3.'reads.2'.equals("null")
+            }
+        }
+
+    }
+
+}

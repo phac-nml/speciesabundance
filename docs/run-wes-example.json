@@ -1,0 +1,18 @@
+{
+    "workflow_params": {
+        "--input": "[SAMPLESHEET]",
+        "-r": "main"
+    },
+    "workflow_type": "DSL2",
+    "workflow_type_version": "22.10.7",
+    "tags": {
+        "createdBy": "TestUser",
+        "group": "TestUserGroup"
+    },
+    "workflow_engine_parameters": {
+        "engine": "nextflow",
+        "execute_loc": "azure"
+    },
+    "workflow_url": "https://github.com/phac-nml/speciesabundance",
+    "workflow_attachment": ""
+}
