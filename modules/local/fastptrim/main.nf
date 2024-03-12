@@ -28,7 +28,7 @@ process FASTP_TRIM {
     if(meta.single_end || reads instanceof nextflow.processor.TaskPath) {
         args = args + "-i ${reads[0]} -o ${meta.id}_trimmed.fastq.gz"
     }else{
-        args = args + "-i ${reads[0]} -I ${reads[1]} -o ${meta.id}R1_trimmed.fastq.gz -O ${meta.id}R2_trimmed.fastq.gz"
+        args = args + "-i ${reads[0]} -I ${reads[1]} -o ${meta.id}_R1_trimmed.fastq.gz -O ${meta.id}_R2_trimmed.fastq.gz"
     }
     """
     fastp ${args} --json ${meta.id}.json --html ${meta.id}.html
