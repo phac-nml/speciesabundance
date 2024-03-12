@@ -71,7 +71,7 @@ workflow SpAnce {
     FASTP_TRIM (
         input
     )
-    
+
     ASSEMBLY_STUB (
         input
     )

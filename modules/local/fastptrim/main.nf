@@ -1,7 +1,4 @@
-/* 
-Trim poor quality reads from fastq input files using Fastp.
-*/
-
+// Trim poor quality reads from fastq input files using Fastp
 process FASTP_TRIM {
     tag "$meta.id"
     label 'process_single'
@@ -24,7 +21,6 @@ process FASTP_TRIM {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    
     if(meta.single_end || reads instanceof nextflow.processor.TaskPath) {
         args = args + "-i ${reads[0]} -o ${meta.id}_trimmed.fastq.gz"
     }else{
@@ -38,4 +34,3 @@ process FASTP_TRIM {
     END_VERSIONS
     """
 }
-
