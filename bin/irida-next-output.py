@@ -77,7 +77,9 @@ def main(argv=None):
         with _open(f, "r") as fh:
             sample_metadata = json.load(fh)
             output_metadata["files"]["samples"] |= sample_metadata["files"]["samples"]
-            output_metadata["metadata"]["samples"] |= sample_metadata["metadata"]["samples"]
+            output_metadata["metadata"]["samples"] |= sample_metadata["metadata"][
+                "samples"
+            ]
 
     data_json = json.dumps(output_metadata, sort_keys=True, indent=4)
     _open = get_open(json_output_file)

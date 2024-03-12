@@ -36,6 +36,7 @@ include { SIMPLIFY_IRIDA_JSON  } from '../modules/local/simplifyiridajson/main'
 include { IRIDA_NEXT_OUTPUT    } from '../modules/local/iridanextoutput/main'
 include { ASSEMBLY_STUB        } from '../modules/local/assemblystub/main'
 include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
+include { FASTP_TRIM           } from '../modules/local/fastptrim/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,6 +67,10 @@ workflow SpAnce {
         .map { meta, fastq_1, fastq_2 ->
                 fastq_2 ? tuple(meta, [ file(fastq_1), file(fastq_2) ]) :
                 tuple(meta, [ file(fastq_1) ])}
+
+    FASTP_TRIM (
+        input
+    )
 
     ASSEMBLY_STUB (
         input
