@@ -7,6 +7,10 @@ lint:
     - docs/images/nf-core-speciesabundance_logo_dark.png
     - .github/workflows/awstest.yml
     - .github/workflows/awsfulltest.yml
+    - lib/Utils.groovy
+    - lib/WorkflowMain.groovy
+    - lib/NfcoreTemplate.groovy
+    - lib/WorkflowSpeciesabundance.groovy
   files_unchanged:
     - assets/sendmail_template.txt
     - assets/email_template.html
