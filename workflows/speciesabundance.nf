@@ -83,7 +83,8 @@ workflow SpAnce {
     ch_versions = ch_versions.mix(FASTP_TRIM.out.versions)
 
     KRAKEN2 (
-        FASTP_TRIM.out.reads.combine(ch_kraken2_db)
+        FASTP_TRIM.out.reads,
+        ch_kraken2_db
     )
     ch_versions = ch_versions.mix(KRAKEN2.out.versions)
 
