@@ -70,14 +70,14 @@ workflow SpAnce {
                 tuple(meta, [ file(fastq_1) ])}
 
     ch_kraken2_db = Channel.fromPath( "${params.kraken2_db}", type: 'dir')
-    
+
     FASTP_TRIM (
         input
     )
 
     KRAKEN2 (
         FASTP_TRIM.out.reads.combine(ch_kraken2_db)
-    )    
+    )
 
     ASSEMBLY_STUB (
         input

@@ -19,7 +19,7 @@ process KRAKEN2 {
 
     """
     kraken2 \\
-        --db ${params.kraken2_db} \\
+        --db ${kraken2_db} \\
         --threads $task.cpus \\
         --output ${meta.id}_kraken2_output.tsv \\
         --report ${meta.id}_kraken2_report.txt \\
