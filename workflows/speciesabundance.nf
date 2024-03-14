@@ -37,6 +37,7 @@ include { IRIDA_NEXT_OUTPUT    } from '../modules/local/iridanextoutput/main'
 include { ASSEMBLY_STUB        } from '../modules/local/assemblystub/main'
 include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
 include { FASTP_TRIM           } from '../modules/local/fastptrim/main'
+include { KRAKEN2              } from '../modules/local/kraken2/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,9 +69,15 @@ workflow SpAnce {
                 fastq_2 ? tuple(meta, [ file(fastq_1), file(fastq_2) ]) :
                 tuple(meta, [ file(fastq_1) ])}
 
+    ch_kraken2_db = Channel.fromPath( "${params.kraken2_db}", type: 'dir')
+    
     FASTP_TRIM (
         input
     )
+
+    KRAKEN2 (
+        FASTP_TRIM.out.reads.combine(ch_kraken2_db)
+    )    
 
     ASSEMBLY_STUB (
         input
