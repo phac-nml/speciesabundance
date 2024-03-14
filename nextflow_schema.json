@@ -32,8 +32,7 @@
                 "kraken2_db": {
                     "type": "string",
                     "format": "directory-path",
-                    "description": "Path to Kraken2 database (do not use symlinks)",
-                    "default": "${projectDir}/tests/data/minigut_kraken/"
+                    "description": "Path to Kraken2 database (do not use symlinks)"
                 },
                 "email": {
                     "type": "string",

@@ -10,12 +10,12 @@ process KRAKEN2 {
 
     output:
     tuple val(meta), path("*_kraken2_output.tsv"), path("*_kraken2_report.txt"), emit:report
-
+    path "versions.yml",                                                         emit: versions
+    
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def paired = meta.single_end ? "" : "--paired"
-    def readsArg = meta.single_end ? reads : "$reads $reads"
+    def paired = meta.paired_end ? "--paired" : ""
 
     """
     kraken2 \\
@@ -26,7 +26,7 @@ process KRAKEN2 {
         --gzip-compressed \\
         $paired \\
         $args \\
-        $readsArg
+        $reads
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
