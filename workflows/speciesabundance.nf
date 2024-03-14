@@ -75,8 +75,8 @@ workflow SpAnce {
                 }
         }
 
-    ch_kraken2_db = Channel.fromPath( "${params.kraken2_db}", type: 'dir')
-
+    ch_kraken2_db = Channel.value(file("${params.kraken2_db}"))
+    
     FASTP_TRIM (
         input
     )
