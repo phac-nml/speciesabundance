@@ -32,7 +32,7 @@ process KRAKEN2 {
         $paired \\
         $args \\
         $reads
-    
+
     gzip ${meta.id}_kraken2_output.tsv
     gzip ${meta.id}_kraken2_report.txt
 

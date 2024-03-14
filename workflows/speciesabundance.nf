@@ -70,13 +70,13 @@ workflow SpAnce {
                     meta.single_end = false
                     tuple(meta, [ file(fastq_1), file(fastq_2) ])
                 } else {
-                    meta.single_end = true 
+                    meta.single_end = true
                     tuple(meta, [ file(fastq_1) ])
                 }
         }
 
     ch_kraken2_db = Channel.value(file("${params.kraken2_db}"))
-    
+
     FASTP_TRIM (
         input
     )
