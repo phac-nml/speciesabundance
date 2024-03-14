@@ -10,8 +10,9 @@ process KRAKEN2 {
     path(kraken2_db)
 
     output:
-    tuple val(meta), path("*_kraken2_output.tsv"), path("*_kraken2_report.txt"), emit:report
-    path "versions.yml",                                                         emit: versions
+    tuple val(meta), path("*_kraken2_output.tsv"),  emit: output_tsv
+    tuple val(meta), path("*_kraken2_report.txt"),  emit: report_txt
+    path "versions.yml",                            emit: versions
 
     when:
     task.ext.when == null || task.ext.when
