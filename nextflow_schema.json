@@ -31,6 +31,7 @@
                 },
                 "kraken2_db": {
                     "type": "string",
+                    "pattern": "^\\S+$",
                     "format": "directory-path",
                     "description": "Path to Kraken2 database (do not use symlinks)"
                 },
