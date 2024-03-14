@@ -18,7 +18,7 @@ process KRAKEN2 {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def paired = meta.paired_end ? "--paired" : ""
+    def paired = meta.single_end ? "" : "--paired"
 
     """
     kraken2 \\

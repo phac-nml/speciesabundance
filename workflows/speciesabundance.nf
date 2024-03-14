@@ -66,8 +66,14 @@ workflow SpAnce {
         // Map the inputs so that they conform to the nf-core-expected "reads" format.
         // Either [meta, [fastq_1]] or [meta, [fastq_1, fastq_2]] if fastq_2 exists
         .map { meta, fastq_1, fastq_2 ->
-                fastq_2 ? tuple(meta, [ file(fastq_1), file(fastq_2) ]) :
-                tuple(meta, [ file(fastq_1) ])}
+                if (fastq_2) {
+                    meta.single_end = false
+                    tuple(meta, [ file(fastq_1), file(fastq_2) ])
+                } else {
+                    meta.single_end = true 
+                    tuple(meta, [ file(fastq_1) ])
+                }
+        }
 
     ch_kraken2_db = Channel.fromPath( "${params.kraken2_db}", type: 'dir')
 
