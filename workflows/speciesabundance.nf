@@ -37,6 +37,7 @@ include { IRIDA_NEXT_OUTPUT    } from '../modules/local/iridanextoutput/main'
 include { ASSEMBLY_STUB        } from '../modules/local/assemblystub/main'
 include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
 include { FASTP_TRIM           } from '../modules/local/fastptrim/main'
+include { KRAKEN2              } from '../modules/local/kraken2/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,12 +66,27 @@ workflow SpAnce {
         // Map the inputs so that they conform to the nf-core-expected "reads" format.
         // Either [meta, [fastq_1]] or [meta, [fastq_1, fastq_2]] if fastq_2 exists
         .map { meta, fastq_1, fastq_2 ->
-                fastq_2 ? tuple(meta, [ file(fastq_1), file(fastq_2) ]) :
-                tuple(meta, [ file(fastq_1) ])}
+                if (fastq_2) {
+                    meta.single_end = false
+                    tuple(meta, [ file(fastq_1), file(fastq_2) ])
+                } else {
+                    meta.single_end = true
+                    tuple(meta, [ file(fastq_1) ])
+                }
+        }
+
+    ch_kraken2_db = Channel.value(file("${params.kraken2_db}"))
 
     FASTP_TRIM (
         input
     )
+    ch_versions = ch_versions.mix(FASTP_TRIM.out.versions)
+
+    KRAKEN2 (
+        FASTP_TRIM.out.reads,
+        ch_kraken2_db
+    )
+    ch_versions = ch_versions.mix(KRAKEN2.out.versions)
 
     ASSEMBLY_STUB (
         input
