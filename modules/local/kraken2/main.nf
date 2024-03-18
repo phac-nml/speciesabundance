@@ -11,7 +11,7 @@ process KRAKEN2 {
 
     output:
     tuple val(meta), path("*_kraken2_output.tsv.gz"),   emit: output_tsv
-    tuple val(meta), path("*_kraken2_report.txt.gz"),      emit: report_txt
+    tuple val(meta), path("*_kraken2_report.txt"),      emit: report_txt
     path "versions.yml",                                emit: versions
 
     when:
@@ -24,17 +24,16 @@ process KRAKEN2 {
 
     """
     kraken2 \\
+        ${args} \\
         --db ${kraken2_db} \\
         --threads $task.cpus \\
         --output ${meta.id}_kraken2_output.tsv \\
         --report ${meta.id}_kraken2_report.txt \\
         --gzip-compressed \\
         $paired \\
-        $args \\
         $reads
 
     gzip ${meta.id}_kraken2_output.tsv
-    gzip ${meta.id}_kraken2_report.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
