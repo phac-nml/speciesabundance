@@ -25,8 +25,6 @@ process BRACKEN {
     // WARN: Version information not provided by tool on CLI. Update version string below when bumping container versions.
     def VERSION = '2.7'
 
-    print "Kraken Report(s): ${report_txt}"
-
     """
     bracken \\
         ${args} \\
