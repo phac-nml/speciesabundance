@@ -45,6 +45,7 @@
                     "type": "string",
                     "errorMessage": "Taxonomic_level must be provided and be one of 'S'(species), 'G'(genus), 'O'(order), 'F'(family), 'P'(phylum), or 'K'(kingdom)",
                     "enum": ["S", "G", "O", "F", "P", "K"],
+                    "description": "Requested taxonomic level for BRACKEN",
                     "default": "S"
                 },
                 "email": {

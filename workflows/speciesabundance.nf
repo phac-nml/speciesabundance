@@ -86,10 +86,12 @@ workflow SpAnce {
     )
     ch_versions = ch_versions.mix(KRAKEN2.out.versions)
 
-    def kraken2_report = KRAKEN2.out.report_txt.collect()
+    KRAKEN2.out.report_txt.subscribe { report ->
+        println "Report files in report_txt channel: ${report}"
+    }
 
     BRACKEN (
-        kraken2_report,
+        KRAKEN2.out.report_txt.collect(),
         ch_bracken_db,
         ch_taxonomic_level
     )
