@@ -86,10 +86,6 @@ workflow SpAnce {
     )
     ch_versions = ch_versions.mix(KRAKEN2.out.versions)
 
-    KRAKEN2.out.report_txt.subscribe { report ->
-        println "Report files in report_txt channel: ${report}"
-    }
-
     BRACKEN (
         KRAKEN2.out.report_txt,
         ch_bracken_db,
