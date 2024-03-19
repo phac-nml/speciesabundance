@@ -34,7 +34,7 @@ process BRACKEN {
         -w ${meta.id}_${taxonomic_level}_bracken.txt \\
         -o ${meta.id}_${taxonomic_level}_bracken_abundances_unsorted.tsv \\
         -l ${taxonomic_level}
-        
+
     paste <(echo "meta.id") <(head -n 1 ${meta.id}_${taxonomic_level}_bracken_abundances_unsorted.tsv) | tr \$'\\t' ',' > bracken_abundances_header.csv
 
     cat <<-END_VERSIONS > versions.yml
