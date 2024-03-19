@@ -73,7 +73,7 @@ workflow SpAnce {
 
     ch_kraken2_db = Channel.value(file("${params.kraken2_db}"))
     ch_bracken_db = Channel.value(file("${params.bracken_db}"))
-    ch_taxonomic_level = Channel.of(params.taxonomic_level.split(',')).unique()
+    ch_taxonomic_level = Channel.value(params.taxonomic_level)
 
     FASTP_TRIM (
         input
@@ -91,7 +91,7 @@ workflow SpAnce {
     }
 
     BRACKEN (
-        KRAKEN2.out.report_txt.collect(),
+        KRAKEN2.out.report_txt,
         ch_bracken_db,
         ch_taxonomic_level
     )
