@@ -35,6 +35,19 @@
                     "format": "directory-path",
                     "description": "Path to Kraken2 database (do not use symlinks)"
                 },
+                "bracken_db": {
+                    "type": "string",
+                    "pattern": "^\\S+$",
+                    "format": "directory-path",
+                    "description": "Path to Bracken database (do not use symlinks)"
+                },
+                "taxonomic_level": {
+                    "type": "string",
+                    "errorMessage": "Taxonomic_level must be provided and be one of 'S'(species), 'G'(genus), 'O'(order), 'F'(family), 'P'(phylum), or 'K'(kingdom)",
+                    "enum": ["S", "G", "O", "F", "P", "K"],
+                    "description": "Requested taxonomic level for BRACKEN",
+                    "default": "S"
+                },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",
