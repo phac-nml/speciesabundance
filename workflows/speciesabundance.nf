@@ -34,6 +34,7 @@ include { INPUT_CHECK    } from '../subworkflows/local/input_check'
 include { FASTP_TRIM     } from '../modules/local/fastptrim/main'
 include { KRAKEN2        } from '../modules/local/kraken2/main'
 include { BRACKEN        } from '../modules/local/bracken/main'
+include { ADJUST_BRACKEN } from '../modules/local/adjustbracken/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -89,6 +90,15 @@ workflow SpAnce {
     BRACKEN (
         KRAKEN2.out.report_txt,
         ch_bracken_db,
+        ch_taxonomic_level
+    )
+    ch_versions = ch_versions.mix(BRACKEN.out.versions)
+
+    ADJUST_BRACKEN (
+        KRAKEN2.out.report_txt,
+        BRACKEN.out.bracken_reports,
+        BRACKEN.out.bracken_output_tsv,
+        BRACKEN.out.header_csv,
         ch_taxonomic_level
     )
     ch_versions = ch_versions.mix(BRACKEN.out.versions)
