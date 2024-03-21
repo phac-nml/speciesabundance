@@ -50,50 +50,37 @@ An example of the what the contents of the IRIDA Next JSON file looks like for t
 {
     "files": {
         "global": [
-            {
-                "path": "summary/summary.txt.gz"
-            }
+
         ],
         "samples": {
             "SAMPLE1": [
                 {
-                    "path": "assembly/SAMPLE1.assembly.fa.gz"
-                }
-            ],
-            "SAMPLE2": [
+                    "path": "adjust/SAMPLE1_S_bracken_abundances.csv"
+                },
                 {
-                    "path": "assembly/SAMPLE2.assembly.fa.gz"
-                }
-            ],
-            "SAMPLE3": [
+                    "path": "krona/SAMPLE1.html"
+                },
                 {
-                    "path": "assembly/SAMPLE3.assembly.fa.gz"
+                    "path": "fastp/SAMPLE1.html"
+                },
+                {
+                    "path": "fastp/SAMPLE1_R2_trimmed.fastq.gz"
+                },
+                {
+                    "path": "fastp/SAMPLE1_R1_trimmed.fastq.gz"
                 }
             ]
         }
     },
     "metadata": {
         "samples": {
-            "SAMPLE1": {
-                "reads.1": "sample1_R1.fastq.gz",
-                "reads.2": "sample1_R2.fastq.gz"
-            },
-            "SAMPLE2": {
-                "reads.1": "sample2_R1.fastq.gz",
-                "reads.2": "sample2_R2.fastq.gz"
-            },
-            "SAMPLE3": {
-                "reads.1": "sample1_R1.fastq.gz",
-                "reads.2": "null"
-            }
+
         }
     }
 }
 ```
 
-Within the `files` section of this JSON file, all of the output paths are relative to the `outdir`. Therefore, `"path": "assembly/SAMPLE1.assembly.fa.gz"` refers to a file located within `outdir/assembly/SAMPLE1.assembly.fa.gz`.
-
-There is also a pipeline execution summary output file provided (specified in the above JSON as `"global": [{"path":"summary/summary.txt.gz"}]`). However, there is no formatting specification for this file.
+Within the `files` section of this JSON file, all of the output paths are relative to the `outdir`. Therefore, `"path": "adjust/SAMPLE1_S_bracken_abundances.csv"` refers to a file located within `outdir/adjust/SAMPLE1_S_bracken_abundances.csv`.
 
 ## Test profile
 
