@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-## This python script was developed by Dan Fornika as a work of the Publich Health Bioinformatics
+## This python script was developed by Dan Fornika as a work of the BC Centre for Disease Control Public Health Laboratory: https://github.com/BCCDC-PHL/taxon-abundance/blob/main/bin/adjust_bracken_percentages_for_unclassified_reads.py
 ## This source file has been adapted to work within our pipeline.
 ## Please refer to the README for more information.
 
