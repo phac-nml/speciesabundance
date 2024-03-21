@@ -35,6 +35,7 @@ process BRACKEN {
         -o ${meta.id}_${taxonomic_level}_bracken_abundances_unsorted.tsv \\
         -l ${taxonomic_level}
 
+    # generate header to be used when adjusting the bracken report and abundances for unclassified reads
     paste <(echo "meta.id") <(head -n 1 ${meta.id}_${taxonomic_level}_bracken_abundances_unsorted.tsv) | tr \$'\\t' ',' > bracken_abundances_header.csv
 
     cat <<-END_VERSIONS > versions.yml
