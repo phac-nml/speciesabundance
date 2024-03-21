@@ -35,7 +35,7 @@ Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](n
 To run the pipeline, please do:
 
 ```bash
-nextflow run phac-nml/speciesabundance -profile singularity --input assets/samplesheet.csv --outdir results
+nextflow run phac-nml/speciesabundance -profile singularity -r dev -latest --input /path/to/samplesheet.csv --outdir results
 ```
 
 Where the `samplesheet.csv` is structured as specified in the [Input](#input) section.
@@ -100,7 +100,7 @@ There is also a pipeline execution summary output file provided (specified in th
 To run with the test profile, please do:
 
 ```bash
-nextflow run phac-nml/speciesabundance -profile docker,test --outdir results
+nextflow run phac-nml/speciesabundance -profile docker,test -r dev -latest --outdir results
 ```
 
 # Legal
