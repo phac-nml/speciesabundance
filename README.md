@@ -16,7 +16,7 @@ The structure of this file is defined in [assets/schema_input.json](assets/schem
 
 # Parameters
 
-The main parameters are `--input` as defined above and `--output` for specifying the output results directory. 
+The main parameters are `--input` as defined above and `--output` for specifying the output results directory.
 
 Additionally, you may wish to provide:
 
@@ -24,7 +24,7 @@ Additionally, you may wish to provide:
 
 `-r [branch]` to specify which GitHub branch you would like to run
 
-`--kraken2_db /path/to/kraken2database` 
+`--kraken2_db /path/to/kraken2database`
 
 `--bracken_db /path/to/brackendatabase`
 
@@ -118,7 +118,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 
-## Derivative Work 
+## Derivative Work
 
 This pipeline includes source code from a [nextflow pipeline for taxon-abundance](https://github.com/BCCDC-PHL/taxon-abundance) and an [IRIDA-plugin for SpeciesAbundance](https://github.com/Public-Health-Bioinformatics/irida-plugin-species-abundance) developed by Dan Fornika as a work of the BC Center for Disease Control Public Health Laboratory (BCCDC_PHL).
 
