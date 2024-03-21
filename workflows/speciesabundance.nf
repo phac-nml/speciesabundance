@@ -30,11 +30,13 @@ WorkflowSpeciesabundance.initialise(params, log)
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK    } from '../subworkflows/local/input_check'
-include { FASTP_TRIM     } from '../modules/local/fastptrim/main'
-include { KRAKEN2        } from '../modules/local/kraken2/main'
-include { BRACKEN        } from '../modules/local/bracken/main'
-include { ADJUST_BRACKEN } from '../modules/local/adjustbracken/main'
+include { INPUT_CHECK     } from '../subworkflows/local/input_check'
+include { FASTP_TRIM      } from '../modules/local/fastptrim/main'
+include { KRAKEN2         } from '../modules/local/kraken2/main'
+include { BRACKEN         } from '../modules/local/bracken/main'
+include { ADJUST_BRACKEN  } from '../modules/local/adjustbracken/main'
+include { BRACKEN2KRONA   } from "../modules/local/bracken2krona/main"
+include { KRONA           } from "../modules/local/krona/main"
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -102,6 +104,16 @@ workflow SpAnce {
         ch_taxonomic_level
     )
     ch_versions = ch_versions.mix(BRACKEN.out.versions)
+
+    BRACKEN2KRONA (
+        KRAKEN2.out.report_txt
+    )
+    ch_versions = ch_versions.mix(BRACKEN2KRONA.out.versions)
+
+    KRONA (
+        BRACKEN2KRONA.out.krona_txt
+    )
+    ch_versions = ch_versions.mix(KRONA.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
