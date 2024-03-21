@@ -4,9 +4,7 @@
 
 This is the in-development nf-core-based pipeline for SpeciesAbundance.
 
-This pipeline is adapted from the existing [SpeciesAbundance plugin](https://github.com/Public-Health-Bioinformatics/irida-plugin-species-abundance) and [Nextflow pipeline](https://github.com/BCCDC-PHL/taxon-abundance) developed by Dan Fornika.
-
-# Input (in development)
+# Input
 
 The input to the pipeline is a standard sample sheet (passed as `--input samplesheet.csv`) that looks like:
 
@@ -16,18 +14,28 @@ The input to the pipeline is a standard sample sheet (passed as `--input samples
 
 The structure of this file is defined in [assets/schema_input.json](assets/schema_input.json). Validation of the sample sheet is performed by [nf-validation](https://nextflow-io.github.io/nf-validation/).
 
-# Parameters (in development)
+# Parameters
 
-The main parameters are `--input` as defined above and `--output` for specifying the output results directory. You may wish to provide `-profile singularity` to specify the use of singularity containers and `-r [branch]` to specify which GitHub branch you would like to run.
+The main parameters are `--input` as defined above and `--output` for specifying the output results directory. 
+
+Additionally, you may wish to provide:
+
+`-profile singularity` to specify the use of singularity containers
+
+`-r [branch]` to specify which GitHub branch you would like to run
+
+`--kraken2_db /path/to/kraken2database` 
+
+`--bracken_db /path/to/brackendatabase`
 
 Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](nextflow_schmea.json).
 
-# Running (in development)
+# Running
 
 To run the pipeline, please do:
 
 ```bash
-nextflow run phac-nml/speciesabundance -profile singularity -r main -latest --input assets/samplesheet.csv --outdir results
+nextflow run phac-nml/speciesabundance -profile singularity --input assets/samplesheet.csv --outdir results
 ```
 
 Where the `samplesheet.csv` is structured as specified in the [Input](#input) section.
@@ -87,12 +95,12 @@ Within the `files` section of this JSON file, all of the output paths are relati
 
 There is also a pipeline execution summary output file provided (specified in the above JSON as `"global": [{"path":"summary/summary.txt.gz"}]`). However, there is no formatting specification for this file.
 
-## Test profile (in development)
+## Test profile
 
 To run with the test profile, please do:
 
 ```bash
-nextflow run phac-nml/speciesabundance -profile docker,test -r main -latest --outdir results
+nextflow run phac-nml/speciesabundance -profile docker,test --outdir results
 ```
 
 # Legal
@@ -109,3 +117,11 @@ Unless required by applicable law or agreed to in writing, software distributed
 under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
+
+## Derivative Work 
+
+This pipeline includes source code from a [nextflow pipeline for taxon-abundance](https://github.com/BCCDC-PHL/taxon-abundance) and an [IRIDA-plugin for SpeciesAbundance](https://github.com/Public-Health-Bioinformatics/irida-plugin-species-abundance) developed by Dan Fornika as a work of the BC Center for Disease Control Public Health Laboratory (BCCDC_PHL).
+
+The included source code developed by Dan Fornika as a work of the BCCDC-PHL was distributed within the public domain under the [Apache Software License version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+Any such source files in this project that are included from or derived from the original work by Dan Fornika will include a notice.
