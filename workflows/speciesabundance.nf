@@ -74,8 +74,8 @@ workflow SpAnce {
                 }
         }
 
-    ch_kraken2_db = Channel.value(file("${params.kraken2_db}"))
-    ch_bracken_db = Channel.value(file("${params.bracken_db}"))
+    kraken_database = select_kraken_database(params.kraken2_db)
+    bracken_database = select_bracken_database(params.bracken_db)
     ch_taxonomic_level = Channel.value(params.taxonomic_level)
 
     FASTP_TRIM (
@@ -85,13 +85,13 @@ workflow SpAnce {
 
     KRAKEN2 (
         FASTP_TRIM.out.reads,
-        ch_kraken2_db
+        kraken_database
     )
     ch_versions = ch_versions.mix(KRAKEN2.out.versions)
 
     BRACKEN (
         KRAKEN2.out.report_txt,
-        ch_bracken_db,
+        bracken_database,
         ch_taxonomic_level
     )
     ch_versions = ch_versions.mix(BRACKEN.out.versions)
@@ -118,6 +118,48 @@ workflow SpAnce {
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SELECT KRAKEN2 and BRACKEN DATABASES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+def select_kraken_database(kraken2_db) {
+
+    if(kraken2_db) {
+        kraken_database = Channel.value(file(kraken2_db))
+        log.debug "Selecting kraken2 database ${kraken_database} from '--kraken2_db'."
+    }
+    else {
+        error("Unable to select a kraken2 database: '--kraken2_db' was not provided")
+    }
+
+    return kraken_database
+}
+
+def select_bracken_database(bracken_db) {
+
+    if(bracken_db) {
+
+        def directory = new File(bracken_db)
+        def files = directory.listFiles()
+        def kmerDist = files.find { it.name == "database100mers.kmer_distrib"}
+        def krakenFile = files.find { it.name == "database100mers.kraken"}
+
+        if(!kmerDist || !krakenFile) {
+            error("Missing required BRACKEN database files: run bracken-build to generate the kmer distribution files")
+        }
+
+        bracken_database = Channel.value(file(bracken_db))
+        log.debug "Selecting bracken database ${bracken_database} from '--bracken_db'."
+    }
+    else {
+        error("Unable to select a bracken database: '--bracken_db' was not provided")
+    }
+
+    return bracken_database
 }
 
 /*
