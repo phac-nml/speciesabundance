@@ -29,10 +29,15 @@ The mandatory parameters are as follows:
 
 Additionally, you may wish to provide:
 
+### SpeciesAbundance Parameters
+
+- `--taxonomic_level` : to specify the taxonomic level of the bracken abundance estimation.
+  - Must be one of 'S'(species)(default), 'G'(genus), 'O'(order), 'F'(family), 'P'(phylum), or 'K'(kingdom)
+
+### Other Parameters
+
 - `-profile` : to specify which profile to use (ex: `-profile singularity`)
 - `-r [branch]` : to specify which GitHub branch you would like to use
-- `-taxonomic_level` : to specify the taxonomic level of the bracken abundance estimation.
-  - Must be one of 'S'(species)(default), 'G'(genus), 'O'(order), 'F'(family), 'P'(phylum), or 'K'(kingdom)
 
 Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](nextflow_schmea.json).
 
