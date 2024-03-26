@@ -44,14 +44,15 @@ nextflow_pipeline {
             assert path("$launchDir/results/krona/SAMPLE2.html").exists()
             assert path("$launchDir/results/krona/SAMPLE3.html").exists()
 
-            // check IRIDA Next JSON files
-            lines = path("$launchDir/results/iridanext.output.json.gz").linesGzip.join("/n")
+            // check IRIDA Next JSON output
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
 
-            assert lines.contains("\"path\": \"adjust/SAMPLE2_S_bracken_abundances.csv\"")
-            assert lines.contains("\"path\": \"krona/SAMPLE2.html\"")
-            assert lines.contains("\"path\": \"fastp/SAMPLE2.html\"")
-            assert lines.contains("\"path\": \"fastp/SAMPLE2_R1_trimmed.fastq.gz\"")
-            assert lines.contains("\"path\": \"fastp/SAMPLE2_R2_trimmed.fastq.gz\"")
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "adjust/SAMPLE2_S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "krona/SAMPLE2.html" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2.html" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2_R1_trimmed.fastq.gz" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2_R2_trimmed.fastq.gz" }.size() == 1
         }
     }
 
