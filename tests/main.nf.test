@@ -10,8 +10,8 @@ nextflow_workflow {
         when {
             params {
                 input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
-                kraken2_db = "${projectDir}/tests/data/kraken2database"
-                bracken_db = "${projectDir}/tests/data/brackendatabase"
+                kraken2_db = "$projectDir/tests/data/kraken2database"
+                bracken_db = "$projectDir/tests/data/brackendatabase"
                 outdir = "results"
             }
             workflow {}
@@ -41,7 +41,7 @@ nextflow_workflow {
             assert lines.contains("SAMPLE2,Escherichia coli,562,S,631,0,631,2.52531")
             assert lines.contains("SAMPLE2,Bacteroides fragilis,817,S,22,0,22,0.08805")
 
-            // check that KRONA html files:
+            // check that KRONA html files exist:
             assert path("$launchDir/results/krona/SAMPLE1.html").exists()
             assert path("$launchDir/results/krona/SAMPLE2.html").exists()
             assert path("$launchDir/results/krona/SAMPLE3.html").exists()

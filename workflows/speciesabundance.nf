@@ -145,8 +145,8 @@ def select_bracken_database(bracken_db) {
 
         def directory = new File(bracken_db)
         def files = directory.listFiles()
-        def kmerDist = files.find { it.name == "database100mers.kmer_distrib"}
-        def krakenFile = files.find { it.name == "database100mers.kraken"}
+        def kmerDist = files.find { it.name ==~ /database\d+mers\.kmer_distrib/ }
+        def krakenFile = files.find { it.name ==~ /database\d+mers.kraken/ }
 
         if(!kmerDist || !krakenFile) {
             error("Missing required BRACKEN database files: run bracken-build to generate the kmer distribution files")
