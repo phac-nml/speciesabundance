@@ -1,8 +1,7 @@
-nextflow_workflow {
+nextflow_pipeline {
 
     name "Full Integration Tests for PHACNML_SpeciesAbundance"
     script "main.nf"
-    workflow "SpAnce"
 
     test("Should run without failures: Selecting input/output and Kraken2/Bracken databases") {
         tag "pipeline_success"
@@ -14,7 +13,6 @@ nextflow_workflow {
                 bracken_db = "$projectDir/tests/data/brackendatabase"
                 outdir = "results"
             }
-            workflow {}
         }
 
         then {
@@ -65,7 +63,6 @@ nextflow_workflow {
                 input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
                 outdir = "results"
             }
-            workflow {}
         }
 
         then {
@@ -83,7 +80,6 @@ nextflow_workflow {
                 kraken2_db = "${projectDir}/tests/data/kracken2database"
                 outdir = "results"
             }
-            workflow {}
         }
 
         then {
@@ -102,7 +98,6 @@ nextflow_workflow {
                 bracken_db = "${projectDir}/tests/data/kraken2database"
                 outdir = "results"
             }
-            workflow {}
         }
 
         then {
