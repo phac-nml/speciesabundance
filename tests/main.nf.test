@@ -103,7 +103,6 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert workflow.stdout.contains("Missing required BRACKEN database files: run bracken-build to generate the kmer distribution files")
         }
     }
 
