@@ -131,6 +131,11 @@ def select_kraken_database(kraken2_db) {
     if(kraken2_db) {
         kraken_database = Channel.value(file(kraken2_db))
         log.debug "Selecting kraken2 database ${kraken_database} from '--kraken2_db'."
+
+        // Print statement to see staged files in kraken2_db directory
+        kraken_database.eachFile { file ->
+            println "Staged files in --kraken2_db directory: ${file.name}"
+        }
     }
     else {
         error("Unable to select a kraken2 database: '--kraken2_db' was not provided")
