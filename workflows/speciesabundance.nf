@@ -149,6 +149,11 @@ def select_bracken_database(bracken_db) {
     if(bracken_db) {
         bracken_database = Channel.value(file(bracken_db))
         log.debug "Selecting bracken database ${bracken_database} from '--bracken_db'."
+        
+        // Print statement to see staged files in kraken2_db directory
+        bracken_database.eachFile { file ->
+            println "Staged files in --bracken_db directory: ${file.name}"
+        }
     }
     else {
         error("Unable to select a bracken database: '--bracken_db' was not provided")
