@@ -142,16 +142,6 @@ def select_kraken_database(kraken2_db) {
 def select_bracken_database(bracken_db) {
 
     if(bracken_db) {
-
-        def directory = new File(bracken_db)
-        def files = directory.listFiles()
-        def kmerDist = files.find { it.name ==~ /database\d+mers\.kmer_distrib/ }
-        def krakenFile = files.find { it.name ==~ /database\d+mers.kraken/ }
-
-        if(!kmerDist || !krakenFile) {
-            error("Missing required BRACKEN database files: run bracken-build to generate the kmer distribution files")
-        }
-
         bracken_database = Channel.value(file(bracken_db))
         log.debug "Selecting bracken database ${bracken_database} from '--bracken_db'."
     }
