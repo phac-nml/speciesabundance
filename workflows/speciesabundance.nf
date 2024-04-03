@@ -35,6 +35,7 @@ include { FASTP_TRIM      } from '../modules/local/fastptrim/main'
 include { KRAKEN2         } from '../modules/local/kraken2/main'
 include { BRACKEN         } from '../modules/local/bracken/main'
 include { ADJUST_BRACKEN  } from '../modules/local/adjustbracken/main'
+include { TOP_5           } from "../modules/local/top5/main"
 include { BRACKEN2KRONA   } from "../modules/local/bracken2krona/main"
 include { KRONA           } from "../modules/local/krona/main"
 
@@ -103,7 +104,12 @@ workflow SpAnce {
         BRACKEN.out.header_csv,
         ch_taxonomic_level
     )
-    ch_versions = ch_versions.mix(BRACKEN.out.versions)
+    ch_versions = ch_versions.mix(ADJUST_BRACKEN.out.versions)
+
+    TOP_5 (
+        ADJUST_BRACKEN.out.abundances,
+        ch_taxonomic_level
+    )
 
     BRACKEN2KRONA (
         KRAKEN2.out.report_txt
