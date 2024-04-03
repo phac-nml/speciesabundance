@@ -4,6 +4,8 @@
 
 This is the in-development nf-core-based pipeline for SpeciesAbundance.
 
+This pipeline estimates the relative abundance of sequence reads originating from different species in a sample. This pipeline is designed to be integrated into IRIDA Next. However, it may be run as a stand-alone pipeline.
+
 # Input
 
 The input to the pipeline is a standard sample sheet (passed as `--input samplesheet.csv`) that looks like:
@@ -32,12 +34,12 @@ Additionally, you may wish to provide:
 ### SpeciesAbundance Parameters
 
 - `--taxonomic_level` : to specify the taxonomic level of the bracken abundance estimation.
-  - Must be one of 'S'(species)(default), 'G'(genus), 'O'(order), 'F'(family), 'P'(phylum), or 'K'(kingdom)
+  - Must be one of : `S`(species)(default), `G`(genus), `O`(order), `F`(family), `P`(phylum), or `K`(kingdom)
 
 ### Other Parameters
 
 - `-profile` : to specify which profile to use (ex: `-profile singularity`)
-- `-r [branch]` : to specify which GitHub branch you would like to use
+- `-r [branch]` : to specify which GitHub branch you would like to use (ex: `-r dev`)
 
 Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](nextflow_schmea.json).
 
@@ -45,19 +47,13 @@ Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](n
 
 ## Test Data
 
-To run the pipeline, please run:
-
-```bash
-nextflow run phac-nml/speciesabundance -profile singularity -r dev -latest --input /path/to/samplesheet.csv --kraken2_db /path/to/kraken2_db -- bracken_db /path/to/bracken_db --outdir results
-```
-
-The pipeline output will be written to a directory named `results`. A JSON file for integrating with IRIDA Next will be written to `results/iridanext.output.json.gz` (as detailed in the [Output](#output) section)
-
 To run the pipeline using the test profile, please run:
 
 ```bash
-nextflow run phac-nml/speciesabundance -profile docker,test -r dev -latest --outdir results
+nextflow run phac-nml/speciesabundance -profile docker,test --outdir results
 ```
+
+The pipeline output will be written to a directory named `results`. A [JSON file for integrating with IRIDA Next](https://github.com/phac-nml/pipeline-standards?tab=readme-ov-file#42-irida-next-json) will be written to `results/iridanext.output.json.gz` (as detailed in the [Output](#output) section)
 
 # Output
 
@@ -103,7 +99,7 @@ Within the `files` section of this JSON file, all of the output paths are relati
 
 # Legal
 
-Copyright 2023 Government of Canada
+Copyright 2024 Government of Canada
 
 Licensed under the MIT License (the "License"); you may not use
 this work except in compliance with the License. You may obtain a copy of the
