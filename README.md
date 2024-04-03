@@ -4,6 +4,8 @@
 
 This is the in-development nf-core-based pipeline for SpeciesAbundance.
 
+This pipeline estimates the relative abundance of sequence reads originating from different species in a sample. This pipeline is designed to be integrated into IRIDA Next. However, it may be run as a stand-alone pipeline.
+
 # Input
 
 The input to the pipeline is a standard sample sheet (passed as `--input samplesheet.csv`) that looks like:
@@ -16,35 +18,48 @@ The structure of this file is defined in [assets/schema_input.json](assets/schem
 
 # Parameters
 
-The main parameters are `--input` as defined above and `--output` for specifying the output results directory.
+## Mandatory
+
+The mandatory parameters are as follows:
+
+- `--input` : a URI to the samplesheet as specified in the [Input](#input) section.
+- `--output` : to specify the output results directory.
+- `--kraken2_db /path/to/kraken2database` : to specify the directory to the Kraken2 database
+- `--bracken_db /path/to/brackendatabase` : to specify the directory to the Bracken database
+
+## Optional
 
 Additionally, you may wish to provide:
 
-`-profile singularity` to specify the use of singularity containers
+### SpeciesAbundance Parameters
 
-`-r [branch]` to specify which GitHub branch you would like to run
+- `--taxonomic_level` : to specify the taxonomic level of the bracken abundance estimation.
+  - Must be one of : `S`(species)(default), `G`(genus), `O`(order), `F`(family), `P`(phylum), or `K`(kingdom)
 
-`--kraken2_db /path/to/kraken2database`
+### Other Parameters
 
-`--bracken_db /path/to/brackendatabase`
+- `-profile` : to specify which profile to use (ex: `-profile singularity`)
+- `-r [branch]` : to specify which GitHub branch you would like to use (ex: `-r dev`)
 
 Other parameters (defaults from nf-core) are defined in [nextflow_schema.json](nextflow_schmea.json).
 
 # Running
 
-To run the pipeline, please do:
+## Test Data
+
+To run the pipeline using the test profile, please run:
 
 ```bash
-nextflow run phac-nml/speciesabundance -profile singularity -r dev -latest --input /path/to/samplesheet.csv --outdir results
+nextflow run phac-nml/speciesabundance -profile docker,test --outdir results
 ```
 
-Where the `samplesheet.csv` is structured as specified in the [Input](#input) section.
+The pipeline output will be written to a directory named `results`. A [JSON file for integrating with IRIDA Next](https://github.com/phac-nml/pipeline-standards?tab=readme-ov-file#42-irida-next-json) will be written to `results/iridanext.output.json.gz` (as detailed in the [Output](#output) section)
 
-# Output (in development)
+# Output
 
 A JSON file for loading metadata into IRIDA Next is output by this pipeline. The format of this JSON file is specified in our [Pipeline Standards for the IRIDA Next JSON](https://github.com/phac-nml/pipeline-standards#32-irida-next-json). This JSON file is written directly within the `--outdir` provided to the pipeline with the name `iridanext.output.json.gz` (ex: `[outdir]/iridanext.output.json.gz`).
 
-An example of the what the contents of the IRIDA Next JSON file looks like for this particular pipeline is as follows:
+(In-development) An example of the what the contents of the IRIDA Next JSON file looks like for this particular pipeline is as follows:
 
 ```
 {
@@ -82,17 +97,9 @@ An example of the what the contents of the IRIDA Next JSON file looks like for t
 
 Within the `files` section of this JSON file, all of the output paths are relative to the `outdir`. Therefore, `"path": "adjust/SAMPLE1_S_bracken_abundances.csv"` refers to a file located within `outdir/adjust/SAMPLE1_S_bracken_abundances.csv`.
 
-## Test profile
-
-To run with the test profile, please do:
-
-```bash
-nextflow run phac-nml/speciesabundance -profile docker,test -r dev -latest --outdir results
-```
-
 # Legal
 
-Copyright 2023 Government of Canada
+Copyright 2024 Government of Canada
 
 Licensed under the MIT License (the "License"); you may not use
 this work except in compliance with the License. You may obtain a copy of the

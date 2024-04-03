@@ -29,6 +29,22 @@
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "email": {
+                    "type": "string",
+                    "description": "Email address for completion summary.",
+                    "fa_icon": "fas fa-envelope",
+                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                }
+            }
+        },
+        "databases": {
+            "title": "Databases",
+            "type": "object",
+            "description": "The Kraken2 and Bracken databases required for analysis.",
+            "fa_icon": "fas fa-terminal",
+            "default": "",
+            "properties": {
                 "kraken2_db": {
                     "type": "string",
                     "pattern": "^\\S+$",
@@ -40,20 +56,22 @@
                     "pattern": "^\\S+$",
                     "format": "directory-path",
                     "description": "Path to Bracken database (do not use symlinks)"
-                },
+                }
+            }
+        },
+        "speciesabundance_pipeline_parameters": {
+            "title": "SpeciesAbundance Pipeline Parameters",
+            "type": "object",
+            "description": "Options to configure specific SpeciesAbundance pipeline behaviour",
+            "fa_icon": "fas fa-terminal",
+            "default": "",
+            "properties": {
                 "taxonomic_level": {
                     "type": "string",
                     "errorMessage": "Taxonomic_level must be provided and be one of 'S'(species), 'G'(genus), 'O'(order), 'F'(family), 'P'(phylum), or 'K'(kingdom)",
                     "enum": ["S", "G", "O", "F", "P", "K"],
                     "description": "Requested taxonomic level for BRACKEN",
                     "default": "S"
-                },
-                "email": {
-                    "type": "string",
-                    "description": "Email address for completion summary.",
-                    "fa_icon": "fas fa-envelope",
-                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
-                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
                 }
             }
         },
@@ -214,6 +232,12 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/databases"
+        },
+        {
+            "$ref": "#/definitions/speciesabundance_pipeline_parameters"
         },
         {
             "$ref": "#/definitions/institutional_config_options"

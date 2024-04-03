@@ -1,0 +1,109 @@
+nextflow_pipeline {
+
+    name "Full Integration Tests for PHACNML_SpeciesAbundance"
+    script "main.nf"
+
+    test("Should run without failures: Selecting input/output and Kraken2/Bracken databases") {
+        tag "pipeline_success"
+
+        when {
+            params {
+                input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
+                kraken2_db = "$projectDir/tests/data/kraken2database"
+                bracken_db = "$projectDir/tests/data/brackendatabase"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // check FASTP_TRIM JSON outputs from paired and single reads
+            def fastp_JSON_paired = path("$launchDir/results/fastp/SAMPLE1.json").json
+
+            assert fastp_JSON_paired.summary.sequencing == "paired end (126 cycles + 126 cycles)"
+            assert fastp_JSON_paired.filtering_result.passed_filter_reads == 99594
+
+            def fastp_JSON_single = path("$launchDir/results/fastp/SAMPLE3.json").json
+
+            assert fastp_JSON_single.summary.sequencing == "single end (126 cycles)"
+            assert fastp_JSON_single.filtering_result.passed_filter_reads == 49986
+
+            // check ADJUST_BRACKEN outputs
+            def lines = []
+
+            lines = path("$launchDir/results/adjust/SAMPLE2_S_bracken_abundances.csv").readLines()
+
+            assert lines.contains("SAMPLE2,unclassified,0,U,24334,0,24334,97.38664")
+            assert lines.contains("SAMPLE2,Escherichia coli,562,S,631,0,631,2.52531")
+            assert lines.contains("SAMPLE2,Bacteroides fragilis,817,S,22,0,22,0.08805")
+
+            // check that KRONA html files exist:
+            assert path("$launchDir/results/krona/SAMPLE1.html").exists()
+            assert path("$launchDir/results/krona/SAMPLE2.html").exists()
+            assert path("$launchDir/results/krona/SAMPLE3.html").exists()
+
+            // check IRIDA Next JSON output
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_samples = iridanext_json.files.samples
+
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "adjust/SAMPLE2_S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "krona/SAMPLE2.html" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2.html" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2_R1_trimmed.fastq.gz" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2_R2_trimmed.fastq.gz" }.size() == 1
+        }
+    }
+
+    test("Selecting no databases (failure)") {
+        tag "pipeline_failure"
+
+        when {
+            params {
+                input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert workflow.stdout.contains("Unable to select a kraken2 database: '--kraken2_db' was not provided")
+        }
+    }
+
+    test("Selecting no BRACKEN database (failure)") {
+        tag "pipeline_failure"
+
+        when {
+            params {
+                input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
+                kraken2_db = "${projectDir}/tests/data/kracken2database"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert workflow.stdout.contains("Unable to select a bracken database: '--bracken_db' was not provided")
+        }
+    }
+
+    test("Missing the BRACKEN kmer distribution database files (failure)") {
+        tag "pipeline_failure"
+
+        when {
+            params {
+                input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
+                kraken2_db = "${projectDir}/tests/data/kraken2database"
+                bracken_db = "${projectDir}/tests/data/kraken2database"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.failed
+        }
+    }
+
+}
