@@ -36,6 +36,7 @@ include { KRAKEN2         } from '../modules/local/kraken2/main'
 include { BRACKEN         } from '../modules/local/bracken/main'
 include { ADJUST_BRACKEN  } from '../modules/local/adjustbracken/main'
 include { TOP_5           } from "../modules/local/top5/main"
+include { MERGE_CSV       } from "../modules/local/mergecsv/main"
 include { BRACKEN2KRONA   } from "../modules/local/bracken2krona/main"
 include { KRONA           } from "../modules/local/krona/main"
 
@@ -109,6 +110,16 @@ workflow SpAnce {
     TOP_5 (
         ADJUST_BRACKEN.out.abundances,
         ch_taxonomic_level
+    )
+    ch_versions = ch_versions.mix(TOP_5.out.versions)
+
+    TOP_5.out.top5
+    | map { _, top5 -> top5 }
+    | toSortedList()
+    | set {files}
+
+    MERGE_CSV (
+        files
     )
 
     BRACKEN2KRONA (
