@@ -16,13 +16,13 @@ process TOP_5 {
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/python:3.8.3' :
         'biocontainers/python:3.8.3' }"
-    
+
     input:
     tuple val(meta), path(abundances)
     val (taxonomic_level)
 
     output:
-    tuple val(meta), path("*_top_5.csv"),    emit: top5 
+    tuple val(meta), path("*_top_5.csv"),    emit: top5
     path "versions.yml",                     emit: versions
 
     when:
@@ -32,7 +32,7 @@ process TOP_5 {
     def args = task.ext.args ?: ""
     def prefix = task.ext.prefix ?: "${meta.id}"
 
-    """   
+    """
     bracken_top_n_linelist.py \\
     ${abundances} \\
     ${args} \\
