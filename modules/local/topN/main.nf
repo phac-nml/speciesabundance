@@ -8,7 +8,7 @@ This source file has been adapted to work within our pipeline.
 
 Please refer to the README for more information.
 */
-process TOP_5 {
+process TOP_N {
     tag "$meta.id"
     label 'process_single'
 
@@ -20,10 +20,11 @@ process TOP_5 {
     input:
     tuple val(meta), path(abundances)
     val (taxonomic_level)
+    val (top_results)
 
     output:
-    tuple val(meta), path("*_top_5.csv"),    emit: top5
-    path "versions.yml",                     emit: versions
+    tuple val(meta), path("*.csv"),     emit: topN
+    path "versions.yml",                emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -36,9 +37,9 @@ process TOP_5 {
     bracken_top_n_linelist.py \\
     ${abundances} \\
     ${args} \\
-    -n 5 \\
+    -n ${top_results} \\
     -s ${meta.id} \\
-    > ${meta.id}_${taxonomic_level}_top_5.csv
+    > ${meta.id}_${taxonomic_level}_top_${top_results}.csv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

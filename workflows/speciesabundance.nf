@@ -35,7 +35,7 @@ include { FASTP_TRIM      } from '../modules/local/fastptrim/main'
 include { KRAKEN2         } from '../modules/local/kraken2/main'
 include { BRACKEN         } from '../modules/local/bracken/main'
 include { ADJUST_BRACKEN  } from '../modules/local/adjustbracken/main'
-include { TOP_5           } from "../modules/local/top5/main"
+include { TOP_N           } from "../modules/local/topN/main"
 include { MERGE_CSV       } from "../modules/local/mergecsv/main"
 include { BRACKEN2KRONA   } from "../modules/local/bracken2krona/main"
 include { KRONA           } from "../modules/local/krona/main"
@@ -79,6 +79,7 @@ workflow SpAnce {
     kraken_database = select_kraken_database(params.kraken2_db)
     bracken_database = select_bracken_database(params.bracken_db)
     ch_taxonomic_level = Channel.value(params.taxonomic_level)
+    ch_top_results = Channel.value(params.top_results)
 
     FASTP_TRIM (
         input
@@ -107,14 +108,15 @@ workflow SpAnce {
     )
     ch_versions = ch_versions.mix(ADJUST_BRACKEN.out.versions)
 
-    TOP_5 (
+    TOP_N (
         ADJUST_BRACKEN.out.abundances,
-        ch_taxonomic_level
+        ch_taxonomic_level,
+        ch_top_results
     )
-    ch_versions = ch_versions.mix(TOP_5.out.versions)
+    ch_versions = ch_versions.mix(TOP_N.out.versions)
 
-    TOP_5.out.top5
-    | map { _, top5 -> top5 }
+    TOP_N.out.topN
+    | map { _, topN -> topN }
     | toSortedList()
     | set {files}
 
