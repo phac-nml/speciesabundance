@@ -79,7 +79,7 @@ workflow SpAnce {
     kraken_database = select_kraken_database(params.kraken2_db)
     bracken_database = select_bracken_database(params.bracken_db)
     ch_taxonomic_level = Channel.value(params.taxonomic_level)
-    ch_top_results = Channel.value(params.top_results)
+    ch_top_n = Channel.value(params.top_n)
 
     FASTP_TRIM (
         input
@@ -111,7 +111,7 @@ workflow SpAnce {
     TOP_N (
         ADJUST_BRACKEN.out.abundances,
         ch_taxonomic_level,
-        ch_top_results
+        ch_top_n
     )
     ch_versions = ch_versions.mix(TOP_N.out.versions)
 

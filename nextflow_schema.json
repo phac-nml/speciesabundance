@@ -73,7 +73,7 @@
                     "description": "Requested taxonomic level for BRACKEN",
                     "default": "S"
                 },
-                "top_results": {
+                "top_n": {
                     "type": "integer",
                     "default": 5,
                     "description": "Defines the number of top results to keep from the BRACKEN report",

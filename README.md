@@ -35,7 +35,7 @@ Additionally, you may wish to provide:
 
 - `--taxonomic_level` : to specify the taxonomic level of the bracken abundance estimation.
   - Must be one of : `S`(species)(default), `G`(genus), `O`(order), `F`(family), `P`(phylum), or `K`(kingdom)
-- `--top_results` : to specify the number of top results to keep and include in the metadata for IRIDA Next.
+- `--top_n` : to specify the number of top results to keep and include in the metadata for IRIDA Next.
   - Default: 5
 
 ### Other Parameters

@@ -20,7 +20,7 @@ process TOP_N {
     input:
     tuple val(meta), path(abundances)
     val (taxonomic_level)
-    val (top_results)
+    val (top_n)
 
     output:
     tuple val(meta), path("*.csv"),     emit: topN
@@ -37,9 +37,9 @@ process TOP_N {
     bracken_top_n_linelist.py \\
     ${abundances} \\
     ${args} \\
-    -n ${top_results} \\
+    -n ${top_n} \\
     -s ${meta.id} \\
-    > ${meta.id}_${taxonomic_level}_top_${top_results}.csv
+    > ${meta.id}_${taxonomic_level}_top_${top_n}.csv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
