@@ -55,6 +55,9 @@ nextflow_pipeline {
             assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2.html" }.size() == 1
             assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2_R1_trimmed.fastq.gz" }.size() == 1
             assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2_R2_trimmed.fastq.gz" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "krona/SAMPLE1.html" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "krona/SAMPLE3.html" }.size() == 1
+
 
             // output metadata
             assert iridanext_metadata.SAMPLE2."abundance_1_name" == "Escherichia coli"
@@ -65,12 +68,26 @@ nextflow_pipeline {
             assert iridanext_metadata.SAMPLE2."abundance_2_ncbi_taxonomy_id" == "817"
             assert iridanext_metadata.SAMPLE2."abundance_2_num_assigned_reads" == "22"
             assert iridanext_metadata.SAMPLE2."abundance_2_fraction_total_reads" == "0.08805"
-            assert iridanext_metadata.SAMPLE2."abundance_3_name" == "None"
-            assert iridanext_metadata.SAMPLE2."abundance_3_fraction_total_reads" == "0.0"
+            assert iridanext_metadata.SAMPLE2."abundance_3_name" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_3_fraction_total_reads" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_4_name" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_4_fraction_total_reads" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_5_name" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_5_fraction_total_reads" == ""
             assert iridanext_metadata.SAMPLE2."unclassified_name" == "unclassified"
             assert iridanext_metadata.SAMPLE2."unclassified_ncbi_taxonomy_id" == "0"
             assert iridanext_metadata.SAMPLE2."unclassified_num_assigned_reads" == "24334"
             assert iridanext_metadata.SAMPLE2."unclassified_fraction_total_reads" == "97.38664"
+
+            assert iridanext_metadata.SAMPLE3."abundance_1_name" == "Bacteroides fragilis"
+            assert iridanext_metadata.SAMPLE3."abundance_1_ncbi_taxonomy_id" == "817"
+            assert iridanext_metadata.SAMPLE3."abundance_1_num_assigned_reads" == "28877"
+            assert iridanext_metadata.SAMPLE3."abundance_1_fraction_total_reads" == "57.77018"
+
+            assert iridanext_metadata.SAMPLE1."abundance_1_name" == "Bacteroides fragilis"
+            assert iridanext_metadata.SAMPLE1."abundance_1_ncbi_taxonomy_id" == "817"
+            assert iridanext_metadata.SAMPLE1."abundance_1_num_assigned_reads" == "28799"
+            assert iridanext_metadata.SAMPLE1."abundance_1_fraction_total_reads" == "57.8328"
         }
     }
 
