@@ -57,7 +57,8 @@
                     "format": "directory-path",
                     "description": "Path to Bracken database (do not use symlinks)"
                 }
-            }
+            },
+            "required": ["kraken2_db", "bracken_db"]
         },
         "speciesabundance_pipeline_parameters": {
             "title": "SpeciesAbundance Pipeline Parameters",
