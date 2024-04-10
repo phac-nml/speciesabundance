@@ -36,7 +36,6 @@ include { KRAKEN2         } from '../modules/local/kraken2/main'
 include { BRACKEN         } from '../modules/local/bracken/main'
 include { ADJUST_BRACKEN  } from '../modules/local/adjustbracken/main'
 include { TOP_N           } from "../modules/local/topN/main"
-include { MERGE_CSV       } from "../modules/local/mergecsv/main"
 include { BRACKEN2KRONA   } from "../modules/local/bracken2krona/main"
 include { KRONA           } from "../modules/local/krona/main"
 
