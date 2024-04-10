@@ -58,14 +58,14 @@ def main(args):
         try:
             output_line[name_field] = bracken_report_sorted[n]["name"]
         except IndexError as e:
-            output_line[name_field] = "None"
+            output_line[name_field] = None
         output_fields.append(name_field)
 
         taxonomy_id_field = "abundance_" + num + "_ncbi_taxonomy_id"
         try:
             output_line[taxonomy_id_field] = bracken_report_sorted[n]["taxonomy_id"]
         except IndexError as e:
-            output_line[taxonomy_id_field] = "None"
+            output_line[taxonomy_id_field] = None
         output_fields.append(taxonomy_id_field)
 
         num_assigned_reads_field = "abundance_" + num + "_num_assigned_reads"
@@ -74,7 +74,7 @@ def main(args):
                 "new_est_reads"
             ]
         except IndexError as e:
-            output_line[num_assigned_reads_field] = 0
+            output_line[num_assigned_reads_field] = None
         output_fields.append(num_assigned_reads_field)
 
         fraction_total_reads_field = "abundance_" + num + "_fraction_total_reads"
@@ -83,7 +83,7 @@ def main(args):
                 "fraction_total_reads"
             ]
         except IndexError as e:
-            output_line[fraction_total_reads_field] = 0.0
+            output_line[fraction_total_reads_field] = None
         output_fields.append(fraction_total_reads_field)
 
     unclassified_name_field = "unclassified_name"
@@ -100,7 +100,7 @@ def main(args):
             "new_est_reads"
         ]
     except IndexError as e:
-        output_line[num_unclassified_reads_field] = 0
+        output_line[num_unclassified_reads_field] = None
     output_fields.append(num_unclassified_reads_field)
 
     fraction_unclassified_reads_field = "unclassified_fraction_total_reads"
@@ -109,7 +109,7 @@ def main(args):
             "fraction_total_reads"
         ]
     except IndexError as e:
-        output_line[fraction_unclassified_reads_field] = 0.0
+        output_line[fraction_unclassified_reads_field] = None
     output_fields.append(fraction_unclassified_reads_field)
 
     csv.register_dialect(
