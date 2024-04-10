@@ -1,7 +1,4 @@
 #!/usr/bin/env python
-## This python script was developed by Dan Fornika as a work of the BC Centre for Disease Control Public Health Laboratory: https://github.com/BCCDC-PHL/taxon-abundance/blob/main/bin/bracken_top_n_linelist.py
-## This source file has been adapted to work within our pipeline.
-## Please refer to the README for more information.
 
 import argparse
 import csv
@@ -51,39 +48,45 @@ def main(args):
         "taxonomy_level": bracken_report_sorted[0]["taxonomy_lvl"],
     }
 
-    for n in range(args.top_n):
-        num = str(n + 1)
+    def create_output_entry(bracken_report, field, row):
 
-        name_field = "abundance_" + num + "_name"
+        # Define new {field} names by mapping for final output
+        field_mappings = {
+            "name": "name",
+            "taxonomy_id": "ncbi_taxonomy_id",
+            "new_est_reads": "num_assigned_reads",
+            "fraction_total_reads": "fraction_total_reads",
+        }
+
         try:
-            output_line[name_field] = bracken_report_sorted[n]["name"]
-        except IndexError as e:
-            output_line[name_field] = None
+            field_value = bracken_report[row][field]
+        except IndexError:
+            field_value = None
+        name_field = f"abundance_{row + 1}_{field_mappings[field]}"
+        return name_field, field_value
+
+    for n in range(args.top_n):
+
+        name_field, name_value = create_output_entry(bracken_report_sorted, "name", n)
+        output_line[name_field] = name_value
         output_fields.append(name_field)
 
-        taxonomy_id_field = "abundance_" + num + "_ncbi_taxonomy_id"
-        try:
-            output_line[taxonomy_id_field] = bracken_report_sorted[n]["taxonomy_id"]
-        except IndexError as e:
-            output_line[taxonomy_id_field] = None
+        taxonomy_id_field, taxonomy_id_value = create_output_entry(
+            bracken_report_sorted, "taxonomy_id", n
+        )
+        output_line[taxonomy_id_field] = taxonomy_id_value
         output_fields.append(taxonomy_id_field)
 
-        num_assigned_reads_field = "abundance_" + num + "_num_assigned_reads"
-        try:
-            output_line[num_assigned_reads_field] = bracken_report_sorted[n][
-                "new_est_reads"
-            ]
-        except IndexError as e:
-            output_line[num_assigned_reads_field] = None
+        num_assigned_reads_field, num_assigned_reads_value = create_output_entry(
+            bracken_report_sorted, "new_est_reads", n
+        )
+        output_line[num_assigned_reads_field] = num_assigned_reads_value
         output_fields.append(num_assigned_reads_field)
 
-        fraction_total_reads_field = "abundance_" + num + "_fraction_total_reads"
-        try:
-            output_line[fraction_total_reads_field] = bracken_report_sorted[n][
-                "fraction_total_reads"
-            ]
-        except IndexError as e:
-            output_line[fraction_total_reads_field] = None
+        fraction_total_reads_field, fraction_total_reads_value = create_output_entry(
+            bracken_report_sorted, "fraction_total_reads", n
+        )
+        output_line[fraction_total_reads_field] = fraction_total_reads_value
         output_fields.append(fraction_total_reads_field)
 
     unclassified_name_field = "unclassified_name"
