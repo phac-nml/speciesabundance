@@ -49,6 +49,7 @@ include { KRONA           } from "../modules/local/krona/main"
 //
 // MODULE: Installed directly from nf-core/modules
 //
+include { CSVTK_CONCAT                } from '../modules/nf-core/csvtk/concat/main.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
@@ -115,14 +116,19 @@ workflow SpAnce {
     )
     ch_versions = ch_versions.mix(TOP_N.out.versions)
 
-    TOP_N.out.topN
-    | map { _, topN -> topN }
-    | toSortedList()
-    | set {files}
+    csv_files = TOP_N.out.topN
+    ch_csvs = csv_files.map{
+        meta, topN -> topN
+        }.collect().map{
+            topN -> [ [id:"merged_topN"], topN]
+        }
 
-    MERGE_CSV (
-        files
+    CSVTK_CONCAT (
+        ch_csvs,
+        "csv",
+        "csv"
     )
+    ch_versions = ch_versions.mix(CSVTK_CONCAT.out.versions)
 
     BRACKEN2KRONA (
         KRAKEN2.out.report_txt
