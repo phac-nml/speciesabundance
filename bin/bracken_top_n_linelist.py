@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+## This python script was developed by Dan Fornika as a work of the BC Centre for Disease Control Public Health Laboratory: https://github.com/BCCDC-PHL/taxon-abundance/blob/main/bin/bracken_top_n_linelist.py
+## This source file has been adapted to work within our pipeline.
+## Please refer to the README for more information.
 
 import argparse
 import csv
