@@ -72,6 +72,12 @@
                     "enum": ["S", "G", "O", "F", "P", "K"],
                     "description": "Requested taxonomic level for BRACKEN",
                     "default": "S"
+                },
+                "top_n": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "Defines the number of top results to keep from the BRACKEN report",
+                    "minimum": 1
                 }
             }
         },

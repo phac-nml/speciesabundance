@@ -35,6 +35,7 @@ include { FASTP_TRIM      } from '../modules/local/fastptrim/main'
 include { KRAKEN2         } from '../modules/local/kraken2/main'
 include { BRACKEN         } from '../modules/local/bracken/main'
 include { ADJUST_BRACKEN  } from '../modules/local/adjustbracken/main'
+include { TOP_N           } from "../modules/local/topN/main"
 include { BRACKEN2KRONA   } from "../modules/local/bracken2krona/main"
 include { KRONA           } from "../modules/local/krona/main"
 
@@ -47,6 +48,7 @@ include { KRONA           } from "../modules/local/krona/main"
 //
 // MODULE: Installed directly from nf-core/modules
 //
+include { CSVTK_CONCAT                } from '../modules/nf-core/csvtk/concat/main.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
@@ -77,6 +79,7 @@ workflow SpAnce {
     kraken_database = select_kraken_database(params.kraken2_db)
     bracken_database = select_bracken_database(params.bracken_db)
     ch_taxonomic_level = Channel.value(params.taxonomic_level)
+    ch_top_n = Channel.value(params.top_n)
 
     FASTP_TRIM (
         input
@@ -103,7 +106,28 @@ workflow SpAnce {
         BRACKEN.out.header_csv,
         ch_taxonomic_level
     )
-    ch_versions = ch_versions.mix(BRACKEN.out.versions)
+    ch_versions = ch_versions.mix(ADJUST_BRACKEN.out.versions)
+
+    TOP_N (
+        ADJUST_BRACKEN.out.abundances,
+        ch_taxonomic_level,
+        ch_top_n
+    )
+    ch_versions = ch_versions.mix(TOP_N.out.versions)
+
+    csv_files = TOP_N.out.topN
+    ch_csvs = csv_files.map{
+        meta, topN -> topN
+        }.collect().map{
+            topN -> [ [id:"merged_topN"], topN]
+        }
+
+    CSVTK_CONCAT (
+        ch_csvs,
+        "csv",
+        "csv"
+    )
+    ch_versions = ch_versions.mix(CSVTK_CONCAT.out.versions)
 
     BRACKEN2KRONA (
         KRAKEN2.out.report_txt
