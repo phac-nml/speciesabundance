@@ -20,12 +20,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // check FASTP_TRIM JSON outputs from paired and single reads
-            def fastp_JSON_paired = path("$launchDir/results/fastp/SAMPLE1.json").json
+            def fastp_JSON_paired = path("$launchDir/results/fastp/SAMPLE1.fastp.json").json
 
             assert fastp_JSON_paired.summary.sequencing == "paired end (126 cycles + 126 cycles)"
             assert fastp_JSON_paired.filtering_result.passed_filter_reads == 99594
 
-            def fastp_JSON_single = path("$launchDir/results/fastp/SAMPLE3.json").json
+            def fastp_JSON_single = path("$launchDir/results/fastp/SAMPLE3.fastp.json").json
 
             assert fastp_JSON_single.summary.sequencing == "single end (126 cycles)"
             assert fastp_JSON_single.filtering_result.passed_filter_reads == 49986
@@ -40,9 +40,9 @@ nextflow_pipeline {
             assert lines.contains("SAMPLE2,Bacteroides fragilis,817,S,22,0,22,0.08805")
 
             // check that KRONA html files exist:
-            assert path("$launchDir/results/krona/SAMPLE1.html").exists()
-            assert path("$launchDir/results/krona/SAMPLE2.html").exists()
-            assert path("$launchDir/results/krona/SAMPLE3.html").exists()
+            assert path("$launchDir/results/krona/SAMPLE1.krona.html").exists()
+            assert path("$launchDir/results/krona/SAMPLE2.krona.html").exists()
+            assert path("$launchDir/results/krona/SAMPLE3.krona.html").exists()
 
             // check IRIDA Next JSON output
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
@@ -51,13 +51,14 @@ nextflow_pipeline {
 
             // output files
             assert iridanext_samples.SAMPLE2.findAll { it.path == "adjust/SAMPLE2_S_bracken_abundances.csv" }.size() == 1
-            assert iridanext_samples.SAMPLE2.findAll { it.path == "krona/SAMPLE2.html" }.size() == 1
-            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2.html" }.size() == 1
-            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2_R1_trimmed.fastq.gz" }.size() == 1
-            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2_R2_trimmed.fastq.gz" }.size() == 1
-            assert iridanext_samples.SAMPLE1.findAll { it.path == "krona/SAMPLE1.html" }.size() == 1
-            assert iridanext_samples.SAMPLE3.findAll { it.path == "krona/SAMPLE3.html" }.size() == 1
-
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "krona/SAMPLE2.krona.html" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2.fastp.html" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "adjust/SAMPLE3_S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "krona/SAMPLE3.krona.html" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "fastp/SAMPLE3.fastp.html" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "adjust/SAMPLE1_S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "krona/SAMPLE1.krona.html" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "fastp/SAMPLE1.fastp.html" }.size() == 1
 
             // output metadata
             assert iridanext_metadata.SAMPLE2."abundance_1_name" == "Escherichia coli"
