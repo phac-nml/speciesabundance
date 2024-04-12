@@ -45,17 +45,25 @@
             "fa_icon": "fas fa-terminal",
             "default": "",
             "properties": {
+                "combined_db": {
+                    "type": "string",
+                    "pattern": "^\\S+$",
+                    "format": "directory-path",
+                    "description": "Path to database containing both the Kraken2 and Bracken database files (do not use symlinks)"
+                },
                 "kraken2_db": {
                     "type": "string",
                     "pattern": "^\\S+$",
                     "format": "directory-path",
-                    "description": "Path to Kraken2 database (do not use symlinks)"
+                    "description": "Path to Kraken2 database (do not use symlinks)",
+                    "hidden": true
                 },
                 "bracken_db": {
                     "type": "string",
                     "pattern": "^\\S+$",
                     "format": "directory-path",
-                    "description": "Path to Bracken database (do not use symlinks)"
+                    "description": "Path to Bracken database (do not use symlinks)",
+                    "hidden": true
                 }
             }
         },

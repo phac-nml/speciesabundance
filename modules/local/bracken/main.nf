@@ -7,7 +7,7 @@ process BRACKEN {
 
     input:
     tuple val(meta), path(report_txt)
-    path(bracken_db)
+    path(database)
     val(taxonomic_level)
     val(kmer_len)
 
@@ -25,6 +25,7 @@ process BRACKEN {
     def prefix = task.ext.prefix ?: "${meta.id}"
     // WARN: Version information not provided by tool on CLI. Update version string below when bumping container versions.
     def VERSION = '2.7'
+    def bracken_db = database ?: error("No Bracken database provided")
 
     """
     bracken \\

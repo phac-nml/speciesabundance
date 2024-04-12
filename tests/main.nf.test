@@ -3,14 +3,13 @@ nextflow_pipeline {
     name "Full Integration Tests for PHACNML_SpeciesAbundance"
     script "main.nf"
 
-    test("Should run without failures: Selecting input/output and Kraken2/Bracken databases") {
+    test("Should run without failures: Selecting input/outdir and the combined database containing the Kraken2 and Bracken files") {
         tag "pipeline_success"
 
         when {
             params {
                 input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
-                kraken2_db = "$projectDir/tests/data/kraken2database"
-                bracken_db = "$projectDir/tests/data/brackendatabase"
+                combined_db = "$projectDir/tests/data/minidb"
                 outdir = "results"
             }
         }
@@ -92,6 +91,24 @@ nextflow_pipeline {
         }
     }
 
+    test("Should run without failures: Selecting input/outdir and Kraken2/Bracken databases individually") {
+        tag "pipeline_success"
+
+        when {
+            params {
+                input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
+                kraken2_db = "$projectDir/tests/data/kraken2database"
+                bracken_db = "$projectDir/tests/data/brackendatabase"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+        }
+    }
+    
     test("Selecting no databases (failure)") {
         tag "pipeline_failure"
 
@@ -104,7 +121,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert workflow.stdout.contains("Unable to select a kraken2 database: '--kraken2_db' was not provided")
+            assert workflow.stdout.contains("Unable to select a Kraken2 database. Neither '--combined_db' nor '--kraken2_db' were provided")
         }
     }
 
@@ -121,7 +138,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert workflow.stdout.contains("Unable to select a bracken database: '--bracken_db' was not provided")
+            assert workflow.stdout.contains("Unable to select a Bracken database. Neither '--combined_db' nor '--bracken_db' were provided")
         }
     }
 
