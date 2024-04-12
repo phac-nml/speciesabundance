@@ -73,6 +73,13 @@
                     "description": "Requested taxonomic level for BRACKEN",
                     "default": "S"
                 },
+                "kmer_len": {
+                    "type": "integer",
+                    "errorMessage": "kmer_len must be provided as one of: 50, 75, 100, 150, 200, 250, or 300",
+                    "enum": [50, 75, 100, 150, 200, 250, 300],
+                    "description": "Requested kmer length for the BRACKEN distribution file used during abundance estimation",
+                    "default": 100
+                },
                 "top_n": {
                     "type": "integer",
                     "default": 5,

@@ -80,6 +80,7 @@ workflow SpAnce {
     bracken_database = select_bracken_database(params.bracken_db)
     ch_taxonomic_level = Channel.value(params.taxonomic_level)
     ch_top_n = Channel.value(params.top_n)
+    ch_kmer_len = Channel.value(params.kmer_len)
 
     FASTP_TRIM (
         input
@@ -95,7 +96,8 @@ workflow SpAnce {
     BRACKEN (
         KRAKEN2.out.report_txt,
         bracken_database,
-        ch_taxonomic_level
+        ch_taxonomic_level,
+        ch_kmer_len
     )
     ch_versions = ch_versions.mix(BRACKEN.out.versions)
 
