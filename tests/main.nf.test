@@ -108,7 +108,7 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
         }
     }
-    
+
     test("Selecting no databases (failure)") {
         tag "pipeline_failure"
 
