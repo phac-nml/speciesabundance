@@ -9,7 +9,7 @@ nextflow_pipeline {
         when {
             params {
                 input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
-                combined_db = "$projectDir/tests/data/minidb"
+                database = "$projectDir/tests/data/minidb"
                 outdir = "results"
             }
         }
@@ -121,7 +121,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert workflow.stdout.contains("Unable to select a Kraken2 database. Neither '--combined_db' nor '--kraken2_db' were provided")
+            assert workflow.stdout.contains("Unable to select a Kraken2 database. Neither '--database' nor '--kraken2_db' were provided")
         }
     }
 
@@ -138,7 +138,7 @@ nextflow_pipeline {
 
         then {
             assert workflow.failed
-            assert workflow.stdout.contains("Unable to select a Bracken database. Neither '--combined_db' nor '--bracken_db' were provided")
+            assert workflow.stdout.contains("Unable to select a Bracken database. Neither '--database' nor '--bracken_db' were provided")
         }
     }
 
