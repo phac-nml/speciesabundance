@@ -76,8 +76,8 @@ workflow SpAnce {
                 }
         }
 
-    kraken_database = select_kraken_database(params.combined_db, params.kraken2_db)
-    bracken_database = select_bracken_database(params.combined_db, params.bracken_db)
+    kraken_database = select_kraken_database(params.database, params.kraken2_db)
+    bracken_database = select_bracken_database(params.database, params.bracken_db)
 
     // Create channels for single value parameters
     ch_taxonomic_level = Channel.value(params.taxonomic_level)
@@ -154,34 +154,34 @@ workflow SpAnce {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-def select_kraken_database(combined_db, kraken2_db) {
-    if (combined_db) {
-        kraken_database = Channel.value(file(combined_db))
-        log.debug "Selecting Kraken2 databases ${kraken_database} from '--combined_db'."
+def select_kraken_database(database, kraken2_db) {
+    if (database) {
+        kraken_database = Channel.value(file(database))
+        log.debug "Selecting Kraken2 databases ${kraken_database} from '--database'."
     }
     else if (kraken2_db) {
         kraken_database = Channel.value(file(kraken2_db))
         log.debug "Selecting Kraken2 database ${kraken_database} from '--kraken2_db'."
     }
     else {
-        error("Unable to select a Kraken2 database. Neither '--combined_db' nor '--kraken2_db' were provided")
+        error("Unable to select a Kraken2 database. Neither '--database' nor '--kraken2_db' were provided")
     }
 
     return kraken_database
 }
 
-def select_bracken_database(combined_db, bracken_db) {
+def select_bracken_database(database, bracken_db) {
 
-    if (combined_db) {
-        bracken_database = Channel.value(file(combined_db))
-        log.debug "Selecting Bracken database ${bracken_database} from '--combined_db'."
+    if (database) {
+        bracken_database = Channel.value(file(database))
+        log.debug "Selecting Bracken database ${bracken_database} from '--database'."
     }
     else if (bracken_db) {
         bracken_database = Channel.value(file(bracken_db))
         log.debug "Selecting Braken2 database ${bracken_database} from '--bracken_db'."
     }
     else {
-        error("Unable to select a Bracken database. Neither '--combined_db' nor '--bracken_db' were provided")
+        error("Unable to select a Bracken database. Neither '--database' nor '--bracken_db' were provided")
     }
 
     return bracken_database

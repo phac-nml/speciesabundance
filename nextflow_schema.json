@@ -45,7 +45,7 @@
             "fa_icon": "fas fa-terminal",
             "default": "",
             "properties": {
-                "combined_db": {
+                "database": {
                     "type": "string",
                     "pattern": "^\\S+$",
                     "format": "directory-path",
