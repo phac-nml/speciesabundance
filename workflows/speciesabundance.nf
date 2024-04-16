@@ -36,7 +36,7 @@ include { KRAKEN2         } from '../modules/local/kraken2/main'
 include { BRACKEN         } from '../modules/local/bracken/main'
 include { ADJUST_BRACKEN  } from '../modules/local/adjustbracken/main'
 include { TOP_N           } from "../modules/local/topN/main"
-include { KRAKEN2KRONA   } from "../modules/local/kraken2krona/main"
+include { BRACKEN2KRONA   } from "../modules/local/bracken2krona/main"
 include { KRONA           } from "../modules/local/krona/main"
 
 /*
@@ -133,13 +133,13 @@ workflow SpAnce {
     )
     ch_versions = ch_versions.mix(CSVTK_CONCAT.out.versions)
 
-    KRAKEN2KRONA (
-        KRAKEN2.out.report_txt
+    BRACKEN2KRONA (
+        ADJUST_BRACKEN.out.adjusted_report
     )
-    ch_versions = ch_versions.mix(KRAKEN2KRONA.out.versions)
+    ch_versions = ch_versions.mix(BRACKEN2KRONA.out.versions)
 
     KRONA (
-        KRAKEN2KRONA.out.krona_txt
+        BRACKEN2KRONA.out.krona_txt
     )
     ch_versions = ch_versions.mix(KRONA.out.versions)
 
