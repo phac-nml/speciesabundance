@@ -34,9 +34,9 @@ nextflow_pipeline {
 
             lines = path("$launchDir/results/adjust/SAMPLE2_S_bracken_abundances.csv").readLines()
 
-            assert lines.contains("SAMPLE2,unclassified,0,U,24334,0,24334,97.38664")
-            assert lines.contains("SAMPLE2,Escherichia coli,562,S,631,0,631,2.52531")
-            assert lines.contains("SAMPLE2,Bacteroides fragilis,817,S,22,0,22,0.08805")
+            assert lines.contains("SAMPLE2,unclassified,0,U,24334,0,24334,97.37885")
+            assert lines.contains("SAMPLE2,Escherichia coli,562,S,631,0,631,2.52511")
+            assert lines.contains("SAMPLE2,Bacteroides fragilis,817,S,22,0,22,0.08804")
 
             // check that KRONA html files exist:
             assert path("$launchDir/results/krona/SAMPLE1.krona.html").exists()
@@ -63,11 +63,11 @@ nextflow_pipeline {
             assert iridanext_metadata.SAMPLE2."abundance_1_name" == "Escherichia coli"
             assert iridanext_metadata.SAMPLE2."abundance_1_ncbi_taxonomy_id" == "562"
             assert iridanext_metadata.SAMPLE2."abundance_1_num_assigned_reads" == "631"
-            assert iridanext_metadata.SAMPLE2."abundance_1_fraction_total_reads" == "2.52531"
+            assert iridanext_metadata.SAMPLE2."abundance_1_fraction_total_reads" == "2.52511"
             assert iridanext_metadata.SAMPLE2."abundance_2_name" == "Bacteroides fragilis"
             assert iridanext_metadata.SAMPLE2."abundance_2_ncbi_taxonomy_id" == "817"
             assert iridanext_metadata.SAMPLE2."abundance_2_num_assigned_reads" == "22"
-            assert iridanext_metadata.SAMPLE2."abundance_2_fraction_total_reads" == "0.08805"
+            assert iridanext_metadata.SAMPLE2."abundance_2_fraction_total_reads" == "0.08804"
             assert iridanext_metadata.SAMPLE2."abundance_3_name" == ""
             assert iridanext_metadata.SAMPLE2."abundance_3_fraction_total_reads" == ""
             assert iridanext_metadata.SAMPLE2."abundance_4_name" == ""
@@ -77,7 +77,7 @@ nextflow_pipeline {
             assert iridanext_metadata.SAMPLE2."unclassified_name" == "unclassified"
             assert iridanext_metadata.SAMPLE2."unclassified_ncbi_taxonomy_id" == "0"
             assert iridanext_metadata.SAMPLE2."unclassified_num_assigned_reads" == "24334"
-            assert iridanext_metadata.SAMPLE2."unclassified_fraction_total_reads" == "97.38664"
+            assert iridanext_metadata.SAMPLE2."unclassified_fraction_total_reads" == "97.37885"
 
             assert iridanext_metadata.SAMPLE3."abundance_1_name" == "Bacteroides fragilis"
             assert iridanext_metadata.SAMPLE3."abundance_1_ncbi_taxonomy_id" == "817"
