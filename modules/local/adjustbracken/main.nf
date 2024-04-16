@@ -26,6 +26,7 @@ process ADJUST_BRACKEN {
 
     output:
     tuple val(meta), path("*_bracken_abundances.csv"),  emit: abundances
+    tuple val(meta), path("*_adjusted_report.txt"),     emit: adjusted_report
     path "versions.yml",                                emit: versions
 
     when:
@@ -40,7 +41,8 @@ process ADJUST_BRACKEN {
         -k ${report_txt} \\
         -b ${bracken_reports} \\
         -a ${bracken_output_tsv} \\
-        > ${meta.id}_${taxonomic_level}_bracken_abundances_unsorted_with_unclassified.csv
+        --adjusted-abundances ${meta.id}_${taxonomic_level}_bracken_abundances_unsorted_with_unclassified.csv \\
+        --adjusted-report ${meta.id}_${taxonomic_level}_adjusted_report.txt
 
     # sort the results (including unclassified reads) in descending order and replace the file header with header_csv generated from the BRACKEN module
 
