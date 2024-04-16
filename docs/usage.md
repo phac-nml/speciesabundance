@@ -16,7 +16,8 @@ You will need to create a samplesheet with information about the samples you wou
 
 The input samplesheet must contain three columns: `sample`, `fastq_1`, `fastq_2`. The sampleIDs within a samplesheet should be unqiue. All other columns will be ignored.
 
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below.
+A final samplesheet file consisting of both single- and paired-end Illumina short read data may look something like the one below.
+This pipleine does not support the processing of long-read sequencing data (Nanopore or PacBio).
 
 ```csv title="samplesheet.csv"
 sample,fastq_1,fastq_2

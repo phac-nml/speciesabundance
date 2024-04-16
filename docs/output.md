@@ -9,9 +9,9 @@ The directories listed below will be created in the results directory after the 
 - `fastp`
 - `adjust`
 - `bracken`
+- `bracken2krona`
 - `csvtk`
 - `kraken2`
-- `kraken2krona`
 - `krona`
 - `pipeline_info`
 - `top`
@@ -22,9 +22,10 @@ The IRIDA Next-compliant JSON output file will be named `iridanext.output.json.g
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [Trimming and Quality Assessment](#Trimming-and-Quality-Assessment) - Performs preprocessing on high-throughput sequencing data, offering quality control, adapter trimming, and filtering.
-- [Taxonomic Classification](#Taxonomic-Classification) - Classifies taxa in metagenomic sequencing reads based on k-mer matches to a reference genome database.
-- [Abundance Estimation](#Abundance-Estimation) - Estimates species abundance in metagenomic samples using read-specific probabilities.
+- [Trimming and Quality Assessment](#trimming-and-quality-assessment) - Performs preprocessing on high-throughput sequencing data, offering quality control, adapter trimming, and filtering.
+- [Taxonomic Classification](#taxonomic-classification) - Classifies taxa in metagenomic sequencing reads based on k-mer matches to a reference genome database.
+- [Abundance Estimation](#abundance-estimation) - Estimates species abundance in metagenomic samples using read-specific probabilities.
+- [Hierarchial Data Visulization](#hierarchial-data-visulization) - Produces radial sunburst visualizations to depict estimated species abundance data.
 - [IRIDA Next Output](#irida-next-output) - Generates a JSON output file that is compliant with IRIDA Next.
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution.
 
@@ -50,9 +51,6 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - Classification files:
     - `sampleID_kraken2_output.tsv.gz`
     - `sampleID_kraken2_report.txt`
-- `krona/`
-  - Hierarchical Data Visualization:
-    - `sampleID.krona.html`
 
 </details>
 
@@ -63,11 +61,23 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - `bracken/`
   - Taxonomic Abundance Estimations:
-    - `sampleID_N_bracken_abundance_unsorted.tsv`
-    - `sampleID_N_bracken.txt`
+    - `sampleID_S_bracken_abundance_unsorted.tsv`
+    - `sampleID_S_bracken.txt`
 - `adjust/`
   - Abundance Estimations adjusted for unclassified reads:
-    - `sampleID_N_bracken_abundance.csv`
+    - `sampleID_S_bracken_abundance.csv`
+    - `sampleID_S_adjusted_report.txt`
+
+</details>
+
+### Hierarchial Data Visulization
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `krona/`
+  - Adjusted Abundance Estimation SunBurst Chart:
+    - `sampleID.krona.html`
 
 </details>
 
