@@ -7,7 +7,7 @@ process KRAKEN2 {
 
     input:
     tuple val(meta), path(reads)
-    path(kraken2_db)
+    path(database)
 
     output:
     tuple val(meta), path("*_kraken2_output.tsv.gz"),   emit: output_tsv
@@ -24,7 +24,7 @@ process KRAKEN2 {
 
     """
     kraken2 \\
-        --db ${kraken2_db} \\
+        --db ${database} \\
         --threads $task.cpus \\
         --output ${meta.id}_kraken2_output.tsv \\
         --report ${meta.id}_kraken2_report.txt \\

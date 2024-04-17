@@ -10,8 +10,8 @@ process KRONA {
     tuple val(meta), path(krona_txt)
 
     output:
-    tuple val(meta), path ('*.html'), emit: html
-    path "versions.yml"             , emit: versions
+    tuple val(meta), path ('*.krona.html'), emit: html
+    path "versions.yml",                    emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -22,7 +22,7 @@ process KRONA {
     """
     ktImportText  \\
         $args \\
-        -o ${prefix}.html \\
+        -o ${prefix}.krona.html \\
         $krona_txt
 
     cat <<-END_VERSIONS > versions.yml

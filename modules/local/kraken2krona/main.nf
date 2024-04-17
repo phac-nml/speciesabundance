@@ -1,4 +1,4 @@
-process BRACKEN2KRONA {
+process KRAKEN2KRONA {
     tag "$meta.id"
     label 'process_single'
 
@@ -7,7 +7,7 @@ process BRACKEN2KRONA {
         'biocontainers/krakentools:1.2--pyh5e36f6f_0' }"
 
     input:
-    tuple val(meta), path(adjusted_report)
+    tuple val(meta), path(report_txt)
 
     output:
     tuple val(meta), path("*.txt"), emit: krona_txt
@@ -25,9 +25,8 @@ process BRACKEN2KRONA {
     """
     kreport2krona.py \\
         $args \\
-        -r ${adjusted_report} \\
-        -o ${prefix}.txt \\
-        --intermediate-ranks
+        -r ${report_txt} \\
+        -o ${prefix}.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

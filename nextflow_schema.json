@@ -45,17 +45,25 @@
             "fa_icon": "fas fa-terminal",
             "default": "",
             "properties": {
+                "database": {
+                    "type": "string",
+                    "pattern": "^\\S+$",
+                    "format": "directory-path",
+                    "description": "Path to database containing both the Kraken2 and Bracken database files (do not use symlinks)"
+                },
                 "kraken2_db": {
                     "type": "string",
                     "pattern": "^\\S+$",
                     "format": "directory-path",
-                    "description": "Path to Kraken2 database (do not use symlinks)"
+                    "description": "Path to Kraken2 database (do not use symlinks)",
+                    "hidden": true
                 },
                 "bracken_db": {
                     "type": "string",
                     "pattern": "^\\S+$",
                     "format": "directory-path",
-                    "description": "Path to Bracken database (do not use symlinks)"
+                    "description": "Path to Bracken database (do not use symlinks)",
+                    "hidden": true
                 }
             }
         },
@@ -72,6 +80,13 @@
                     "enum": ["S", "G", "O", "F", "P", "K"],
                     "description": "Requested taxonomic level for BRACKEN",
                     "default": "S"
+                },
+                "kmer_len": {
+                    "type": "integer",
+                    "errorMessage": "kmer_len must be provided as one of: 50, 75, 100, 150, 200, 250, or 300",
+                    "enum": [50, 75, 100, 150, 200, 250, 300],
+                    "description": "Requested kmer length for the BRACKEN distribution file used during abundance estimation",
+                    "default": 100
                 },
                 "top_n": {
                     "type": "integer",

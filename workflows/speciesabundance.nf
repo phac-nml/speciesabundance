@@ -76,10 +76,13 @@ workflow SpAnce {
                 }
         }
 
-    kraken_database = select_kraken_database(params.kraken2_db)
-    bracken_database = select_bracken_database(params.bracken_db)
+    kraken_database = select_kraken_database(params.database, params.kraken2_db)
+    bracken_database = select_bracken_database(params.database, params.bracken_db)
+
+    // Create channels for single value parameters
     ch_taxonomic_level = Channel.value(params.taxonomic_level)
     ch_top_n = Channel.value(params.top_n)
+    ch_kmer_len = Channel.value(params.kmer_len)
 
     FASTP_TRIM (
         input
@@ -95,7 +98,8 @@ workflow SpAnce {
     BRACKEN (
         KRAKEN2.out.report_txt,
         bracken_database,
-        ch_taxonomic_level
+        ch_taxonomic_level,
+        ch_kmer_len
     )
     ch_versions = ch_versions.mix(BRACKEN.out.versions)
 
@@ -130,7 +134,7 @@ workflow SpAnce {
     ch_versions = ch_versions.mix(CSVTK_CONCAT.out.versions)
 
     BRACKEN2KRONA (
-        KRAKEN2.out.report_txt
+        ADJUST_BRACKEN.out.adjusted_report
     )
     ch_versions = ch_versions.mix(BRACKEN2KRONA.out.versions)
 
@@ -146,31 +150,38 @@ workflow SpAnce {
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    SELECT KRAKEN2 and BRACKEN DATABASES
+    SELECT databases: Create channels of COMBINED, KRAKEN2, and BRACKEN DATABASES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-def select_kraken_database(kraken2_db) {
-
-    if(kraken2_db) {
+def select_kraken_database(database, kraken2_db) {
+    if (database) {
+        kraken_database = Channel.value(file(database))
+        log.debug "Selecting Kraken2 databases ${kraken_database} from '--database'."
+    }
+    else if (kraken2_db) {
         kraken_database = Channel.value(file(kraken2_db))
-        log.debug "Selecting kraken2 database ${kraken_database} from '--kraken2_db'."
+        log.debug "Selecting Kraken2 database ${kraken_database} from '--kraken2_db'."
     }
     else {
-        error("Unable to select a kraken2 database: '--kraken2_db' was not provided")
+        error("Unable to select a Kraken2 database. Neither '--database' nor '--kraken2_db' were provided")
     }
 
     return kraken_database
 }
 
-def select_bracken_database(bracken_db) {
+def select_bracken_database(database, bracken_db) {
 
-    if(bracken_db) {
+    if (database) {
+        bracken_database = Channel.value(file(database))
+        log.debug "Selecting Bracken database ${bracken_database} from '--database'."
+    }
+    else if (bracken_db) {
         bracken_database = Channel.value(file(bracken_db))
-        log.debug "Selecting bracken database ${bracken_database} from '--bracken_db'."
+        log.debug "Selecting Braken2 database ${bracken_database} from '--bracken_db'."
     }
     else {
-        error("Unable to select a bracken database: '--bracken_db' was not provided")
+        error("Unable to select a Bracken database. Neither '--database' nor '--bracken_db' were provided")
     }
 
     return bracken_database
