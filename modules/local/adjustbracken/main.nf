@@ -37,7 +37,7 @@ process ADJUST_BRACKEN {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    adjust_bracken_percentages_for_unclassified_reads.py \\
+    adjust_bracken_for_unclassified_reads.py \\
         -k ${report_txt} \\
         -b ${bracken_reports} \\
         -a ${bracken_output_tsv} \\

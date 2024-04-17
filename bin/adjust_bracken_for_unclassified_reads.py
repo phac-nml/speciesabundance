@@ -143,12 +143,12 @@ def adjust_bracken_abundances(
     }
     if num_total_seqs > 0:
         unclassified_record["fraction_total_reads"] = round(
-            num_unclassified_seqs / num_total_seqs * 100, 5
+            num_unclassified_seqs / num_total_seqs, 6
         )
         adjusted_bracken_abundances.append(unclassified_record)
         for bracken_abundance_record in bracken_abundances:
             bracken_abundance_record["fraction_total_reads"] = round(
-                bracken_abundance_record["new_est_reads"] / num_total_seqs * 100, 5
+                bracken_abundance_record["new_est_reads"] / num_total_seqs, 6
             )
             adjusted_bracken_abundances.append(bracken_abundance_record)
 
