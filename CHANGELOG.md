@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Migrated SpeciesAbundance to a Nextflow pipeline, with integration testing using [nf-test](https://www.nf-test.com/).
-- Updated the SpeciesAbundance release version from 1 to 2 to reflect migration from a Galaxy-based pipeline.
+- Updated the SpeciesAbundance release version from 1 to 2 to reflect migration from the [Galaxy-based](https://github.com/Public-Health-Bioinformatics/irida-plugin-species-abundance) pipeline.
 
 ### `Fixed`
 
