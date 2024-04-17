@@ -29,14 +29,41 @@ nextflow_pipeline {
             assert fastp_JSON_single.summary.sequencing == "single end (126 cycles)"
             assert fastp_JSON_single.filtering_result.passed_filter_reads == 49986
 
-            // check ADJUST_BRACKEN outputs
+            // check output files
             def lines = []
 
+            // KRAKEN2 outputs
+            lines = path("$launchDir/results/kraken2/SAMPLE2_kraken2_report.txt").text
+
+            assert lines.contains("97.38	24334	24334	U	0	unclassified")
+            assert lines.contains(" 2.53	631	0	S	562	                Escherichia coli")
+            assert lines.contains(" 2.53	631	631	S2	511145	                    Escherichia coli str. K-12 substr. MG1655")
+            assert lines.contains(" 0.09	22	0	S	817	                    Bacteroides fragilis")
+            assert lines.contains(" 0.09	22	22	S1	295405	                      Bacteroides fragilis YCH46")
+
+            // BRACKEN outputs
+            lines = path("$launchDir/results/bracken/SAMPLE2_S_bracken.txt").text
+
+            assert lines.contains("96.63	631	631	S	562	                Escherichia coli")
+            assert lines.contains("3.37	22	22	S	817	                    Bacteroides fragilis")
+
+            lines = path("$launchDir/results/bracken/SAMPLE2_S_bracken_abundances_unsorted.tsv").text
+
+            assert lines.contains("Escherichia coli	562	S	631	0	631	0.96631")
+            assert lines.contains("Bacteroides fragilis	817	S	22	0	22	0.03369")
+
+            // ADJUST_BRACKEN outputs
             lines = path("$launchDir/results/adjust/SAMPLE2_S_bracken_abundances.csv").readLines()
 
             assert lines.contains("SAMPLE2,unclassified,0,U,24334,0,24334,97.37885")
             assert lines.contains("SAMPLE2,Escherichia coli,562,S,631,0,631,2.52511")
             assert lines.contains("SAMPLE2,Bacteroides fragilis,817,S,22,0,22,0.08804")
+
+            lines = path("$launchDir/results/adjust/SAMPLE2_S_adjusted_report.txt").text
+
+            assert lines.contains("97.39	24334	24334	U	0	unclassified")
+            assert lines.contains("2.53	631	631	S	562	                Escherichia coli")
+            assert lines.contains("0.09	22	22	S	817	                    Bacteroides fragilis")
 
             // check that KRONA html files exist:
             assert path("$launchDir/results/krona/SAMPLE1.krona.html").exists()
