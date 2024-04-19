@@ -30,13 +30,14 @@ WorkflowSpeciesabundance.initialise(params, log)
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK          } from '../subworkflows/local/input_check'
-include { GENERATE_SAMPLE_JSON } from '../modules/local/generatesamplejson/main'
-include { SIMPLIFY_IRIDA_JSON  } from '../modules/local/simplifyiridajson/main'
-include { IRIDA_NEXT_OUTPUT    } from '../modules/local/iridanextoutput/main'
-include { ASSEMBLY_STUB        } from '../modules/local/assemblystub/main'
-include { GENERATE_SUMMARY     } from '../modules/local/generatesummary/main'
-include { FASTP_TRIM           } from '../modules/local/fastptrim/main'
+include { INPUT_CHECK     } from '../subworkflows/local/input_check'
+include { FASTP_TRIM      } from '../modules/local/fastptrim/main'
+include { KRAKEN2         } from '../modules/local/kraken2/main'
+include { BRACKEN         } from '../modules/local/bracken/main'
+include { ADJUST_BRACKEN  } from '../modules/local/adjustbracken/main'
+include { TOP_N           } from "../modules/local/topN/main"
+include { BRACKEN2KRONA   } from "../modules/local/bracken2krona/main"
+include { KRONA           } from "../modules/local/krona/main"
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,6 +48,7 @@ include { FASTP_TRIM           } from '../modules/local/fastptrim/main'
 //
 // MODULE: Installed directly from nf-core/modules
 //
+include { CSVTK_CONCAT                } from '../modules/nf-core/csvtk/concat/main.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
@@ -65,45 +67,124 @@ workflow SpAnce {
         // Map the inputs so that they conform to the nf-core-expected "reads" format.
         // Either [meta, [fastq_1]] or [meta, [fastq_1, fastq_2]] if fastq_2 exists
         .map { meta, fastq_1, fastq_2 ->
-                fastq_2 ? tuple(meta, [ file(fastq_1), file(fastq_2) ]) :
-                tuple(meta, [ file(fastq_1) ])}
+                if (fastq_2) {
+                    meta.single_end = false
+                    tuple(meta, [ file(fastq_1), file(fastq_2) ])
+                } else {
+                    meta.single_end = true
+                    tuple(meta, [ file(fastq_1) ])
+                }
+        }
+
+    kraken_database = select_kraken_database(params.database, params.kraken2_db)
+    bracken_database = select_bracken_database(params.database, params.bracken_db)
+
+    // Create channels for single value parameters
+    ch_taxonomic_level = Channel.value(params.taxonomic_level)
+    ch_top_n = Channel.value(params.top_n)
+    ch_kmer_len = Channel.value(params.kmer_len)
 
     FASTP_TRIM (
         input
     )
+    ch_versions = ch_versions.mix(FASTP_TRIM.out.versions)
 
-    ASSEMBLY_STUB (
-        input
+    KRAKEN2 (
+        FASTP_TRIM.out.reads,
+        kraken_database
     )
-    ch_versions = ch_versions.mix(ASSEMBLY_STUB.out.versions)
+    ch_versions = ch_versions.mix(KRAKEN2.out.versions)
 
-    // A channel of tuples of ({meta}, [read[0], read[1]], assembly)
-    ch_tuple_read_assembly = input.join(ASSEMBLY_STUB.out.assembly)
-
-    GENERATE_SAMPLE_JSON (
-        ch_tuple_read_assembly
+    BRACKEN (
+        KRAKEN2.out.report_txt,
+        bracken_database,
+        ch_taxonomic_level,
+        ch_kmer_len
     )
-    ch_versions = ch_versions.mix(GENERATE_SAMPLE_JSON.out.versions)
+    ch_versions = ch_versions.mix(BRACKEN.out.versions)
 
-    GENERATE_SUMMARY (
-        ch_tuple_read_assembly.collect{ [it] }
+    ADJUST_BRACKEN (
+        KRAKEN2.out.report_txt,
+        BRACKEN.out.bracken_reports,
+        BRACKEN.out.bracken_output_tsv,
+        BRACKEN.out.header_csv,
+        ch_taxonomic_level
     )
-    ch_versions = ch_versions.mix(GENERATE_SUMMARY.out.versions)
+    ch_versions = ch_versions.mix(ADJUST_BRACKEN.out.versions)
 
-    SIMPLIFY_IRIDA_JSON (
-        GENERATE_SAMPLE_JSON.out.json
+    TOP_N (
+        ADJUST_BRACKEN.out.abundances,
+        ch_taxonomic_level,
+        ch_top_n
     )
-    ch_versions = ch_versions.mix(SIMPLIFY_IRIDA_JSON.out.versions)
-    ch_simplified_jsons = SIMPLIFY_IRIDA_JSON.out.simple_json.map { meta, data -> data }.collect() // Collect JSONs
+    ch_versions = ch_versions.mix(TOP_N.out.versions)
 
-    IRIDA_NEXT_OUTPUT (
-        samples_data=ch_simplified_jsons
+    csv_files = TOP_N.out.topN
+    ch_csvs = csv_files.map{
+        meta, topN -> topN
+        }.collect().map{
+            topN -> [ [id:"merged_topN"], topN]
+        }
+
+    CSVTK_CONCAT (
+        ch_csvs,
+        "csv",
+        "csv"
     )
-    ch_versions = ch_versions.mix(IRIDA_NEXT_OUTPUT.out.versions)
+    ch_versions = ch_versions.mix(CSVTK_CONCAT.out.versions)
+
+    BRACKEN2KRONA (
+        ADJUST_BRACKEN.out.adjusted_report
+    )
+    ch_versions = ch_versions.mix(BRACKEN2KRONA.out.versions)
+
+    KRONA (
+        BRACKEN2KRONA.out.krona_txt
+    )
+    ch_versions = ch_versions.mix(KRONA.out.versions)
 
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SELECT databases: Create channels of COMBINED, KRAKEN2, and BRACKEN DATABASES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+def select_kraken_database(database, kraken2_db) {
+    if (database) {
+        kraken_database = Channel.value(file(database))
+        log.debug "Selecting Kraken2 databases ${kraken_database} from '--database'."
+    }
+    else if (kraken2_db) {
+        kraken_database = Channel.value(file(kraken2_db))
+        log.debug "Selecting Kraken2 database ${kraken_database} from '--kraken2_db'."
+    }
+    else {
+        error("Unable to select a Kraken2 database. Neither '--database' nor '--kraken2_db' were provided")
+    }
+
+    return kraken_database
+}
+
+def select_bracken_database(database, bracken_db) {
+
+    if (database) {
+        bracken_database = Channel.value(file(database))
+        log.debug "Selecting Bracken database ${bracken_database} from '--database'."
+    }
+    else if (bracken_db) {
+        bracken_database = Channel.value(file(bracken_db))
+        log.debug "Selecting Braken2 database ${bracken_database} from '--bracken_db'."
+    }
+    else {
+        error("Unable to select a Bracken database. Neither '--database' nor '--bracken_db' were provided")
+    }
+
+    return bracken_database
 }
 
 /*

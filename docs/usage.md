@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This pipeline is an example that illustrates running a nf-core-compliant pipeline on IRIDA Next.
+This is the [nf-core](https://nf-co.re/)-based pipeline for SpeciesAbundance. This pipeline estimates the relative abundance of sequence reads originating from different species in a sample(s).
 
 ## Samplesheet input
 
@@ -14,9 +14,10 @@ You will need to create a samplesheet with information about the samples you wou
 
 ### Full samplesheet
 
-The input samplesheet must contain three columns: `ID`, `fastq_1`, `fastq_2`. The IDs within a samplesheet should be unique. All other columns will be ignored.
+The input samplesheet must contain three columns: `sample`, `fastq_1`, `fastq_2`. The sampleIDs within a samplesheet should be unqiue. All other columns will be ignored.
 
-A final samplesheet file consisting of both single- and paired-end data may look something like the one below.
+A final samplesheet file consisting of both single- and paired-end Illumina short read data may look something like the one below.
+This pipleine does not support the processing of long-read sequencing data (Nanopore or PacBio).
 
 ```csv title="samplesheet.csv"
 sample,fastq_1,fastq_2
@@ -38,10 +39,10 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run main.nf --input ./samplesheet.csv --outdir ./results -profile singularity
+nextflow run phac-nml/speciesabundance -profile test,docker --outdir results
 ```
 
-This will launch the pipeline with the `singularity` configuration profile. See below for more information about profiles.
+This will launch the pipeline with the `docker` configuration profile (use `singularity` for singularity profile). See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
 
@@ -70,6 +71,7 @@ with `params.yaml` containing:
 ```yaml
 input: './samplesheet.csv'
 outdir: './results/'
+database: './path/to/database/'
 <...>
 ```
 

@@ -11,8 +11,8 @@ process FASTP_TRIM {
 
     output:
     tuple val(meta), path("*_trimmed.fastq.gz"),    emit: reads
-    tuple val(meta), path("*.json"),                emit: json
-    tuple val(meta), path("*.html"),                emit: html
+    tuple val(meta), path("*.fastp.json"),          emit: json
+    tuple val(meta), path("*.fastp.html"),          emit: html
     path "versions.yml",                            emit: versions
 
     when:
@@ -27,7 +27,11 @@ process FASTP_TRIM {
         args = args + "-i ${reads[0]} -I ${reads[1]} -o ${meta.id}_R1_trimmed.fastq.gz -O ${meta.id}_R2_trimmed.fastq.gz"
     }
     """
-    fastp ${args} --json ${meta.id}.json --html ${meta.id}.html
+    fastp \\
+        ${args} \\
+        --json ${meta.id}.fastp.json \\
+        --html ${meta.id}.fastp.html
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         fastp: \$(fastp --version 2>&1 | sed -e "s/fastp //g")

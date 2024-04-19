@@ -29,33 +29,70 @@
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
                 },
-                "project_name": {
-                    "type": "string",
-                    "default": "assembly",
-                    "pattern": "^\\S+$",
-                    "description": "The name of the project.",
-                    "fa_icon": "fas fa-tag"
-                },
-                "assembler": {
-                    "type": "string",
-                    "default": "stub",
-                    "fa_icon": "fas fa-desktop",
-                    "description": "The sequence assembler to use for sequence assembly.",
-                    "enum": ["default", "stub", "experimental"]
-                },
-                "random_seed": {
-                    "type": "integer",
-                    "default": 1,
-                    "fa_icon": "fas fa-dice-six",
-                    "description": "The random seed to use for sequence assembly.",
-                    "minimum": 1
-                },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",
                     "fa_icon": "fas fa-envelope",
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                }
+            }
+        },
+        "databases": {
+            "title": "Databases",
+            "type": "object",
+            "description": "The Kraken2 and Bracken databases required for analysis.",
+            "fa_icon": "fas fa-terminal",
+            "default": "",
+            "properties": {
+                "database": {
+                    "type": "string",
+                    "pattern": "^\\S+$",
+                    "format": "directory-path",
+                    "description": "Path to database containing both the Kraken2 and Bracken database files (do not use symlinks)"
+                },
+                "kraken2_db": {
+                    "type": "string",
+                    "pattern": "^\\S+$",
+                    "format": "directory-path",
+                    "description": "Path to Kraken2 database (do not use symlinks)",
+                    "hidden": true
+                },
+                "bracken_db": {
+                    "type": "string",
+                    "pattern": "^\\S+$",
+                    "format": "directory-path",
+                    "description": "Path to Bracken database (do not use symlinks)",
+                    "hidden": true
+                }
+            }
+        },
+        "speciesabundance_pipeline_parameters": {
+            "title": "SpeciesAbundance Pipeline Parameters",
+            "type": "object",
+            "description": "Options to configure specific SpeciesAbundance pipeline behaviour",
+            "fa_icon": "fas fa-terminal",
+            "default": "",
+            "properties": {
+                "taxonomic_level": {
+                    "type": "string",
+                    "errorMessage": "Taxonomic_level must be provided and be one of 'S'(species), 'G'(genus), 'O'(order), 'F'(family), 'P'(phylum), or 'K'(kingdom)",
+                    "enum": ["S", "G", "O", "F", "P", "K"],
+                    "description": "Requested taxonomic level for BRACKEN",
+                    "default": "S"
+                },
+                "kmer_len": {
+                    "type": "integer",
+                    "errorMessage": "kmer_len must be provided as one of: 50, 75, 100, 150, 200, 250, or 300",
+                    "enum": [50, 75, 100, 150, 200, 250, 300],
+                    "description": "Requested kmer length for the BRACKEN distribution file used during abundance estimation",
+                    "default": 100
+                },
+                "top_n": {
+                    "type": "integer",
+                    "default": 5,
+                    "description": "Defines the number of top results to keep from the BRACKEN report",
+                    "minimum": 1
                 }
             }
         },
@@ -216,6 +253,12 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/databases"
+        },
+        {
+            "$ref": "#/definitions/speciesabundance_pipeline_parameters"
         },
         {
             "$ref": "#/definitions/institutional_config_options"
