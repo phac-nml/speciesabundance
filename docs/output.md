@@ -24,7 +24,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 
 - [Trimming and Quality Assessment](#trimming-and-quality-assessment) - Performs preprocessing on high-throughput sequencing data, offering quality control, adapter trimming, and filtering.
 - [Taxonomic Classification](#taxonomic-classification) - Classifies taxa in metagenomic sequencing reads based on k-mer matches to a reference genome database.
-- [Abundance Estimation](#abundance-estimation) - Estimates species abundance in metagenomic samples using read-specific probabilities.
+- [Abundance Estimation](#abundance-estimation) - Estimates taxon abundance in metagenomic samples using read-specific probabilities.
+  - The taxon abundances are adjusted to include unclassified reads.
+  - Taxon abundances across all taxonomic units integrates total reads in each sample, a process recalibrated by the Bracken estimation algorithm.
 - [Hierarchial Data Visulization](#hierarchial-data-visulization) - Produces radial sunburst visualizations to depict estimated species abundance data.
 - [IRIDA Next Output](#irida-next-output) - Generates a JSON output file that is compliant with IRIDA Next.
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution.
@@ -64,7 +66,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
     - `sampleID_S_bracken_abundance_unsorted.tsv`
     - `sampleID_S_bracken.txt`
 - `adjust/`
-  - Abundance Estimations adjusted for unclassified reads:
+  - Taxonomic abundances/proportions adjusted for unclassified reads and recalibrated total reads:
     - `sampleID_S_bracken_abundance.csv`
     - `sampleID_S_adjusted_report.txt`
 
