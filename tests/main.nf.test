@@ -36,6 +36,7 @@ nextflow_pipeline {
             lines = path("$launchDir/results/kraken2/SAMPLE2_kraken2_report.txt").text
 
             assert lines.contains("97.38	24334	24334	U	0	unclassified")
+            assert lines.contains(" 2.62	655	2	D	2	    Bacteria")
             assert lines.contains(" 2.53	631	0	S	562	                Escherichia coli")
             assert lines.contains(" 2.53	631	631	S2	511145	                    Escherichia coli str. K-12 substr. MG1655")
             assert lines.contains(" 0.09	22	0	S	817	                    Bacteroides fragilis")
@@ -44,6 +45,7 @@ nextflow_pipeline {
             // BRACKEN outputs
             lines = path("$launchDir/results/bracken/SAMPLE2_S_bracken.txt").text
 
+            assert lines.contains("100.00	653	0	D	2	    Bacteria")
             assert lines.contains("96.63	631	631	S	562	                Escherichia coli")
             assert lines.contains("3.37	22	22	S	817	                    Bacteroides fragilis")
 
@@ -55,8 +57,8 @@ nextflow_pipeline {
             // ADJUST_BRACKEN outputs
             lines = path("$launchDir/results/adjust/SAMPLE2_S_bracken_abundances.csv").readLines()
 
-            assert lines.contains("SAMPLE2,unclassified,0,U,24334,0,24334,0.973788")
-            assert lines.contains("SAMPLE2,Escherichia coli,562,S,631,0,631,0.025251")
+            assert lines.contains("SAMPLE2,unclassified,0,U,24334,0,24334,0.973866")
+            assert lines.contains("SAMPLE2,Escherichia coli,562,S,631,0,631,0.025253")
             assert lines.contains("SAMPLE2,Bacteroides fragilis,817,S,22,0,22,0.00088")
 
             lines = path("$launchDir/results/adjust/SAMPLE2_S_adjusted_report.txt").text
@@ -90,7 +92,7 @@ nextflow_pipeline {
             assert iridanext_metadata.SAMPLE2."abundance_1_name" == "Escherichia coli"
             assert iridanext_metadata.SAMPLE2."abundance_1_ncbi_taxonomy_id" == "562"
             assert iridanext_metadata.SAMPLE2."abundance_1_num_assigned_reads" == "631"
-            assert iridanext_metadata.SAMPLE2."abundance_1_fraction_total_reads" == "0.025251"
+            assert iridanext_metadata.SAMPLE2."abundance_1_fraction_total_reads" == "0.025253"
             assert iridanext_metadata.SAMPLE2."abundance_2_name" == "Bacteroides fragilis"
             assert iridanext_metadata.SAMPLE2."abundance_2_ncbi_taxonomy_id" == "817"
             assert iridanext_metadata.SAMPLE2."abundance_2_num_assigned_reads" == "22"
@@ -104,7 +106,7 @@ nextflow_pipeline {
             assert iridanext_metadata.SAMPLE2."unclassified_name" == "unclassified"
             assert iridanext_metadata.SAMPLE2."unclassified_ncbi_taxonomy_id" == "0"
             assert iridanext_metadata.SAMPLE2."unclassified_num_assigned_reads" == "24334"
-            assert iridanext_metadata.SAMPLE2."unclassified_fraction_total_reads" == "0.973788"
+            assert iridanext_metadata.SAMPLE2."unclassified_fraction_total_reads" == "0.973866"
 
             assert iridanext_metadata.SAMPLE3."abundance_1_name" == "Bacteroides fragilis"
             assert iridanext_metadata.SAMPLE3."abundance_1_ncbi_taxonomy_id" == "817"
