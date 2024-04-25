@@ -184,7 +184,9 @@ nextflow_pipeline {
         }
 
         then {
-            assert workflow.failed
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+            assert !path("$launchDir/results/bracken").exists()
         }
     }
 

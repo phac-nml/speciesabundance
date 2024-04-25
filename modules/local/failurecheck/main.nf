@@ -41,7 +41,7 @@ process FAILURE_CHECK {
         bracken_fail.each {
             def id = it[0].id
             if (!processedIDs.containsKey(id)) {
-                writer.writeLine("$id,BRACKEN,The reads may have failed to classify against the selected Kraken2 database")
+                writer.writeLine("$id,BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory is missing the Bracken distribution files")
                 processedIDs[id] = true
             }
         }
