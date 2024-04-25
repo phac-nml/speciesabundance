@@ -1,21 +1,50 @@
-process FAILURE_CHECK{
+process FAILURE_CHECK {
     tag "failure_check"
     label 'process_low'
 
     input:
-    val failures
+    val fastp_fail
+    val kraken_fail
+    val bracken_fail
 
     output:
-    path("failures_report.csv"),    emit: failures_report
+    path("failures_report.csv"), emit: failures_report
 
     exec:
-    task.workDir.resolve("failures_report.csv").withWriter { writer ->
+    def processedIDs = [:]
+    def writer = task.workDir.resolve("failures_report.csv").newWriter()
+    // write header to the file
+    writer.writeLine("sample,module,error_message")
 
-        writer.writeLine("sample,error_message") // header
-
-        if (failures.size() > 0) {
-            failures.each {writer.writeLine "${it[0].id},The input sample(s) failed to progress through the pipeline"}
+    // Process FASTP_TRIM
+    if (fastp_fail.size() > 0) {
+        fastp_fail.each {
+            def id = it[0].id
+            if (!processedIDs.containsKey(id)) {
+                writer.writeLine("$id,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files or corruption in a SINGLE file")
+                processedIDs[id] = true
+            }
         }
     }
-
+    // Process KRAKEN2
+    if (kraken_fail.size() > 0) {
+        kraken_fail.each {
+            def id = it[0].id
+            if (!processedIDs.containsKey(id)) {
+                writer.writeLine("$id,KRAKEN2,The reads may not have passed the quality control and trimming process")
+                processedIDs[id] = true
+            }
+        }
+    }
+    // Process BRACKEN
+    if (bracken_fail.size() > 0) {
+        bracken_fail.each {
+            def id = it[0].id
+            if (!processedIDs.containsKey(id)) {
+                writer.writeLine("$id,BRACKEN,The reads may have failed to classify against the selected Kraken2 database")
+                processedIDs[id] = true
+            }
+        }
+    }
+    writer.close()
 }

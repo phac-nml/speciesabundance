@@ -110,12 +110,12 @@ workflow SpAnce {
     )
     ch_versions = ch_versions.mix(BRACKEN.out.versions)
 
-    // Create channel with sample IDs (meta) to report any errors that occured in pipeline
+    // Error Reporting: Create channel with sample IDs (meta) to report any errors that occured in pipeline
 
     samples = input.map { tuple -> tuple[0] }
 
-    // Checks for null entries from all samples provided in samplesheet.csv; adjusts for single or multiple sample entries
-    failure_checks = samples.join(BRACKEN.out.bracken_reports, remainder: true)
+    // Checks for null entires from all samples from the samplesheet.csv after processes; adjusts for single or multiple sample entries
+    fastp_check = samples.join(FASTP_TRIM.out.reads, remainder: true)
                                 .map { tuple ->
                                     if (tuple[1] == null) {
                                         [tuple, null]
@@ -123,10 +123,32 @@ workflow SpAnce {
                                         tuple
                                     }
                                 }
-    failures = failure_checks.filter { it[1] == null }.toList()
+    fastp_fail = fastp_check.filter { it[1] == null }.toList()
+
+    kraken_check = samples.join(KRAKEN2.out.report_txt, remainder: true)
+                                .map { tuple ->
+                                    if (tuple[1] == null) {
+                                        [tuple, null]
+                                    } else {
+                                        tuple
+                                    }
+                                }
+    kraken_fail = kraken_check.filter { it[1] == null }.toList()
+
+    bracken_check = samples.join(BRACKEN.out.bracken_reports, remainder: true)
+                                .map { tuple ->
+                                    if (tuple[1] == null) {
+                                        [tuple, null]
+                                    } else {
+                                        tuple
+                                    }
+                                }
+    bracken_fail = bracken_check.filter { it[1] == null }.toList()
 
     FAILURE_CHECK (
-        failures
+        fastp_fail,
+        kraken_fail,
+        bracken_fail
     )
 
     // Continue with pipeline to adjust for unclassified reads and re-estimated total reads
