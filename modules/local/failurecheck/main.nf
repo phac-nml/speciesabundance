@@ -21,7 +21,7 @@ process FAILURE_CHECK {
         fastp_fail.each {
             def id = it[0].id
             if (!processedIDs.containsKey(id)) {
-                writer.writeLine("$id,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files or corruption in a SINGLE file")
+                writer.writeLine("$id,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files, corruption in one or both SINGLE/PAIRED file(s), or do not exist in provided PATH")
                 processedIDs[id] = true
             }
         }
@@ -41,7 +41,7 @@ process FAILURE_CHECK {
         bracken_fail.each {
             def id = it[0].id
             if (!processedIDs.containsKey(id)) {
-                writer.writeLine("$id,BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory is missing the Bracken distribution files")
+                writer.writeLine("$id,BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory may be missing the Bracken distribution files")
                 processedIDs[id] = true
             }
         }
