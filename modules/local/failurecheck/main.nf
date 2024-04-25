@@ -21,7 +21,7 @@ process FAILURE_CHECK {
         fastp_fail.each {
             def id = it[0].id
             if (!processedIDs.containsKey(id)) {
-                writer.writeLine("$id,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files, corruption in one or both SINGLE/PAIRED file(s), or do not exist in provided PATH")
+                writer.writeLine("$id,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or do not exist in provided PATH")
                 processedIDs[id] = true
             }
         }
