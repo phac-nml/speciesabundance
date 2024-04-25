@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### `Changed`
+
 - Refined the calculations within the 'adjust_brakcen_for_unclassified_reads' function to ascertain the proportions of taxonomic abundances relative to the read values adjusted following Bracken's re-estimation of abundances.
 
 ## 2.0.0 - 2024/04/18
