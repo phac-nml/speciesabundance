@@ -30,14 +30,21 @@ WorkflowSpeciesabundance.initialise(params, log)
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK     } from '../subworkflows/local/input_check'
-include { FASTP_TRIM      } from '../modules/local/fastptrim/main'
-include { KRAKEN2         } from '../modules/local/kraken2/main'
-include { BRACKEN         } from '../modules/local/bracken/main'
-include { ADJUST_BRACKEN  } from '../modules/local/adjustbracken/main'
-include { TOP_N           } from "../modules/local/topN/main"
-include { BRACKEN2KRONA   } from "../modules/local/bracken2krona/main"
-include { KRONA           } from "../modules/local/krona/main"
+
+include { INPUT_CHECK      } from '../subworkflows/local/input_check'
+
+//
+// MODULES: Locally developed modules
+//
+
+include { FASTP_TRIM       } from '../modules/local/fastptrim/main'
+include { KRAKEN2          } from '../modules/local/kraken2/main'
+include { BRACKEN          } from '../modules/local/bracken/main'
+include { FAILURE_CHECK    } from '../modules/local/failurecheck/main'
+include { ADJUST_BRACKEN   } from '../modules/local/adjustbracken/main'
+include { TOP_N            } from '../modules/local/topN/main'
+include { BRACKEN2KRONA    } from '../modules/local/bracken2krona/main'
+include { KRONA            } from '../modules/local/krona/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -102,6 +109,27 @@ workflow SpAnce {
         ch_kmer_len
     )
     ch_versions = ch_versions.mix(BRACKEN.out.versions)
+
+    // Create channel with sample IDs (meta) to report any errors that occured in pipeline
+
+    samples = input.map { tuple -> tuple[0] }
+
+    // Checks for null entries from all samples provided in samplesheet.csv; adjusts for single or multiple sample entries
+    failure_checks = samples.join(BRACKEN.out.bracken_reports, remainder: true)
+                                .map { tuple ->
+                                    if (tuple[1] == null) {
+                                        [tuple, null]
+                                    } else {
+                                        tuple
+                                    }
+                                }
+    failures = failure_checks.filter { it[1] == null }.toList()
+
+    FAILURE_CHECK (
+        failures
+    )
+
+    // Continue with pipeline to adjust for unclassified reads and re-estimated total reads
 
     ADJUST_BRACKEN (
         KRAKEN2.out.report_txt,
