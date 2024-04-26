@@ -1,6 +1,6 @@
 process FAILURE_CHECK {
     tag "failure_check"
-    label 'process_low'
+    label 'process_medium'
 
     input:
     val fastp_fail
