@@ -158,9 +158,9 @@ Within the `files` section of this JSON file, all of the output paths are relati
 
 ## Failures
 
-If one or more samples fail during the pipeline execution, the workflow will still run all other samples in the samplesheet. The samples that fail will be reported in a file names `results/failure/failure_report.csv`. This CSV file has three columns:
+If one or more samples fail during the pipeline execution, the workflow will still run all other samples in the samplesheet. The samples that fail will be reported in a file named `results/failure/failure_report.csv`. This CSV file has three columns:
 
-- `sample` : the name os the sample that failed (matching the input samplesheet)
+- `sample` : the name of the sample that failed (matching the input samplesheet)
 - `module` : the module (or process) where the error occured
 - `error_message` : suggestions that aim to provide insights into potential reasons for sample failure in the respective process
 
@@ -168,8 +168,8 @@ For example:
 
 ```
 sample,module,error_message
-[SAMPLE1],FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or files may not exist in PATH provided by input samplesheet
-[SAMPLE2],KRAKEN2,The reads may not have passed the quality control and trimming process OR the database directory may be missing KRAKEN2 files
+[SAMPLE1],FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or file(s) may not exist in PATH provided by input samplesheet
+[SAMPLE2],KRAKEN2,The reads may not have passed the quality control and trimming process OR the database directory may be missing required KRAKEN2 files
 {SAMPLE3},BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory may be missing the Bracken distribution files
 ```
 
