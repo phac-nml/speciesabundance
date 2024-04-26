@@ -21,7 +21,7 @@ process FAILURE_CHECK {
         fastp_fail.each {
             def id = it[0].id
             if (!processedIDs.containsKey(id)) {
-                writer.writeLine("$id,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or do not exist in provided PATH")
+                writer.writeLine("$id,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or files may not exist in PATH provided by input samplesheet")
                 processedIDs[id] = true
             }
         }
@@ -31,7 +31,7 @@ process FAILURE_CHECK {
         kraken_fail.each {
             def id = it[0].id
             if (!processedIDs.containsKey(id)) {
-                writer.writeLine("$id,KRAKEN2,The reads may not have passed the quality control and trimming process")
+                writer.writeLine("$id,KRAKEN2,The reads may not have passed the quality control and trimming process OR the database directory may be missing KRAKEN2 files")
                 processedIDs[id] = true
             }
         }
