@@ -46,5 +46,11 @@ process FAILURE_CHECK {
             }
         }
     }
+
+    // If no samples fail pipeline execution:
+    if (fastp_fail.isEmpty() && kraken_fail.isEmpty() && bracken_fail.isEmpty()) {
+        writer.writeLine("No samples failed pipeline execution")
+    }
+
     writer.close()
 }
