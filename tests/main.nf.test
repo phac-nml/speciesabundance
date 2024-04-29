@@ -211,7 +211,7 @@ nextflow_pipeline {
 
         when {
             params{
-                input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/error_handling/tests/data/error_samplesheet.csv"
+                input = "$projectDir/tests/data/error_samplesheet.csv"
                 database = "$projectDir/tests/data/minidb"
                 outdir = "results"
             }
