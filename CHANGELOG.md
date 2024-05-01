@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### `Added`
+
+- The ability to handle errors that occur during quality trimming, alignment to selected database, and taxon abundance estimation. These errors will be reported in `failure/failures_report.csv`.
+
 ### `Changed`
 
 - Refined the calculations within the 'adjust_brakcen_for_unclassified_reads' function to ascertain the proportions of taxonomic abundances relative to the read values adjusted following Bracken's re-estimation of abundances.

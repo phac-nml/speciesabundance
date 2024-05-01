@@ -11,6 +11,7 @@ The directories listed below will be created in the results directory after the 
 - `bracken`
 - `bracken2krona`
 - `csvtk`
+- `failure`
 - `kraken2`
 - `krona`
 - `pipeline_info`
@@ -28,6 +29,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
   - The taxon abundances are adjusted to include unclassified reads.
   - Taxon abundances across all taxonomic units integrates total reads in each sample, a process recalibrated by the Bracken estimation algorithm.
 - [Hierarchial Data Visulization](#hierarchial-data-visulization) - Produces radial sunburst visualizations to depict estimated species abundance data.
+- [Failure Check](#failure-check) - Verifies if any sample(s) failed pipeline execution and generates a report that identifies the failed sample(s), which pipeline module/process encountered errors, and offers potential reasons for the failure(s).
 - [IRIDA Next Output](#irida-next-output) - Generates a JSON output file that is compliant with IRIDA Next.
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution.
 
@@ -80,6 +82,16 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 - `krona/`
   - Adjusted Abundance Estimation SunBurst Chart:
     - `sampleID.krona.html`
+
+</details>
+
+### Failure Check
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `failure/`
+  - `failures_report.csv`
 
 </details>
 

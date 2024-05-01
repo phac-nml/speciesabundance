@@ -72,12 +72,28 @@ nextflow_pipeline {
             assert path("$launchDir/results/krona/SAMPLE2.krona.html").exists()
             assert path("$launchDir/results/krona/SAMPLE3.krona.html").exists()
 
+            // check failure_report
+            assert path("$launchDir/results/failure/failures_report.csv").exists()
+
+            lines = path("$launchDir/results/failure/failures_report.csv").readLines()
+
+            assert lines.size() == 2
+            assert lines.contains("sample,module,error_message")
+            assert lines.contains(",,No samples failed pipeline execution")
+
             // check IRIDA Next JSON output
+
+            assert path("$launchDir/results/iridanext.output.json").json == path("$projectDir/tests/data/test_iridanext.output.json").json
+
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_global = iridanext_json.files.global
             def iridanext_samples = iridanext_json.files.samples
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            // output files
+            // global output file
+            assert iridanext_global.findAll {it.path == "failure/failures_report.csv" }.size() == 1
+
+            // samples output files
             assert iridanext_samples.SAMPLE2.findAll { it.path == "adjust/SAMPLE2_S_bracken_abundances.csv" }.size() == 1
             assert iridanext_samples.SAMPLE2.findAll { it.path == "krona/SAMPLE2.krona.html" }.size() == 1
             assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2.fastp.html" }.size() == 1
@@ -160,7 +176,7 @@ nextflow_pipeline {
         when {
             params {
                 input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
-                kraken2_db = "${projectDir}/tests/data/kracken2database"
+                kraken2_db = "$projectDir/tests/data/kracken2database"
                 outdir = "results"
             }
         }
@@ -177,15 +193,94 @@ nextflow_pipeline {
         when {
             params {
                 input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
-                kraken2_db = "${projectDir}/tests/data/kraken2database"
-                bracken_db = "${projectDir}/tests/data/kraken2database"
+                kraken2_db = "$projectDir/tests/data/kraken2database"
+                bracken_db = "$projectDir/tests/data/kraken2database"
                 outdir = "results"
             }
         }
 
         then {
-            assert workflow.failed
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+            assert !path("$launchDir/results/bracken").exists()
         }
     }
 
+    test("Integration tests with samples that pass and fail"){
+        tag "sample_failures"
+
+        when {
+            params{
+                input = "$projectDir/tests/data/error_samplesheet.csv"
+                database = "$projectDir/tests/data/minidb"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // check failures_report csv file
+            assert path("$launchDir/results/failure/failures_report.csv").exists()
+
+            def lines = []
+            lines = path("$launchDir/results/failure/failures_report.csv").readLines()
+
+            assert lines.size() == 4
+            assert lines.contains("sample,module,error_message")
+            assert lines.contains("SAMPLE1,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or file(s) may not exist in PATH provided by input samplesheet")
+            assert lines.contains("SAMPLE2,KRAKEN2,The reads may not have passed the quality control and trimming process OR the database directory may be missing required KRAKEN2 files")
+            assert lines.contains("SAMPLE3,BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory may be missing the Bracken distribution files")
+
+            // individual sample output checks across the pipeline
+
+            assert path("$launchDir/results/fastp/SAMPLE1.fastp.html").exists() == false
+            assert path("$launchDir/results/fastp/SAMPLE2.fastp.html").exists()
+            assert path("$launchDir/results/kraken2/SAMPLE2_kraken2_report.txt").exists() == false
+            assert path("$launchDir/results/kraken2/SAMPLE3_kraken2_report.txt").exists()
+            assert path("$launchDir/results/bracken/SAMPLE3_S_bracken.txt").exists() == false
+            assert path("$launchDir/results/bracken/SAMPLE4_S_bracken.txt").exists()
+            assert path("$launchDir/results/adjust/SAMPLE4_S_adjusted_report.txt").exists()
+            assert path("$launchDir/results/krona/SAMPLE4.krona.html").exists()
+            assert path("$launchDir/results/top/SAMPLE4_S_top_5.csv").exists()
+            assert path("$launchDir/results/csvtk/merged_topN.csv").exists()
+
+            lines = path("$launchDir/results/csvtk/merged_topN.csv").readLines()
+
+            assert lines.size() == 2
+            assert lines.contains("SAMPLE4,S,Bacteroides fragilis,817,28799,0.578107,Escherichia coli,562,20997,0.421491,,,,,,,,,,,,,unclassified,0,20,0.000401")
+        }
+    }
+
+    test("Integration tests with a single sample that fails"){
+        tag "sample_failures"
+
+        when {
+            params{
+                input = "$projectDir/tests/data/fail_samplesheet.csv"
+                database = "$projectDir/tests/data/minidb"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+            assert path("$launchDir/results/fastp").exists() == false
+            assert path("$launchDir/results/kraken").exists() == false
+            assert path("$launchDir/results/bracken").exists() == false
+
+            // check failures_report csv file
+            assert path("$launchDir/results/failure/failures_report.csv").exists()
+
+            def lines = []
+            lines = path("$launchDir/results/failure/failures_report.csv").readLines()
+
+            assert lines.size() == 2
+            assert lines.contains("sample,module,error_message")
+            assert lines.contains("SAMPLE1,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or file(s) may not exist in PATH provided by input samplesheet")
+
+        }
+    }
 }
