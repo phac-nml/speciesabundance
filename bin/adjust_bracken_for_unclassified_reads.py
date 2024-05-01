@@ -85,19 +85,6 @@ def get_num_unclassified_seqs(parsed_kraken_report):
     return num_unclassified_seqs
 
 
-def get_num_classified_seqs(parsed_kraken_report):
-    root_records = list(
-        filter(lambda x: x["ncbi_taxonomy_id"] == "1", parsed_kraken_report)
-    )
-    num_classified_seqs = 0
-    if len(root_records) > 0:
-        root_record = root_records[0]
-        if "num_seqs_this_clade" in root_record:
-            num_classified_seqs = root_record["num_seqs_this_clade"]
-
-    return num_classified_seqs
-
-
 def adjust_bracken_report(bracken_report, num_unclassified_seqs):
     adjusted_bracken_report = []
     unclassified_record = {
@@ -129,6 +116,19 @@ def adjust_bracken_report(bracken_report, num_unclassified_seqs):
     return adjusted_bracken_report
 
 
+def get_num_classified_seqs(adjusted_bracken_report):
+    root_records = list(
+        filter(lambda x: x["ncbi_taxonomy_id"] == "1", adjusted_bracken_report)
+    )
+    num_classified_seqs = 0
+    if len(root_records) > 0:
+        root_record = root_records[0]
+        if "num_seqs_this_clade" in root_record:
+            num_classified_seqs = root_record["num_seqs_this_clade"]
+
+    return num_classified_seqs
+
+
 def adjust_bracken_abundances(
     bracken_abundances, num_total_seqs, num_unclassified_seqs
 ):
@@ -158,11 +158,12 @@ def adjust_bracken_abundances(
 def main(args):
 
     kraken_report = parse_kraken_report(args.kraken_report)
+    bracken_report = parse_kraken_report(args.bracken_report)
+
     num_unclassified_seqs = get_num_unclassified_seqs(kraken_report)
-    num_classified_seqs = get_num_classified_seqs(kraken_report)
+    num_classified_seqs = get_num_classified_seqs(bracken_report)
     num_total_seqs = num_unclassified_seqs + num_classified_seqs
 
-    bracken_report = parse_kraken_report(args.bracken_report)
     adjusted_bracken_report = adjust_bracken_report(
         bracken_report, num_unclassified_seqs
     )

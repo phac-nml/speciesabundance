@@ -3,6 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.0 - 2024/05/01
+
+### `Added`
+
+- The ability to handle errors that occur during quality trimming, alignment to selected database, and taxon abundance estimation. These errors will be reported in `failure/failures_report.csv`.
+
+### `Changed`
+
+- Refined the calculations within the 'adjust_bracken_for_unclassified_reads' function to ascertain the proportions of taxonomic abundances relative to the read values adjusted following Bracken's re-estimation of abundances.
+
 ## 2.0.0 - 2024/04/18
 
 ### `Added`

@@ -36,6 +36,7 @@ nextflow_pipeline {
             lines = path("$launchDir/results/kraken2/SAMPLE2_kraken2_report.txt").text
 
             assert lines.contains("97.38	24334	24334	U	0	unclassified")
+            assert lines.contains(" 2.62	655	2	D	2	    Bacteria")
             assert lines.contains(" 2.53	631	0	S	562	                Escherichia coli")
             assert lines.contains(" 2.53	631	631	S2	511145	                    Escherichia coli str. K-12 substr. MG1655")
             assert lines.contains(" 0.09	22	0	S	817	                    Bacteroides fragilis")
@@ -44,6 +45,7 @@ nextflow_pipeline {
             // BRACKEN outputs
             lines = path("$launchDir/results/bracken/SAMPLE2_S_bracken.txt").text
 
+            assert lines.contains("100.00	653	0	D	2	    Bacteria")
             assert lines.contains("96.63	631	631	S	562	                Escherichia coli")
             assert lines.contains("3.37	22	22	S	817	                    Bacteroides fragilis")
 
@@ -55,8 +57,8 @@ nextflow_pipeline {
             // ADJUST_BRACKEN outputs
             lines = path("$launchDir/results/adjust/SAMPLE2_S_bracken_abundances.csv").readLines()
 
-            assert lines.contains("SAMPLE2,unclassified,0,U,24334,0,24334,0.973788")
-            assert lines.contains("SAMPLE2,Escherichia coli,562,S,631,0,631,0.025251")
+            assert lines.contains("SAMPLE2,unclassified,0,U,24334,0,24334,0.973866")
+            assert lines.contains("SAMPLE2,Escherichia coli,562,S,631,0,631,0.025253")
             assert lines.contains("SAMPLE2,Bacteroides fragilis,817,S,22,0,22,0.00088")
 
             lines = path("$launchDir/results/adjust/SAMPLE2_S_adjusted_report.txt").text
@@ -70,12 +72,28 @@ nextflow_pipeline {
             assert path("$launchDir/results/krona/SAMPLE2.krona.html").exists()
             assert path("$launchDir/results/krona/SAMPLE3.krona.html").exists()
 
+            // check failure_report
+            assert path("$launchDir/results/failure/failures_report.csv").exists()
+
+            lines = path("$launchDir/results/failure/failures_report.csv").readLines()
+
+            assert lines.size() == 2
+            assert lines.contains("sample,module,error_message")
+            assert lines.contains(",,No samples failed pipeline execution")
+
             // check IRIDA Next JSON output
+
+            assert path("$launchDir/results/iridanext.output.json").json == path("$projectDir/tests/data/test_iridanext.output.json").json
+
             def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_global = iridanext_json.files.global
             def iridanext_samples = iridanext_json.files.samples
             def iridanext_metadata = iridanext_json.metadata.samples
 
-            // output files
+            // global output file
+            assert iridanext_global.findAll {it.path == "failure/failures_report.csv" }.size() == 1
+
+            // samples output files
             assert iridanext_samples.SAMPLE2.findAll { it.path == "adjust/SAMPLE2_S_bracken_abundances.csv" }.size() == 1
             assert iridanext_samples.SAMPLE2.findAll { it.path == "krona/SAMPLE2.krona.html" }.size() == 1
             assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/SAMPLE2.fastp.html" }.size() == 1
@@ -90,7 +108,7 @@ nextflow_pipeline {
             assert iridanext_metadata.SAMPLE2."abundance_1_name" == "Escherichia coli"
             assert iridanext_metadata.SAMPLE2."abundance_1_ncbi_taxonomy_id" == "562"
             assert iridanext_metadata.SAMPLE2."abundance_1_num_assigned_reads" == "631"
-            assert iridanext_metadata.SAMPLE2."abundance_1_fraction_total_reads" == "0.025251"
+            assert iridanext_metadata.SAMPLE2."abundance_1_fraction_total_reads" == "0.025253"
             assert iridanext_metadata.SAMPLE2."abundance_2_name" == "Bacteroides fragilis"
             assert iridanext_metadata.SAMPLE2."abundance_2_ncbi_taxonomy_id" == "817"
             assert iridanext_metadata.SAMPLE2."abundance_2_num_assigned_reads" == "22"
@@ -104,7 +122,7 @@ nextflow_pipeline {
             assert iridanext_metadata.SAMPLE2."unclassified_name" == "unclassified"
             assert iridanext_metadata.SAMPLE2."unclassified_ncbi_taxonomy_id" == "0"
             assert iridanext_metadata.SAMPLE2."unclassified_num_assigned_reads" == "24334"
-            assert iridanext_metadata.SAMPLE2."unclassified_fraction_total_reads" == "0.973788"
+            assert iridanext_metadata.SAMPLE2."unclassified_fraction_total_reads" == "0.973866"
 
             assert iridanext_metadata.SAMPLE3."abundance_1_name" == "Bacteroides fragilis"
             assert iridanext_metadata.SAMPLE3."abundance_1_ncbi_taxonomy_id" == "817"
@@ -158,7 +176,7 @@ nextflow_pipeline {
         when {
             params {
                 input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
-                kraken2_db = "${projectDir}/tests/data/kracken2database"
+                kraken2_db = "$projectDir/tests/data/kracken2database"
                 outdir = "results"
             }
         }
@@ -175,15 +193,94 @@ nextflow_pipeline {
         when {
             params {
                 input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
-                kraken2_db = "${projectDir}/tests/data/kraken2database"
-                bracken_db = "${projectDir}/tests/data/kraken2database"
+                kraken2_db = "$projectDir/tests/data/kraken2database"
+                bracken_db = "$projectDir/tests/data/kraken2database"
                 outdir = "results"
             }
         }
 
         then {
-            assert workflow.failed
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+            assert !path("$launchDir/results/bracken").exists()
         }
     }
 
+    test("Integration tests with samples that pass and fail"){
+        tag "sample_failures"
+
+        when {
+            params{
+                input = "$projectDir/tests/data/error_samplesheet.csv"
+                database = "$projectDir/tests/data/minidb"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // check failures_report csv file
+            assert path("$launchDir/results/failure/failures_report.csv").exists()
+
+            def lines = []
+            lines = path("$launchDir/results/failure/failures_report.csv").readLines()
+
+            assert lines.size() == 4
+            assert lines.contains("sample,module,error_message")
+            assert lines.contains("SAMPLE1,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or file(s) may not exist in PATH provided by input samplesheet")
+            assert lines.contains("SAMPLE2,KRAKEN2,The reads may not have passed the quality control and trimming process OR the database directory may be missing required KRAKEN2 files")
+            assert lines.contains("SAMPLE3,BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory may be missing the Bracken distribution files")
+
+            // individual sample output checks across the pipeline
+
+            assert path("$launchDir/results/fastp/SAMPLE1.fastp.html").exists() == false
+            assert path("$launchDir/results/fastp/SAMPLE2.fastp.html").exists()
+            assert path("$launchDir/results/kraken2/SAMPLE2_kraken2_report.txt").exists() == false
+            assert path("$launchDir/results/kraken2/SAMPLE3_kraken2_report.txt").exists()
+            assert path("$launchDir/results/bracken/SAMPLE3_S_bracken.txt").exists() == false
+            assert path("$launchDir/results/bracken/SAMPLE4_S_bracken.txt").exists()
+            assert path("$launchDir/results/adjust/SAMPLE4_S_adjusted_report.txt").exists()
+            assert path("$launchDir/results/krona/SAMPLE4.krona.html").exists()
+            assert path("$launchDir/results/top/SAMPLE4_S_top_5.csv").exists()
+            assert path("$launchDir/results/csvtk/merged_topN.csv").exists()
+
+            lines = path("$launchDir/results/csvtk/merged_topN.csv").readLines()
+
+            assert lines.size() == 2
+            assert lines.contains("SAMPLE4,S,Bacteroides fragilis,817,28799,0.578107,Escherichia coli,562,20997,0.421491,,,,,,,,,,,,,unclassified,0,20,0.000401")
+        }
+    }
+
+    test("Integration tests with a single sample that fails"){
+        tag "sample_failures"
+
+        when {
+            params{
+                input = "$projectDir/tests/data/fail_samplesheet.csv"
+                database = "$projectDir/tests/data/minidb"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+            assert path("$launchDir/results/fastp").exists() == false
+            assert path("$launchDir/results/kraken").exists() == false
+            assert path("$launchDir/results/bracken").exists() == false
+
+            // check failures_report csv file
+            assert path("$launchDir/results/failure/failures_report.csv").exists()
+
+            def lines = []
+            lines = path("$launchDir/results/failure/failures_report.csv").readLines()
+
+            assert lines.size() == 2
+            assert lines.contains("sample,module,error_message")
+            assert lines.contains("SAMPLE1,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or file(s) may not exist in PATH provided by input samplesheet")
+
+        }
+    }
 }
