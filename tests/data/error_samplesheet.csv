@@ -1,5 +1,5 @@
 sample,fastq_1,fastq_2
 SAMPLE1,https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_R1.fastq.gz,https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_sample2_R2.fastq.gz
-SAMPLE2,https://raw.githubusercontent.com/phac-nml/speciesabundance/error_handling/tests/data/fastq/test-kraken_R1_001.fastq.gz,https://raw.githubusercontent.com/phac-nml/speciesabundance/error_handling/tests/data/fastq/test-kraken_R2_001.fastq.gz
-SAMPLE3,https://raw.githubusercontent.com/phac-nml/speciesabundance/error_handling/tests/data/fastq/test-bracken_R1_001.fastq.gz,https://raw.githubusercontent.com/phac-nml/speciesabundance/error_handling/tests/data/fastq/test-bracken_R2_001.fastq.gz
+SAMPLE2,https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/tests/data/fastq/test-kraken_R1_001.fastq.gz,https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/tests/data/fastq/test-kraken_R2_001.fastq.gz
+SAMPLE3,https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/tests/data/fastq/test-bracken_R1_001.fastq.gz,https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/tests/data/fastq/test-bracken_R2_001.fastq.gz
 SAMPLE4,https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_R1.fastq.gz,https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_R2.fastq.gz
