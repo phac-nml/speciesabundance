@@ -22,17 +22,13 @@ process FAILURE_CHECK {
         if (fastp_fail.size() > 0) {
             fastp_fail.each {
                 def id = it[0].id
-                if (id instanceof List) {
-                    id.each { currentId ->
-                        if (!(currentId in processedIDs)) {
-                            writer.writeLine("$currentId,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or file(s) may not exist in PATH provided by input samplesheet")
-                            processedIDs.add(currentId)
-                        }
-                    }
-                } else {
-                    if (!(id in processedIDs)) {
-                        writer.writeLine("$id,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or file(s) may not exist in PATH provided by input samplesheet")
-                        processedIDs.add(id)
+                if (!(id instanceof List)) {
+                    id =[id]
+                }
+                id.each { currentId ->
+                    if (!(currentId in processedIDs)) {
+                        writer.writeLine("$currentId,FASTP,The input FASTQ file(s) might exhibit either a mismatch in PAIRED files; corruption in one or both SINGLE/PAIRED file(s); or file(s) may not exist in PATH provided by input samplesheet")
+                        processedIDs.add(currentId)
                     }
                 }
             }
@@ -42,17 +38,13 @@ process FAILURE_CHECK {
         if (kraken_fail.size() > 0) {
             kraken_fail.each {
                 def id = it[0].id
-                if (id instanceof List) {
-                    id.each { currentId ->
-                        if (!(currentId in processedIDs)) {
-                            writer.writeLine("$currentId,KRAKEN2,The reads may not have passed the quality control and trimming process OR the database directory may be missing required KRAKEN2 files")
-                            processedIDs.add(currentId)
-                        }
-                    }
-                } else {
-                    if (!(id in processedIDs)) {
-                        writer.writeLine("$id,KRAKEN2,The reads may not have passed the quality control and trimming process OR the database directory may be missing required KRAKEN2 files")
-                        processedIDs.add(id)
+                if (!(id instanceof List)) {
+                    id = [id]
+                }
+                id.each { currentId ->
+                    if (!(currentId in processedIDs)) {
+                        writer.writeLine("$currentId,KRAKEN2,The reads may not have passed the quality control and trimming process OR the database directory may be missing required KRAKEN2 files")
+                        processedIDs.add(currentId)
                     }
                 }
             }
@@ -62,17 +54,13 @@ process FAILURE_CHECK {
         if (bracken_fail.size() > 0) {
             bracken_fail.each {
                 def id = it[0].id
-                if (id instanceof List) {
-                    id.each { currentId ->
-                        if (!(currentId in processedIDs)) {
-                            writer.writeLine("$currentId,BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory may be missing the Bracken distribution files")
-                            processedIDs.add(currentId)
-                        }
-                    }
-                } else {
-                    if (!(id in processedIDs)) {
-                        writer.writeLine("$id,BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory may be missing the Bracken distribution files")
-                        processedIDs.add(id)
+                if (!(id instanceof List)) {
+                    id = [id]
+                }
+                id.each { currentId ->
+                    if (!(currentId in processedIDs)) {
+                        writer.writeLine("$currentId,BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory may be missing the Bracken distribution files")
+                        processedIDs.add(currentId)
                     }
                 }
             }
