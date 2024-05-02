@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Changed`
 
-- Enabled checking for existance of database files in JSON Schema to avoid issues with staging non-existent files in Azure.
+- Enabled checking for existence of database files in JSON Schema to avoid issues with staging non-existent files in Azure.
 
 ## 2.1.0 - 2024/05/01
 
