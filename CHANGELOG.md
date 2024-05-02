@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.1.1 - 2024/05/02
+
+### `Changed`
+
+- Enabled checking for existence of database files in JSON Schema to avoid issues with staging non-existent files in Azure.
+
 ## 2.1.0 - 2024/05/01
 
 ### `Added`

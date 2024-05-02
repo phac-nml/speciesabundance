@@ -176,7 +176,7 @@ nextflow_pipeline {
         when {
             params {
                 input = "https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/assets/samplesheet.csv"
-                kraken2_db = "$projectDir/tests/data/kracken2database"
+                kraken2_db = "$projectDir/tests/data/kraken2database"
                 outdir = "results"
             }
         }
@@ -203,6 +203,23 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/results").exists()
             assert !path("$launchDir/results/bracken").exists()
+        }
+    }
+
+    test ("Test validation of database parameters check for file existance"){
+        tag "fail_validation"
+
+        when {
+            params{
+                input = "$projectDir/tests/data/error_samplesheet.csv"
+                database = "./validate_path_non_existance"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert workflow.stderr.contains("* --database: the file or directory './validate_path_non_existance' does not exist.")
         }
     }
 
