@@ -29,6 +29,13 @@
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
                     "fa_icon": "fas fa-folder-open"
                 },
+                "private_registry": {
+                    "type": "boolean",
+                    "format": "directory-path",
+                    "description": "Use GSP private container registry in Azure",
+                    "fa_icon": "fas fa-question-circle",
+                    "default": false
+                },
                 "email": {
                     "type": "string",
                     "description": "Email address for completion summary.",
