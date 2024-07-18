@@ -4,7 +4,7 @@ process KRONA {
 
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/krona:2.8.1--pl5321hdfd78af_1':
-        'biocontainers/krona:2.8.1--pl5321hdfd78af_1' }"
+        (params.override_default_container_registry ? 'docker.io/biocontainers/krona:v2.7.1_cv1' : 'biocontainers/krona:2.8.1--pl5321hdfd78af_1') }"
 
     input:
     tuple val(meta), path(krona_txt)
