@@ -8,68 +8,41 @@
         "samples": {
             "SAMPLE2": [
                 {
-                    "path": "krona/SAMPLE2.krona.html"
+                    "path": "krona/B2.krona.html"
                 },
                 {
-                    "path": "adjust/SAMPLE2_S_bracken_abundances.csv"
+                    "path": "adjust/B2_S_bracken_abundances.csv"
                 },
                 {
-                    "path": "fastp/SAMPLE2.fastp.html"
-                }
-            ],
-            "SAMPLE1": [
-                {
-                    "path": "krona/SAMPLE1.krona.html"
-                },
-                {
-                    "path": "adjust/SAMPLE1_S_bracken_abundances.csv"
-                },
-                {
-                    "path": "fastp/SAMPLE1.fastp.html"
+                    "path": "fastp/B2.fastp.html"
                 }
             ],
             "SAMPLE3": [
                 {
-                    "path": "krona/SAMPLE3.krona.html"
+                    "path": "krona/B2_SAMPLE3.krona.html"
                 },
                 {
-                    "path": "adjust/SAMPLE3_S_bracken_abundances.csv"
+                    "path": "adjust/B2_SAMPLE3_S_bracken_abundances.csv"
                 },
                 {
-                    "path": "fastp/SAMPLE3.fastp.html"
+                    "path": "fastp/B2_SAMPLE3.fastp.html"
+                }
+            ],
+            "SAMPLE1": [
+                {
+                    "path": "krona/A1_sample.krona.html"
+                },
+                {
+                    "path": "adjust/A1_sample_S_bracken_abundances.csv"
+                },
+                {
+                    "path": "fastp/A1_sample.fastp.html"
                 }
             ]
         }
     },
     "metadata": {
         "samples": {
-            "SAMPLE3": {
-                "taxonomy_level": "S",
-                "abundance_1_name": "Bacteroides fragilis",
-                "abundance_1_ncbi_taxonomy_id": "817",
-                "abundance_1_num_assigned_reads": "28877",
-                "abundance_1_fraction_total_reads": "0.577702",
-                "abundance_2_name": "Escherichia coli",
-                "abundance_2_ncbi_taxonomy_id": "562",
-                "abundance_2_num_assigned_reads": "21065",
-                "abundance_2_fraction_total_reads": "0.421418",
-                "abundance_3_name": "",
-                "abundance_3_ncbi_taxonomy_id": "",
-                "abundance_3_num_assigned_reads": "",
-                "abundance_3_fraction_total_reads": "",
-                "abundance_4_name": "",
-                "abundance_4_ncbi_taxonomy_id": "",
-                "abundance_4_num_assigned_reads": "",
-                "abundance_4_fraction_total_reads": "",
-                "abundance_5_name": "",
-                "abundance_5_ncbi_taxonomy_id": "",
-                "abundance_5_num_assigned_reads": "",
-                "abundance_5_fraction_total_reads": "",
-                "unclassified_name": "unclassified",
-                "unclassified_ncbi_taxonomy_id": "0",
-                "unclassified_num_assigned_reads": "44",
-                "unclassified_fraction_total_reads": "0.00088"
-            },
             "SAMPLE2": {
                 "taxonomy_level": "S",
                 "abundance_1_name": "Escherichia coli",
@@ -96,6 +69,33 @@
                 "unclassified_ncbi_taxonomy_id": "0",
                 "unclassified_num_assigned_reads": "24334",
                 "unclassified_fraction_total_reads": "0.973866"
+            },
+            "SAMPLE3": {
+                "taxonomy_level": "S",
+                "abundance_1_name": "Bacteroides fragilis",
+                "abundance_1_ncbi_taxonomy_id": "817",
+                "abundance_1_num_assigned_reads": "28877",
+                "abundance_1_fraction_total_reads": "0.577702",
+                "abundance_2_name": "Escherichia coli",
+                "abundance_2_ncbi_taxonomy_id": "562",
+                "abundance_2_num_assigned_reads": "21065",
+                "abundance_2_fraction_total_reads": "0.421418",
+                "abundance_3_name": "",
+                "abundance_3_ncbi_taxonomy_id": "",
+                "abundance_3_num_assigned_reads": "",
+                "abundance_3_fraction_total_reads": "",
+                "abundance_4_name": "",
+                "abundance_4_ncbi_taxonomy_id": "",
+                "abundance_4_num_assigned_reads": "",
+                "abundance_4_fraction_total_reads": "",
+                "abundance_5_name": "",
+                "abundance_5_ncbi_taxonomy_id": "",
+                "abundance_5_num_assigned_reads": "",
+                "abundance_5_fraction_total_reads": "",
+                "unclassified_name": "unclassified",
+                "unclassified_ncbi_taxonomy_id": "0",
+                "unclassified_num_assigned_reads": "44",
+                "unclassified_fraction_total_reads": "0.00088"
             },
             "SAMPLE1": {
                 "taxonomy_level": "S",
