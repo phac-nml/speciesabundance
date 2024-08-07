@@ -38,7 +38,7 @@ process TOP_N {
     ${abundances} \\
     ${args} \\
     -n ${top_n} \\
-    -s ${meta.id} \\
+    -s ${meta.irida_id} \\
     > ${meta.id}_${taxonomic_level}_top_${top_n}.csv
 
     cat <<-END_VERSIONS > versions.yml
