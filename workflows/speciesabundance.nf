@@ -68,19 +68,36 @@ workflow SpAnce {
 
     ch_versions = Channel.empty()
 
+    // Track processed IDs
+    def processedIDs = [] as Set 
+
     // Create a new channel of metadata from a sample sheet
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
     input = Channel.fromSamplesheet("input")
+        .map { meta, fastq_1, fastq_2 ->
+            // Replace spaces in 'id' with underscores
+            if (meta.id) {
+                meta.id = meta.id.replaceAll(/\s+/, '_')
+            }
+            // Ensure ID is unique by appending meta.irida_id if needed
+            while (processedIDs.contains(meta.id)) {
+                meta.id = "${meta.id}_${meta.irida_id}"
+            }
+            // Add the ID to the set of processed IDs
+            processedIDs << meta.id
+            // Return the adjusted tuple
+            return [meta, fastq_1, fastq_2]
+        }
         // Map the inputs so that they conform to the nf-core-expected "reads" format.
         // Either [meta, [fastq_1]] or [meta, [fastq_1, fastq_2]] if fastq_2 exists
         .map { meta, fastq_1, fastq_2 ->
-                if (fastq_2) {
-                    meta.single_end = false
-                    tuple(meta, [ file(fastq_1), file(fastq_2) ])
-                } else {
-                    meta.single_end = true
-                    tuple(meta, [ file(fastq_1) ])
-                }
+            if (fastq_2) {
+                meta.single_end = false
+                tuple(meta, [ file(fastq_1), file(fastq_2) ])
+            } else {
+                meta.single_end = true
+                tuple(meta, [ file(fastq_1) ])
+            }
         }
 
     kraken_database = select_kraken_database(params.database, params.kraken2_db)
@@ -173,7 +190,7 @@ workflow SpAnce {
     ch_csvs = csv_files.map{
         meta, topN -> topN
         }.collect().map{
-            topN -> [ [id:"merged_topN"], topN]
+            topN -> [ [id:"merged_topN", irida_id: "sample"], topN]
         }
 
     CSVTK_CONCAT (
