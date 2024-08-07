@@ -69,7 +69,7 @@ workflow SpAnce {
     ch_versions = Channel.empty()
 
     // Track processed IDs
-    def processedIDs = [] as Set 
+    def processedIDs = [] as Set
 
     // Create a new channel of metadata from a sample sheet
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
