@@ -71,6 +71,7 @@ nextflow_pipeline {
             assert path("$launchDir/results/krona/A1_sample.krona.html").exists()
             assert path("$launchDir/results/krona/B2.krona.html").exists()
             assert path("$launchDir/results/krona/B2_SAMPLE3.krona.html").exists()
+            assert path("$launchDir/results/krona/SAMPLE4.krona.html").exists()
 
             // check failure_report
             assert path("$launchDir/results/failure/failures_report.csv").exists()
@@ -103,6 +104,9 @@ nextflow_pipeline {
             assert iridanext_samples.SAMPLE1.findAll { it.path == "adjust/A1_sample_S_bracken_abundances.csv" }.size() == 1
             assert iridanext_samples.SAMPLE1.findAll { it.path == "krona/A1_sample.krona.html" }.size() == 1
             assert iridanext_samples.SAMPLE1.findAll { it.path == "fastp/A1_sample.fastp.html" }.size() == 1
+            assert iridanext_samples.SAMPLE4.findAll { it.path == "adjust/SAMPLE4_S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE4.findAll { it.path == "krona/SAMPLE4.krona.html" }.size() == 1
+            assert iridanext_samples.SAMPLE4.findAll { it.path == "fastp/SAMPLE4.fastp.html" }.size() == 1
 
             // output metadata
             assert iridanext_metadata.SAMPLE2."abundance_1_name" == "Escherichia coli"
@@ -128,6 +132,11 @@ nextflow_pipeline {
             assert iridanext_metadata.SAMPLE3."abundance_1_ncbi_taxonomy_id" == "817"
             assert iridanext_metadata.SAMPLE3."abundance_1_num_assigned_reads" == "28877"
             assert iridanext_metadata.SAMPLE3."abundance_1_fraction_total_reads" == "0.577702"
+
+            assert iridanext_metadata.SAMPLE4."abundance_1_name" == "Bacteroides fragilis"
+            assert iridanext_metadata.SAMPLE4."abundance_1_ncbi_taxonomy_id" == "817"
+            assert iridanext_metadata.SAMPLE4."abundance_1_num_assigned_reads" == "28877"
+            assert iridanext_metadata.SAMPLE4."abundance_1_fraction_total_reads" == "0.577702"
 
             assert iridanext_metadata.SAMPLE1."abundance_1_name" == "Bacteroides fragilis"
             assert iridanext_metadata.SAMPLE1."abundance_1_ncbi_taxonomy_id" == "817"
