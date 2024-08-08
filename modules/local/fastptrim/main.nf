@@ -4,7 +4,9 @@ process FASTP_TRIM {
     label 'process_single'
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/fastp:0.23.4--h5f740d0_0' :
-        (params.override_default_container_registry ? 'docker.io/biocontainers/fastp:v0.20.1_cv1' : 'biocontainers/fastp:0.23.4--h5f740d0_0') }"
+        task.ext.override_configured_container_registry != false ? 
+        'docker.io/biocontainers/fastp:v0.20.1_cv1' : 
+        'biocontainers/fastp:0.23.4--h5f740d0_0' }"
     
     input:
     tuple val(meta), path(reads)
