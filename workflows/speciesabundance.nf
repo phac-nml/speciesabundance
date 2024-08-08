@@ -75,8 +75,11 @@ workflow SpAnce {
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
     input = Channel.fromSamplesheet("input")
         .map { meta, fastq_1, fastq_2 ->
-            // Replace spaces in 'id' with underscores
-            if (meta.id) {
+            // Set meta.id to meta.irida_if if sample_name is not provided in the samplesheet
+            if (!meta.id) {
+                meta.id = meta.irida_id
+            } else {
+                // Replace spaces in 'id' with underscores
                 meta.id = meta.id.replaceAll(/\s+/, '_')
             }
             // Ensure ID is unique by appending meta.irida_id if needed

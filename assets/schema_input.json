@@ -38,6 +38,6 @@
                 ]
             }
         },
-        "required": ["sample", "sample_name", "fastq_1"]
+        "required": ["sample", "fastq_1"]
     }
 }
