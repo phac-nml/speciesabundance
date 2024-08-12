@@ -75,7 +75,7 @@ workflow SpAnce {
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
     input = Channel.fromSamplesheet("input")
         .map { meta, fastq_1, fastq_2 ->
-            // Set meta.id to meta.irida_if if sample_name is not provided in the samplesheet
+            // Set meta.id to meta.irida_id if sample_name is not provided in the samplesheet
             if (!meta.id) {
                 meta.id = meta.irida_id
             } else {
