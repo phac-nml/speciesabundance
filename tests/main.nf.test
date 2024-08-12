@@ -19,12 +19,12 @@ nextflow_pipeline {
             assert path("$launchDir/results").exists()
 
             // check FASTP_TRIM JSON outputs from paired and single reads
-            def fastp_JSON_paired = path("$launchDir/results/fastp/A1_sample.fastp.json").json
+            def fastp_JSON_paired = path("$launchDir/results/fastp/A1.fastp.json").json
 
             assert fastp_JSON_paired.summary.sequencing == "paired end (126 cycles + 126 cycles)"
             assert fastp_JSON_paired.filtering_result.passed_filter_reads == 99594
 
-            def fastp_JSON_single = path("$launchDir/results/fastp/B2_SAMPLE3.fastp.json").json
+            def fastp_JSON_single = path("$launchDir/results/fastp/C3.fastp.json").json
 
             assert fastp_JSON_single.summary.sequencing == "single end (126 cycles)"
             assert fastp_JSON_single.filtering_result.passed_filter_reads == 49986
@@ -68,10 +68,9 @@ nextflow_pipeline {
             assert lines.contains("0.09	22	22	S	817	                    Bacteroides fragilis")
 
             // check that KRONA html files exist:
-            assert path("$launchDir/results/krona/A1_sample.krona.html").exists()
+            assert path("$launchDir/results/krona/A1.krona.html").exists()
             assert path("$launchDir/results/krona/B2.krona.html").exists()
-            assert path("$launchDir/results/krona/B2_SAMPLE3.krona.html").exists()
-            assert path("$launchDir/results/krona/SAMPLE4.krona.html").exists()
+            assert path("$launchDir/results/krona/C3.krona.html").exists()
 
             // check failure_report
             assert path("$launchDir/results/failure/failures_report.csv").exists()
@@ -98,12 +97,146 @@ nextflow_pipeline {
             assert iridanext_samples.SAMPLE2.findAll { it.path == "adjust/B2_S_bracken_abundances.csv" }.size() == 1
             assert iridanext_samples.SAMPLE2.findAll { it.path == "krona/B2.krona.html" }.size() == 1
             assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/B2.fastp.html" }.size() == 1
-            assert iridanext_samples.SAMPLE3.findAll { it.path == "adjust/B2_SAMPLE3_S_bracken_abundances.csv" }.size() == 1
-            assert iridanext_samples.SAMPLE3.findAll { it.path == "krona/B2_SAMPLE3.krona.html" }.size() == 1
-            assert iridanext_samples.SAMPLE3.findAll { it.path == "fastp/B2_SAMPLE3.fastp.html" }.size() == 1
-            assert iridanext_samples.SAMPLE1.findAll { it.path == "adjust/A1_sample_S_bracken_abundances.csv" }.size() == 1
-            assert iridanext_samples.SAMPLE1.findAll { it.path == "krona/A1_sample.krona.html" }.size() == 1
-            assert iridanext_samples.SAMPLE1.findAll { it.path == "fastp/A1_sample.fastp.html" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "adjust/C3_S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "krona/C3.krona.html" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "fastp/C3.fastp.html" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "adjust/A1_S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "krona/A1.krona.html" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "fastp/A1.fastp.html" }.size() == 1
+
+            // output metadata
+            assert iridanext_metadata.SAMPLE2."abundance_1_name" == "Escherichia coli"
+            assert iridanext_metadata.SAMPLE2."abundance_1_ncbi_taxonomy_id" == "562"
+            assert iridanext_metadata.SAMPLE2."abundance_1_num_assigned_reads" == "631"
+            assert iridanext_metadata.SAMPLE2."abundance_1_fraction_total_reads" == "0.025253"
+            assert iridanext_metadata.SAMPLE2."abundance_2_name" == "Bacteroides fragilis"
+            assert iridanext_metadata.SAMPLE2."abundance_2_ncbi_taxonomy_id" == "817"
+            assert iridanext_metadata.SAMPLE2."abundance_2_num_assigned_reads" == "22"
+            assert iridanext_metadata.SAMPLE2."abundance_2_fraction_total_reads" == "0.00088"
+            assert iridanext_metadata.SAMPLE2."abundance_3_name" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_3_fraction_total_reads" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_4_name" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_4_fraction_total_reads" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_5_name" == ""
+            assert iridanext_metadata.SAMPLE2."abundance_5_fraction_total_reads" == ""
+            assert iridanext_metadata.SAMPLE2."unclassified_name" == "unclassified"
+            assert iridanext_metadata.SAMPLE2."unclassified_ncbi_taxonomy_id" == "0"
+            assert iridanext_metadata.SAMPLE2."unclassified_num_assigned_reads" == "24334"
+            assert iridanext_metadata.SAMPLE2."unclassified_fraction_total_reads" == "0.973866"
+
+            assert iridanext_metadata.SAMPLE3."abundance_1_name" == "Bacteroides fragilis"
+            assert iridanext_metadata.SAMPLE3."abundance_1_ncbi_taxonomy_id" == "817"
+            assert iridanext_metadata.SAMPLE3."abundance_1_num_assigned_reads" == "28877"
+            assert iridanext_metadata.SAMPLE3."abundance_1_fraction_total_reads" == "0.577702"
+
+            assert iridanext_metadata.SAMPLE1."abundance_1_name" == "Bacteroides fragilis"
+            assert iridanext_metadata.SAMPLE1."abundance_1_ncbi_taxonomy_id" == "817"
+            assert iridanext_metadata.SAMPLE1."abundance_1_num_assigned_reads" == "28799"
+            assert iridanext_metadata.SAMPLE1."abundance_1_fraction_total_reads" == "0.578328"
+        }
+    }
+
+    test("Testing different sample_name scenarios") {
+        tag "pipeline_success"
+
+        when {
+            params {
+                input = "$projectDir/tests/data/samplename_samplesheet.csv"
+                database = "$projectDir/tests/data/minidb"
+                outdir = "results"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/results").exists()
+
+            // check FASTP_TRIM JSON outputs from paired and single reads
+            def fastp_JSON_paired = path("$launchDir/results/fastp/A1__sample1.fastp.json").json
+
+            assert fastp_JSON_paired.summary.sequencing == "paired end (126 cycles + 126 cycles)"
+            assert fastp_JSON_paired.filtering_result.passed_filter_reads == 99594
+
+            def fastp_JSON_single = path("$launchDir/results/fastp/B2__SAMPLE3.fastp.json").json
+
+            assert fastp_JSON_single.summary.sequencing == "single end (126 cycles)"
+            assert fastp_JSON_single.filtering_result.passed_filter_reads == 49986
+
+            // check output files
+            def lines = []
+
+            // KRAKEN2 outputs
+            lines = path("$launchDir/results/kraken2/B2__kraken2_report.txt").text
+
+            assert lines.contains("97.38	24334	24334	U	0	unclassified")
+            assert lines.contains(" 2.62	655	2	D	2	    Bacteria")
+            assert lines.contains(" 2.53	631	0	S	562	                Escherichia coli")
+            assert lines.contains(" 2.53	631	631	S2	511145	                    Escherichia coli str. K-12 substr. MG1655")
+            assert lines.contains(" 0.09	22	0	S	817	                    Bacteroides fragilis")
+            assert lines.contains(" 0.09	22	22	S1	295405	                      Bacteroides fragilis YCH46")
+
+            // BRACKEN outputs
+            lines = path("$launchDir/results/bracken/B2__S_bracken.txt").text
+
+            assert lines.contains("100.00	653	0	D	2	    Bacteria")
+            assert lines.contains("96.63	631	631	S	562	                Escherichia coli")
+            assert lines.contains("3.37	22	22	S	817	                    Bacteroides fragilis")
+
+            lines = path("$launchDir/results/bracken/B2__S_bracken_abundances_unsorted.tsv").text
+
+            assert lines.contains("Escherichia coli	562	S	631	0	631	0.96631")
+            assert lines.contains("Bacteroides fragilis	817	S	22	0	22	0.03369")
+
+            // ADJUST_BRACKEN outputs
+            lines = path("$launchDir/results/adjust/B2__S_bracken_abundances.csv").readLines()
+
+            assert lines.contains("B2_,unclassified,0,U,24334,0,24334,0.973866")
+            assert lines.contains("B2_,Escherichia coli,562,S,631,0,631,0.025253")
+            assert lines.contains("B2_,Bacteroides fragilis,817,S,22,0,22,0.00088")
+
+            lines = path("$launchDir/results/adjust/B2__S_adjusted_report.txt").text
+
+            assert lines.contains("97.39	24334	24334	U	0	unclassified")
+            assert lines.contains("2.53	631	631	S	562	                Escherichia coli")
+            assert lines.contains("0.09	22	22	S	817	                    Bacteroides fragilis")
+
+            // check that KRONA html files exist:
+            assert path("$launchDir/results/krona/A1__sample1.krona.html").exists()
+            assert path("$launchDir/results/krona/B2_.krona.html").exists()
+            assert path("$launchDir/results/krona/B2__SAMPLE3.krona.html").exists()
+            assert path("$launchDir/results/krona/SAMPLE4.krona.html").exists()
+
+            // check failure_report
+            assert path("$launchDir/results/failure/failures_report.csv").exists()
+
+            lines = path("$launchDir/results/failure/failures_report.csv").readLines()
+
+            assert lines.size() == 2
+            assert lines.contains("sample,module,error_message")
+            assert lines.contains(",,No samples failed pipeline execution")
+
+            // check IRIDA Next JSON output
+
+            assert path("$launchDir/results/iridanext.output.json").json == path("$projectDir/tests/data/samplename.test_iridanext.output.json").json
+
+            def iridanext_json = path("$launchDir/results/iridanext.output.json").json
+            def iridanext_global = iridanext_json.files.global
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            // global output file
+            assert iridanext_global.findAll {it.path == "failure/failures_report.csv" }.size() == 1
+
+            // samples output files
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "adjust/B2__S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "krona/B2_.krona.html" }.size() == 1
+            assert iridanext_samples.SAMPLE2.findAll { it.path == "fastp/B2_.fastp.html" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "adjust/B2__SAMPLE3_S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "krona/B2__SAMPLE3.krona.html" }.size() == 1
+            assert iridanext_samples.SAMPLE3.findAll { it.path == "fastp/B2__SAMPLE3.fastp.html" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "adjust/A1__sample1_S_bracken_abundances.csv" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "krona/A1__sample1.krona.html" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "fastp/A1__sample1.fastp.html" }.size() == 1
             assert iridanext_samples.SAMPLE4.findAll { it.path == "adjust/SAMPLE4_S_bracken_abundances.csv" }.size() == 1
             assert iridanext_samples.SAMPLE4.findAll { it.path == "krona/SAMPLE4.krona.html" }.size() == 1
             assert iridanext_samples.SAMPLE4.findAll { it.path == "fastp/SAMPLE4.fastp.html" }.size() == 1
