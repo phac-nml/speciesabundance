@@ -17,7 +17,7 @@
             "sample_name": {
                 "type": "string",
                 "meta": ["id"],
-                "errorMessage": "Sample name must be provided"
+                "errorMessage": "Optional. Used to override sample when used in tools like IRIDA-Next."
             },
             "fastq_1": {
                 "type": "string",
