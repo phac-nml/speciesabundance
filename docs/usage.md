@@ -15,24 +15,40 @@ You will need to create a samplesheet with information about the samples you wou
 ### Full samplesheet
 
 The input samplesheet must contain three columns: `sample`, `fastq_1`, `fastq_2`. The sampleIDs within a samplesheet should be unqiue. All other columns will be ignored.
-
-A final samplesheet file consisting of both single- and paired-end Illumina short read data may look something like the one below.
 This pipleine does not support the processing of long-read sequencing data (Nanopore or PacBio).
 
-```csv title="samplesheet.csv"
+A final samplesheet file consisting of both single- and paired-end Illumina short read data may look something like the one below.
+
+```csv title="samplesheet_minimal.csv"
 sample,fastq_1,fastq_2
 SAMPLE1,sample1_R1.fastq.gz,sample1_R2.fastq.gz
 SAMPLE2,sample2_R1.fastq.gz,sample2_R2.fastq.gz
-SAMPLE3,sample1_R1.fastq.gz,
+SAMPLE3,sample3_R1.fastq.gz,
 ```
 
-| Column    | Description                                                                                                                |
-| --------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. Samples should be unique within a samplesheet.                                                         |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
+A minimal [example samplesheet](../assets/samplesheet_minimal.csv) has been provided with the pipeline.
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+### IRIDA-Next Optional Samplesheet Configuration
+
+`speciesabundance` accepts the [IRIDA-Next](https://github.com/phac-nml/irida-next) format for samplesheets which contain the following columns: `sample`, `sample_name`, `fastq_1`, and `fastq_2`. The sample IDs within a samplesheet should be unique.
+
+A final samplesheet file consisting of both single- and paired-end data may look something like the one below.
+
+```csv title'"samplesheet.csv"
+sample,sample_name,fastq_1,fastq_2
+SAMPLE1,A1,sample1_R1.fastq.gz,sample1_R2.fastq.gz
+SAMPLE2,B2,sample2_R1.fastq.gz,sample2_R2.fastq.gz
+SAMPLE3,C3,sample3_R1.fastq.gz,
+```
+
+| Column        | Description                                                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `sample`      | Custom sample name. Samples should be unique within a samplesheet.                                                         |
+| `sample_name` | Sample name used in outputs (filenames and sample names)                                                                   |
+| `fastq_1`     | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
+| `fastq_2`     | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
+
+An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline, which includes the `sample_name` column.
 
 ## Running the pipeline
 

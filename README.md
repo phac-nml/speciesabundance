@@ -16,6 +16,16 @@ The input to the pipeline is a standard sample sheet (passed as `--input samples
 
 The structure of this file is defined in [assets/schema_input.json](assets/schema_input.json). Validation of the sample sheet is performed by [nf-validation](https://nextflow-io.github.io/nf-validation/).
 
+## IRIDA-Next Optional Input Configuration
+
+`speciesabundance` accepts the [IRIDA-Next](https://github.com/phac-nml/irida-next) format for samplesheets which can contain an additional column: `sample_name`
+
+`sample_name`: An **optional** column, that overrides `sample` for outputs (filenames and sample names) and reference assembly identification.
+
+`sample_name`, allows more flexibility in naming output files or sample identification. Unlike `sample`, `sample_name` is not required to contain unique values. `Nextflow` requires unique sample names, and therefore in the instance of repeat `sample_names`, `sample` will be suffixed to any `sample_name`. Non-alphanumeric characters (excluding `_`,`-`,`.`) will be replaced with `"_"`.
+
+An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+
 # Parameters
 
 ## Mandatory
