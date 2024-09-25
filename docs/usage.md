@@ -26,7 +26,7 @@ SAMPLE2,sample2_R1.fastq.gz,sample2_R2.fastq.gz
 SAMPLE3,sample3_R1.fastq.gz,
 ```
 
-A [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+A [example samplesheet](../assets/samplesheet_minimal.csv) has been provided with the pipeline.
 
 ### IRIDA-Next Optional Samplesheet Configuration
 
