@@ -26,7 +26,7 @@ SAMPLE2,sample2_R1.fastq.gz,sample2_R2.fastq.gz
 SAMPLE3,sample3_R1.fastq.gz,
 ```
 
-A minimal [example samplesheet](../assets/samplesheet_minimal.csv) has been provided with the pipeline.
+A [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
 ### IRIDA-Next Optional Samplesheet Configuration
 
@@ -48,7 +48,7 @@ SAMPLE3,C3,sample3_R1.fastq.gz,
 | `fastq_1`     | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
 | `fastq_2`     | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz". |
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline, which includes the `sample_name` column.
+An [example samplesheet](../tests/data/samplename_samplesheet.csv) has been provided with the pipeline, which includes the `sample_name` column.
 
 ## Running the pipeline
 

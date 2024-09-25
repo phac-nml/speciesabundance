@@ -14,7 +14,7 @@ The input to the pipeline is a standard sample sheet (passed as `--input samples
 | ------- | --------------- | --------------- |
 | SampleA | file_1.fastq.gz | file_2.fastq.gz |
 
-A minimal [example samplesheet](../assets/samplesheet_minimal.csv) has been provided with the pipeline.
+An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
 
 The structure of this file is defined in [assets/schema_input.json](assets/schema_input.json). Validation of the sample sheet is performed by [nf-validation](https://nextflow-io.github.io/nf-validation/).
 
@@ -32,7 +32,7 @@ The sample sheet, when including the optional `sample_name` column, should look 
 | ------- | ----------- | --------------- | --------------- |
 | SampleA | A1          | file_1.fastq.gz | file_2.fastq.gz |
 
-An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline, which includes the `sample_name` column.
+An [example samplesheet](../tests/data/samplename_samplesheet.csv) has been provided with the pipeline, which includes the `sample_name` column.
 
 # Parameters
 

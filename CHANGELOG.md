@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Added the ability to include a `sample_name` column in the input samplesheet.csv. Allows for compatibility with IRIDA-Next input configuration [PR24](https://github.com/phac-nml/speciesabundance/pull/24)
+  - `sample_name` special characters will be replaced with `"_"`
+  - If no `sample_name` is supplied in the column sample will be used
+  - To avoid repeat values for `sample_name` all `sample_name` values will be suffixed with the unique `sample` value from the input file
 
 ## 2.1.1 - 2024/05/02
 
