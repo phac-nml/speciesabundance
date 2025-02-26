@@ -1,0 +1,24 @@
+{
+    "overrides": {
+        "definitions": {
+            "input_output_options": {
+                "description": {
+                    "en": "Define where the pipeline should find input data and save output data.",
+                    "fr": "Définir où le pipeline doit trouver les données d’entrée et sauvegarder les données de sortie."
+                }
+            },
+            "speciesabundance_pipeline_parameters": {
+                "description": {
+                    "en": "Options to configure specific SpeciesAbundance pipeline behaviour",
+                    "fr": "Options pour configurer un comportement propre au pipeline SpeciesAbundance"
+                }
+            },
+            "databases": {
+                "description": {
+                    "en": "The Kraken2 and Bracken databases required for analysis.",
+                    "fr": "Les bases de données Kraken2 et Bracken requises pour l’analyse."
+                }
+            }
+        }
+    }
+}
