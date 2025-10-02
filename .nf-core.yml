@@ -30,5 +30,8 @@ lint:
     - custom_config
     - manifest.name
     - manifest.homePage
+    - params.max_cpus
+    - params.max_memory
+    - params.max_time
   readme:
     - nextflow_badge
