@@ -1,4 +1,4 @@
-pipeline_info/*.{html,json,txt}
+pipeline_info/*.{html,json,txt,yml}
 krona/*.html
 fastp/*.html
 iridanext.output.json
