@@ -36,6 +36,9 @@ lint:
     - params.max_time
   readme:
     - nextflow_badge
+  nf_test_content:
+    - tests/main.nf.test
+    - tests/default.nf.test
 
   template:
     org: phac-nml
