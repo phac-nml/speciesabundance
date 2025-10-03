@@ -1,0 +1,5 @@
+pipeline_info/*.{html,json,txt,yml}
+krona/*.html
+fastp/*.html
+iridanext.output.json
+csvtk/merged_topN.csv

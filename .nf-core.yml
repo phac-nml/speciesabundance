@@ -1,4 +1,5 @@
 repository_type: pipeline
+nf_core_version: "3.3.2"
 
 lint:
   files_exist:
