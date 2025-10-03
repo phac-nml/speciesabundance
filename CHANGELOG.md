@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### `Changed`
 
 - Adding GitHub CI tests against Nextflow `24.10.3`. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
+- Updating GithubCI tests and nf-tests to fix nf-core linting issues. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
 
 ## 2.2.0 - 2024/09/26
 
