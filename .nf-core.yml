@@ -36,3 +36,10 @@ lint:
     - params.max_time
   readme:
     - nextflow_badge
+
+  template:
+    org: phac-nml
+    name: speciesabundance
+    description: SpeciesAbundance pipeline
+    outdir: .
+    is_nfcore: false
