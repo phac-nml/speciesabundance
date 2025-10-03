@@ -42,9 +42,10 @@ lint:
   nf_test_content:
     - tests/main.nf.test
 
-  template:
-    org: phac-nml
-    name: speciesabundance
-    description: SpeciesAbundance pipeline
-    outdir: .
-    is_nfcore: false
+template:
+  org: phac-nml
+  name: speciesabundance
+  description: SpeciesAbundance Pipeline
+  version: 2.2.0
+  outdir: .
+  is_nfcore: false
