@@ -28,12 +28,6 @@ WorkflowSpeciesabundance.initialise(params, log)
 */
 
 //
-// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
-//
-
-include { INPUT_CHECK      } from '../subworkflows/local/input_check'
-
-//
 // MODULES: Locally developed modules
 //
 
