@@ -1,4 +1,5 @@
 repository_type: pipeline
+nf_core_version: "3.3.2"
 
 lint:
   files_exist:
@@ -11,6 +12,8 @@ lint:
     - lib/WorkflowMain.groovy
     - lib/NfcoreTemplate.groovy
     - lib/WorkflowSpeciesabundance.groovy
+    - conf/igenomes_ignored.config
+    - ro-crate-metadata.json
   files_unchanged:
     - assets/sendmail_template.txt
     - assets/email_template.html
@@ -30,5 +33,19 @@ lint:
     - custom_config
     - manifest.name
     - manifest.homePage
+    - params.max_cpus
+    - params.max_memory
+    - params.max_time
   readme:
     - nextflow_badge
+    - nfcore_template_badge
+  nf_test_content:
+    - tests/main.nf.test
+
+template:
+  org: phac-nml
+  name: speciesabundance
+  description: SpeciesAbundance Pipeline
+  version: 2.2.0
+  outdir: .
+  is_nfcore: false

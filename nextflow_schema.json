@@ -1,8 +1,8 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft-07/schema",
     "$id": "https://raw.githubusercontent.com/phac-nml/speciesabundance/main/nextflow_schema.json",
     "title": "phac-nml/speciesabundance pipeline parameters",
-    "description": "IRIDA Next speciesabundance Pipeline",
+    "description": "SpeciesAbundance Pipeline",
     "type": "object",
     "definitions": {
         "input_output_options": {
