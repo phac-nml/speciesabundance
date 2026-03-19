@@ -78,7 +78,7 @@ jobs:
         NXF_VER:
           - "23.04.0"
           - "24.10.3"
-          - "latest-everything"
+          - "25.10.4"
     env:
       NXF_ANSI_LOG: false
       TOTAL_SHARDS: ${{ needs.nf-test-changes.outputs.total_shards }}
