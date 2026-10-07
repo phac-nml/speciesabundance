@@ -5,6 +5,7 @@ lint:
     - assets/nf-core-speciesabundance_logo_light.png
     - docs/images/nf-core-speciesabundance_logo_light.png
     - docs/images/nf-core-speciesabundance_logo_dark.png
+    - docs/CONTRIBUTING.md
     - .github/workflows/awstest.yml
     - .github/workflows/awsfulltest.yml
     - lib/Utils.groovy
@@ -30,5 +31,8 @@ lint:
     - custom_config
     - manifest.name
     - manifest.homePage
+    - params.max_cpus
+    - params.max_memory
+    - params.max_time
   readme:
     - nextflow_badge
