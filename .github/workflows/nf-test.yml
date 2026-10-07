@@ -77,7 +77,7 @@ jobs:
             profile: "singularity"
         NXF_VER:
           - "25.10.4"
-          - "24.10.3"
+          - "25.10.0"
     env:
       NXF_ANSI_LOG: false
       TOTAL_SHARDS: ${{ needs.nf-test-changes.outputs.total_shards }}
