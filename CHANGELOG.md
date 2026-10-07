@@ -3,6 +3,19 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### `Added`
+
+- Adding GitHub CI tests against Nextflow `24.10.3`. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
+
+### `Changed`
+
+- Updating GithubCI tests and nf-tests to fix nf-core linting issues. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
+- Updating `custom/dumpsoftwareversions` and `csvtk/concat` nf-core modules to latest versions. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
+- Removed unneeded `input_check` code from pipeline. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
+- Set nextflow version 25.10.4 to replace 'latest-everything' to confirm compatibility with next IRIDA-Next nextflow version in `.github/workflows` for nf-test. [PR #27](https://github.com/phac-nml/speciesabundance/pull/27)
+
 ## 2.2.0 - 2024/09/26
 
 ### `Added`
