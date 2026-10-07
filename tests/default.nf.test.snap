@@ -12,11 +12,11 @@
                     "kreport2krona.py": "1.2"
                 },
                 "CSVTK_CONCAT": {
-                    "csvtk": "0.23.0"
+                    "csvtk": "0.31.0"
                 },
                 "CUSTOM_DUMPSOFTWAREVERSIONS": {
-                    "python": "3.11.7",
-                    "yaml": "5.4.1"
+                    "python": "3.13.1",
+                    "yaml": "6.0.2"
                 },
                 "FASTP_TRIM": {
                     "fastp": "0.23.4"
@@ -130,6 +130,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.10.5"
         },
-        "timestamp": "2026-10-07T12:34:04.029401211"
+        "timestamp": "2026-10-07T14:25:35.773088108"
     }
 }

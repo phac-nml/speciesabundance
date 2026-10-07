@@ -6,7 +6,7 @@ This is the [nf-core](https://nf-co.re/)-based pipeline for SpeciesAbundance. Th
 
 ## Samplesheet input
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It must be either a CSV-formatted or JSON-formatted file.
 
 ```bash
 --input '[path to samplesheet file]'
@@ -17,7 +17,7 @@ You will need to create a samplesheet with information about the samples you wou
 The input samplesheet must contain three columns: `sample`, `fastq_1`, `fastq_2`. The sampleIDs within a samplesheet should be unqiue. All other columns will be ignored.
 This pipleine does not support the processing of long-read sequencing data (Nanopore or PacBio).
 
-A final samplesheet file consisting of both single- and paired-end Illumina short read data may look something like the one below.
+A final CSV-formatted samplesheet file consisting of both single- and paired-end Illumina short read data may look something like the one below.
 
 ```csv title="samplesheet_minimal.csv"
 sample,fastq_1,fastq_2
@@ -26,7 +26,27 @@ SAMPLE2,sample2_R1.fastq.gz,sample2_R2.fastq.gz
 SAMPLE3,sample3_R1.fastq.gz,
 ```
 
-A [example samplesheet](../assets/samplesheet_minimal.csv) has been provided with the pipeline.
+If the provided sample sheet is in JSON format, then the JSON sample sheet must be an array of objects with each object containing the `sample`, `fastq_1`, and/or `fastq_2` fields, as illustrated below.
+
+```json
+[
+  {
+    "sample": "SAMPLE1",
+    "fastq_1": "sample1_R1.fastq.gz",
+    "fastq_2": "sample1_R2.fastq.gz"
+  },
+  {
+    "sample": "SAMPLE2",
+    "fastq_1": "sample2_R1.fastq.gz",
+    "fastq_2": "sample2_R2.fastq.gz"
+  },
+  {
+    "sample": "SAMPLE3",
+    "fastq_1": "sample3_R1.fastq.gz"
+  }
+]
+```
+A [example samplesheet](../assets/samplesheet_minimal.csv) and an [example JSON sample sheet](../assets/samplesheet.json) has been provided with the pipeline.
 
 ### IRIDA-Next Optional Samplesheet Configuration
 
