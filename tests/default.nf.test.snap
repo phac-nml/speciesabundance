@@ -1,7 +1,6 @@
 {
-    "Default test": {
+    "-profile test": {
         "content": [
-            24,
             {
                 "ADJUST_BRACKEN": {
                     "python": "3.8.3"
@@ -129,8 +128,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.6"
+            "nextflow": "25.10.5"
         },
-        "timestamp": "2025-10-03T14:43:07.052678456"
+        "timestamp": "2026-10-07T14:25:35.773088108"
     }
 }

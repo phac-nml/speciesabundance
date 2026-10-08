@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf-validation'
+include { paramsSummaryMap; paramsSummaryLog; samplesheetToList } from 'plugin/nf-schema'
 
 def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
 def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
@@ -67,7 +67,7 @@ workflow SpAnce {
 
     // Create a new channel of metadata from a sample sheet
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
-    input = Channel.fromSamplesheet("input")
+    input = Channel.fromList(samplesheetToList(params.input, "assets/schema_input.json"))
         .map { meta, fastq_1, fastq_2 ->
             // Set meta.id to meta.irida_id if sample_name is not provided in the samplesheet
             if (!meta.id) {
