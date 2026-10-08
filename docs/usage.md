@@ -46,6 +46,7 @@ If the provided sample sheet is in JSON format, then the JSON sample sheet must 
   }
 ]
 ```
+
 A [example samplesheet](../assets/samplesheet_minimal.csv) and an [example JSON sample sheet](../assets/samplesheet.json) has been provided with the pipeline.
 
 ### IRIDA-Next Optional Samplesheet Configuration
