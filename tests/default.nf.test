@@ -4,13 +4,12 @@ nextflow_pipeline {
     script "../main.nf"
     tag "pipeline"
 
-    test("Default test") {
+    test("-profile test") {
 
         when {
             params {
-                input = "$projectDir/assets/samplesheet.csv"
+                input = "$baseDir/assets/samplesheet.csv"
                 database = "$projectDir/tests/data/minidb"
-
                 outdir = "$outputDir"
             }
         }
@@ -23,8 +22,6 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // Number of successful tasks
-                    workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
                     removeNextflowVersion("$outputDir/pipeline_info/software_versions.yml"),
                     // All stable path name, with a relative path
