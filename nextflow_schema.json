@@ -1,10 +1,10 @@
 {
-    "$schema": "https://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/phac-nml/speciesabundance/main/nextflow_schema.json",
     "title": "phac-nml/speciesabundance pipeline parameters",
     "description": "SpeciesAbundance Pipeline",
     "type": "object",
-    "definitions": {
+    "$defs": {
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -16,12 +16,10 @@
                     "type": "string",
                     "format": "file-path",
                     "exists": true,
-                    "mimetype": "text/csv",
-                    "pattern": "^\\S+\\.csv$",
-                    "schema": "assets/schema_input.json",
-                    "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
-                    "fa_icon": "fas fa-file-csv"
+                    "pattern": "^\\S+\\.(csv|json)$",
+                    "description": "Path to either a CSV-formmated or JSON-formatted file containing information about the samples in the experiment.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It must be either a CSV-formatted or JSON-formatted file.",
+                    "fa_icon": "fas fa-file"
                 },
                 "outdir": {
                     "type": "string",
@@ -255,22 +253,22 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/input_output_options"
+            "$ref": "#/$defs/input_output_options"
         },
         {
-            "$ref": "#/definitions/databases"
+            "$ref": "#/$defs/databases"
         },
         {
-            "$ref": "#/definitions/speciesabundance_pipeline_parameters"
+            "$ref": "#/$defs/speciesabundance_pipeline_parameters"
         },
         {
-            "$ref": "#/definitions/institutional_config_options"
+            "$ref": "#/$defs/institutional_config_options"
         },
         {
-            "$ref": "#/definitions/max_job_request_options"
+            "$ref": "#/$defs/max_job_request_options"
         },
         {
-            "$ref": "#/definitions/generic_options"
+            "$ref": "#/$defs/generic_options"
         }
     ]
 }

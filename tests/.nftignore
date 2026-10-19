@@ -1,5 +1,6 @@
+.DS_Store
 pipeline_info/*.{html,json,txt,yml}
-krona/*.html
+iridanext.output.json*
+csvtk/*
 fastp/*.html
-iridanext.output.json
-csvtk/merged_topN.csv
+krona/*

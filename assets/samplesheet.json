@@ -1,0 +1,20 @@
+[
+    {
+        "sample": "SAMPLE1",
+        "sample_name": "A1",
+        "fastq_1": "https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_R1.fastq.gz",
+        "fastq_2": "https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_R2.fastq.gz"
+    },
+    {
+        "sample": "SAMPLE2",
+        "sample_name": "B2",
+        "fastq_1": "https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_sample2_R1.fastq.gz",
+        "fastq_2": "https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_sample2_R2.fastq.gz"
+    },
+    {
+        "sample": "SAMPLE3",
+        "sample_name": "C3",
+        "fastq_1": "https://github.com/nf-core/test-datasets/raw/mag/test_data/test_minigut_R1.fastq.gz",
+        "fastq_2": null
+    }
+]
