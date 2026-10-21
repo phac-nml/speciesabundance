@@ -90,12 +90,12 @@
                 "top/C3_S_top_5.csv"
             ],
             [
-                "A1_S_adjusted_report.txt:md5,c58ec223bd7c1582f2c872a1572286cc",
-                "A1_S_bracken_abundances.csv:md5,303f3b5f6c385e531e78befa080ac5db",
+                "A1_S_adjusted_report.txt:md5,ba31f7818c018413914f81a334fdf84a",
+                "A1_S_bracken_abundances.csv:md5,79f2f5fcdd4d21bb55ad7fe84bd66969",
                 "B2_S_adjusted_report.txt:md5,7b730531d2b6923d2762f8d3c45eff87",
                 "B2_S_bracken_abundances.csv:md5,fd0d5e75b649a338dec640b1fb8e3f34",
-                "C3_S_adjusted_report.txt:md5,588fd4370f6eb33c604ff6282c50676e",
-                "C3_S_bracken_abundances.csv:md5,8778ba23a6c8b0197bcd7c63a30a5e0d",
+                "C3_S_adjusted_report.txt:md5,52b348f0a11fb285138608a5e794f76f",
+                "C3_S_bracken_abundances.csv:md5,add5cd16873aecac89446f07875be6f0",
                 "A1_S_bracken.txt:md5,20fdf77a7f6b050c19e2b5d18e490757",
                 "A1_S_bracken_abundances_unsorted.tsv:md5,63f3faf29d6ae1ff2340052881317d15",
                 "B2_S_bracken.txt:md5,82ba5ceea5aef2f7f4666cac98d65fa0",
@@ -103,9 +103,9 @@
                 "C3_S_bracken.txt:md5,649cd51d610fcad9a986a291e241030a",
                 "C3_S_bracken_abundances_unsorted.tsv:md5,8751405f28aa6a0295487b15e54a86df",
                 "bracken_abundances_header.csv:md5,58497e218cfe4e2f460545fb715245d3",
-                "A1.txt:md5,e65adc3a8dad25011b2e57792bae89c2",
+                "A1.txt:md5,8b3670d80f15dd18976716354b87be1d",
                 "B2.txt:md5,9100a487da015ad000ff9b347afc76ae",
-                "C3.txt:md5,36c5791dfeb0dbc3f1e5c484b0c98f1e",
+                "C3.txt:md5,9ac11c5f3d75a2c8d648c2cf077c9143",
                 "failures_report.csv:md5,1e9dfc599574146843162ad55e76ee0f",
                 "A1.fastp.json:md5,ececfcb50a5e3bae261e3cb203000e27",
                 "A1_R1_trimmed.fastq.gz:md5,0057157e70a9c0e29ed33c9534e4fde1",
@@ -121,15 +121,15 @@
                 "B2_kraken2_report.txt:md5,6782a4c7088a7edd08b4ef5cce9c4d69",
                 "C3_kraken2_output.tsv.gz:md5,4a138c80558905861fdadc7ba9580fe9",
                 "C3_kraken2_report.txt:md5,530c12509ee74a9ac96b1215c0fdffff",
-                "A1_S_top_5.csv:md5,0e3b5a9f1a729caefd96e18d8a52bf56",
+                "A1_S_top_5.csv:md5,997c64e799ee5a8fc84c7830fe8f09e5",
                 "B2_S_top_5.csv:md5,824edf6da7008ddc1e73bc7ea4c0e0c2",
-                "C3_S_top_5.csv:md5,60b62e4b162e2c1ff117abf8469bae1b"
+                "C3_S_top_5.csv:md5,2788261901ff4df0d6a3ea40623114eb"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.10.5"
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2026-10-21T14:40:37.73122598"
+        "timestamp": "2026-10-21T14:55:50.823826396"
     }
 }
