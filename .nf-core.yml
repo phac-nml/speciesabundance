@@ -47,6 +47,6 @@ template:
   org: phac-nml
   name: speciesabundance
   description: SpeciesAbundance Pipeline
-  version: 2.2.0
+  version: 2.3.0
   outdir: .
   is_nfcore: false
