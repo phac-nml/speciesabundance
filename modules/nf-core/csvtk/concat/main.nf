@@ -32,10 +32,11 @@ process CSVTK_CONCAT {
         --num-cpus $task.cpus \\
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" \\
-        --out-file ${prefix}.${out_extension} \\
         $csv \\
-        | csvtk sort -k name \\
-        > ${prefix}.${out_extension}
+        > ${prefix}.unsorted.${out_extension}
+
+    { head -n 1 ${prefix}.unsorted.${out_extension}; tail -n +2 ${prefix}.unsorted.${out_extension} | LC_ALL=C sort -t ',' -k1,1; } > ${prefix}.${out_extension}
+    rm ${prefix}.unsorted.${out_extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

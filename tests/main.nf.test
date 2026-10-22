@@ -30,6 +30,9 @@ nextflow_pipeline {
             assert fastp_JSON_single.summary.sequencing == "single end (126 cycles)"
             assert fastp_JSON_single.filtering_result.passed_filter_reads == 49986
 
+            def merged_topN = path("$launchDir/output/csvtk/merged_topN.csv").readLines()
+            assert merged_topN.drop(1).collect { it.split(",", -1)[0] } == ["SAMPLE1", "SAMPLE2", "SAMPLE3"]
+
             // check output files
             def lines = []
 
