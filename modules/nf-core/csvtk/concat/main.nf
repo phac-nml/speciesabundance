@@ -33,7 +33,9 @@ process CSVTK_CONCAT {
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" \\
         --out-file ${prefix}.${out_extension} \\
-        $csv
+        $csv \\
+        | csvtk sort -k name \\
+        > ${prefix}.${out_extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
