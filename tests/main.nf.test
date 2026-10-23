@@ -553,7 +553,7 @@ nextflow_pipeline {
             lines = path("$launchDir/output/csvtk/merged_topN.csv").readLines()
 
             assert lines.size() == 2
-            assert lines.contains("SAMPLE4,S,Bacteroides fragilis,817,28799,0.578107,Escherichia coli,562,20997,0.421491,,,,,,,,,,,,,unclassified,0,20,0.000401")
+            assert lines.contains("SAMPLE4,S,Bacteroides fragilis,817,28799,0.578328,Escherichia coli,562,20997,0.421652,,,,,,,,,,,,,unclassified,0,1,2e-05")
         }
     }
 
