@@ -49,7 +49,7 @@ include { KRONA            } from '../modules/local/krona/main'
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { CSVTK_CONCAT                } from '../modules/nf-core/csvtk/concat/main.nf'
+include { CSVTK_CONCAT                } from '../modules/local/csvtk/concat/main.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
