@@ -2,7 +2,7 @@ process BRACKEN {
     tag "$meta.id"
     label 'process_medium'
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'biocontainers/bracken:2.7--py39hc16433a_0':
+        'https://depot.galaxyproject.org/singularity/bracken:2.7--py39hc16433a_0':
         'biocontainers/bracken:2.7--py39hc16433a_0' }"
 
     input:
