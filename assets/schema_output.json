@@ -1,0 +1,152 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/phac-nml/speciesabundance/main/assets/schema_output.json",
+    "title": "Species Abundance Output Schema",
+    "description": "The Species Abundance-specific schema used for validating IRIDA Next JSON output data",
+    "type": "object",
+    "properties": {
+        "files": {
+            "type": "object",
+            "properties": {
+                "global": {
+                    "type": "array",
+                    "items": {
+                        "properties": {
+                            "path": {
+                                "anyOf": [
+                                    {
+                                        "pattern": "^.*failure/.*failures_report.csv$",
+                                        "description": ""
+                                    }
+                                ]
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "uniqueItems": true
+                },
+                "samples": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "type": "array",
+                            "items": {
+                                "properties": {
+                                    "path": {
+                                        "anyOf": [
+                                            {
+                                                "pattern": "^.*fastp/.*.fastp.html$",
+                                                "description": ""
+                                            },
+                                            {
+                                                "pattern": "^.*adjust/.*_bracken_abundances.csv$",
+                                                "description": ""
+                                            },
+                                            {
+                                                "pattern": "^.*krona/.*.krona.html$",
+                                                "description": ""
+                                            }
+                                        ]
+                                    }
+                                },
+                                "additionalProperties": false
+                            },
+                            "uniqueItems": true
+                        }
+                    }
+                }
+            }
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "samples": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "type": "object",
+                            "properties": {
+                                "taxonomy_level": {
+                                    "description": ""
+                                },
+                                "abundance_1_name": {
+                                    "description":  "The name of the most abundant species."
+                                },
+                                "abundance_1_ncbi_taxonomy_id": {
+                                    "description":  "The NCBI taxonomic ID of the most abundance species."
+                                },
+                                "abundance_1_num_assigned_reads": {
+                                    "description":  "The number of reads assigned as the most abundant species."
+                                },
+                                "abundance_1_fraction_total_reads": {
+                                    "description":  "The total fraction of reads assigned as the most abundant species."
+                                },
+                                "abundance_2_name": {
+                                    "description":  "The name of the second most abundant species."
+                                },
+                                "abundance_2_ncbi_taxonomy_id": {
+                                    "description":  "The NCBI taxonomic ID of the second most abundance species."
+                                },
+                                "abundance_2_num_assigned_reads": {
+                                    "description":  "The number of reads assigned as the second most abundant species."
+                                },
+                                "abundance_2_fraction_total_reads": {
+                                    "description":  "The total fraction of reads assigned as the second most abundant species."
+                                },
+                                "abundance_3_name": {
+                                    "description":  "The name of the third most abundant species."
+                                },
+                                "abundance_3_ncbi_taxonomy_id": {
+                                    "description":  "The NCBI taxonomic ID of the third most abundance species."
+                                },
+                                "abundance_3_num_assigned_reads": {
+                                    "description":  "The number of reads assigned as the third most abundant species."
+                                },
+                                "abundance_3_fraction_total_reads": {
+                                    "description":  "The total fraction of reads assigned as the third most abundant species."
+                                },
+                                "abundance_4_name": {
+                                    "description":  "The name of the fourth most abundant species."
+                                },
+                                "abundance_4_ncbi_taxonomy_id": {
+                                    "description":  "The NCBI taxonomic ID of the fourth most abundance species."
+                                },
+                                "abundance_4_num_assigned_reads": {
+                                    "description":  "The number of reads assigned as the fourth most abundant species."
+                                },
+                                "abundance_4_fraction_total_reads": {
+                                    "description":  "The total fraction of reads assigned as the fourth most abundant species."
+                                },
+                                "abundance_5_name": {
+                                    "description":  "The name of the fifth most abundant species."
+                                },
+                                "abundance_5_ncbi_taxonomy_id": {
+                                    "description":  "The NCBI taxonomic ID of the fifth most abundance species."
+                                },
+                                "abundance_5_num_assigned_reads": {
+                                    "description":  "The number of reads assigned as the fifth most abundant species."
+                                },
+                                "abundance_5_fraction_total_reads": {
+                                    "description":  "The total fraction of reads assigned as the fifth most abundant species."
+                                },
+                                "unclassified_name": {
+                                    "description":  "The category for unclassified reads. Will contain 'unclassified'."
+                                },
+                                "unclassified_ncbi_taxonomy_id": {
+                                    "description":  "The NCBI taxonomy ID assigned to unclassified reads. Will contain '0'."
+                                },
+                                "unclassified_num_assigned_reads": {
+                                    "description":  "The number of unclassified reads."
+                                },
+                                "unclassified_fraction_total_reads": {
+                                    "description":  "The total fraction of unclassified reads."
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
