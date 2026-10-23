@@ -4,11 +4,11 @@ process CSVTK_CONCAT {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/csvtk:0.23.0--h9ee0642_0' :
-        'biocontainers/csvtk:0.23.0--h9ee0642_0' }"
+        'https://depot.galaxyproject.org/singularity/csvtk:0.31.0--h9ee0642_0' :
+        'biocontainers/csvtk:0.31.0--h9ee0642_0' }"
 
     input:
-    tuple val(meta), path(csv)
+    tuple val(meta), path(csv, name: 'inputs/csv*/*')
     val in_format
     val out_format
 
@@ -32,8 +32,23 @@ process CSVTK_CONCAT {
         --num-cpus $task.cpus \\
         --delimiter "${delimiter}" \\
         --out-delimiter "${out_delimiter}" \\
-        --out-file ${prefix}.${out_extension} \\
-        $csv
+        $csv \\
+        > ${prefix}.unsorted.${out_extension}
+
+    { head -n 1 ${prefix}.unsorted.${out_extension}; tail -n +2 ${prefix}.unsorted.${out_extension} | LC_ALL=C sort -t ',' -k1,1; } > ${prefix}.${out_extension}
+    rm ${prefix}.unsorted.${out_extension}
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        csvtk: \$(echo \$( csvtk version | sed -e "s/csvtk v//g" ))
+    END_VERSIONS
+    """
+
+    stub:
+    prefix = task.ext.prefix ?: "${meta.id}"
+    out_extension = out_format == "tsv" ? 'tsv' : 'csv'
+    """
+    touch ${prefix}.${out_extension}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

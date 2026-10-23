@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf-validation'
+include { paramsSummaryMap; paramsSummaryLog; samplesheetToList } from 'plugin/nf-schema'
 
 def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
 def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
@@ -28,12 +28,6 @@ WorkflowSpeciesabundance.initialise(params, log)
 */
 
 //
-// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
-//
-
-include { INPUT_CHECK      } from '../subworkflows/local/input_check'
-
-//
 // MODULES: Locally developed modules
 //
 
@@ -55,7 +49,7 @@ include { KRONA            } from '../modules/local/krona/main'
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { CSVTK_CONCAT                } from '../modules/nf-core/csvtk/concat/main.nf'
+include { CSVTK_CONCAT                } from '../modules/local/csvtk/concat/main.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
@@ -73,7 +67,7 @@ workflow SpAnce {
 
     // Create a new channel of metadata from a sample sheet
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
-    input = Channel.fromSamplesheet("input")
+    input = Channel.fromList(samplesheetToList(params.input, "assets/schema_input.json"))
         .map { meta, fastq_1, fastq_2 ->
             // Set meta.id to meta.irida_id if sample_name is not provided in the samplesheet
             if (!meta.id) {
@@ -173,11 +167,18 @@ workflow SpAnce {
 
     // Continue with pipeline to adjust for unclassified reads and re-estimated total reads
 
+    // Join by sample ID: independent queue channels may emit results in different orders.
+    adjust_inputs = KRAKEN2.out.report_txt
+        .map { meta, report_txt -> tuple(meta.id, meta, report_txt) }
+        .join(BRACKEN.out.bracken_reports.map { meta, report_txt -> tuple(meta.id, report_txt) })
+        .join(BRACKEN.out.bracken_output_tsv.map { meta, output_tsv -> tuple(meta.id, output_tsv) })
+        .join(BRACKEN.out.header_csv.map { meta, header_csv -> tuple(meta.id, header_csv) })
+        .map { id, meta, report_txt, bracken_report, bracken_output_tsv, header_csv ->
+            tuple(meta, report_txt, bracken_report, bracken_output_tsv, header_csv)
+        }
+
     ADJUST_BRACKEN (
-        KRAKEN2.out.report_txt,
-        BRACKEN.out.bracken_reports,
-        BRACKEN.out.bracken_output_tsv,
-        BRACKEN.out.header_csv,
+        adjust_inputs,
         ch_taxonomic_level
     )
     ch_versions = ch_versions.mix(ADJUST_BRACKEN.out.versions)
@@ -193,7 +194,7 @@ workflow SpAnce {
     ch_csvs = csv_files.map{
         meta, topN -> topN
         }.collect().map{
-            topN -> [ [id:"merged_topN", irida_id: "sample"], topN]
+        topN -> [ [id:"merged_topN", irida_id: "sample"], topN]
         }
 
     CSVTK_CONCAT (
