@@ -33,6 +33,9 @@ nextflow_pipeline {
             assert fastp_JSON_single.summary.sequencing == "single end (126 cycles)"
             assert fastp_JSON_single.filtering_result.passed_filter_reads == 49986
 
+            def merged_topN = path("$launchDir/output/csvtk/merged_topN.csv").readLines()
+            assert merged_topN.drop(1).collect { it.split(",", -1)[0] } == ["SAMPLE1", "SAMPLE2", "SAMPLE3"]
+
             // check output files
             def lines = []
 
@@ -568,7 +571,7 @@ nextflow_pipeline {
             lines = path("$launchDir/output/csvtk/merged_topN.csv").readLines()
 
             assert lines.size() == 2
-            assert lines.contains("SAMPLE4,S,Bacteroides fragilis,817,28799,0.578107,Escherichia coli,562,20997,0.421491,,,,,,,,,,,,,unclassified,0,20,0.000401")
+            assert lines.contains("SAMPLE4,S,Bacteroides fragilis,817,28799,0.578328,Escherichia coli,562,20997,0.421652,,,,,,,,,,,,,unclassified,0,1,2e-05")
         }
     }
 

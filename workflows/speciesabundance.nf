@@ -167,11 +167,18 @@ workflow SpAnce {
 
     // Continue with pipeline to adjust for unclassified reads and re-estimated total reads
 
+    // Join by sample ID: independent queue channels may emit results in different orders.
+    adjust_inputs = KRAKEN2.out.report_txt
+        .map { meta, report_txt -> tuple(meta.id, meta, report_txt) }
+        .join(BRACKEN.out.bracken_reports.map { meta, report_txt -> tuple(meta.id, report_txt) })
+        .join(BRACKEN.out.bracken_output_tsv.map { meta, output_tsv -> tuple(meta.id, output_tsv) })
+        .join(BRACKEN.out.header_csv.map { meta, header_csv -> tuple(meta.id, header_csv) })
+        .map { id, meta, report_txt, bracken_report, bracken_output_tsv, header_csv ->
+            tuple(meta, report_txt, bracken_report, bracken_output_tsv, header_csv)
+        }
+
     ADJUST_BRACKEN (
-        KRAKEN2.out.report_txt,
-        BRACKEN.out.bracken_reports,
-        BRACKEN.out.bracken_output_tsv,
-        BRACKEN.out.header_csv,
+        adjust_inputs,
         ch_taxonomic_level
     )
     ch_versions = ch_versions.mix(ADJUST_BRACKEN.out.versions)
@@ -184,11 +191,14 @@ workflow SpAnce {
     ch_versions = ch_versions.mix(TOP_N.out.versions)
 
     csv_files = TOP_N.out.topN
-    ch_csvs = csv_files.map{
-        meta, topN -> topN
-        }.collect().map{
-            topN -> [ [id:"merged_topN", irida_id: "sample"], topN]
-        }
+    ch_csvs = csv_files
+        .toSortedList { a, b -> a[0].id <=> b[0].id }
+        .map { items ->
+            [
+                [id: "merged_topN", irida_id: "sample"],
+                items.collect { meta, topN -> topN }
+            ]
+    }
 
     CSVTK_CONCAT (
         ch_csvs,

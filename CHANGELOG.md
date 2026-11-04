@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - A Species Abundance-specific JSON output schema that the nf-iridanext plugin will automatically validate its output against. Currently, this schema enforcement is only enabled during testing. [PR 32](https://github.com/phac-nml/speciesabundance/pull/32)
 
-## 2.3.0 - 2026/10/08
+## 2.3.0 - 2026/10/21
 
 ### `Added`
 
@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updating `custom/dumpsoftwareversions` and `csvtk/concat` nf-core modules to latest versions. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
 - Removed unneeded `input_check` code from pipeline. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
 - Set nextflow version 25.10.4 to replace 'latest-everything' to confirm compatibility with next IRIDA-Next nextflow version in `.github/workflows` for nf-test. [PR #27](https://github.com/phac-nml/speciesabundance/pull/27)
+
+### `Modified`
+
+- Workflow to pass meta tags to Bracken process. [PR 31](https://github.com/phac-nml/speciesabundance/pull/31)
+- Fix sample order for `csvtk/merged_topN.csv` to avoid flakey snapshots for `iridanextoutput.json.gz`. [PR 31](https://github.com/phac-nml/speciesabundance/pull/31)
 
 ## 2.2.0 - 2024/09/26
 
