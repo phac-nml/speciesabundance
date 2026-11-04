@@ -49,7 +49,7 @@ include { KRONA            } from '../modules/local/krona/main'
 //
 // MODULE: Installed directly from nf-core/modules
 //
-include { CSVTK_CONCAT                } from '../modules/local/csvtk/concat/main.nf'
+include { CSVTK_CONCAT                } from '../modules/nf-core/csvtk/concat/main.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/custom/dumpsoftwareversions/main'
 
 /*
@@ -191,11 +191,14 @@ workflow SpAnce {
     ch_versions = ch_versions.mix(TOP_N.out.versions)
 
     csv_files = TOP_N.out.topN
-    ch_csvs = csv_files.map{
-        meta, topN -> topN
-        }.collect().map{
-        topN -> [ [id:"merged_topN", irida_id: "sample"], topN]
-        }
+    ch_csvs = csv_files
+        .toSortedList { a, b -> a[0].id <=> b[0].id }
+        .map { items ->
+            [
+                [id: "merged_topN", irida_id: "sample"],
+                items.collect { meta, topN -> topN }
+            ]
+    }
 
     CSVTK_CONCAT (
         ch_csvs,

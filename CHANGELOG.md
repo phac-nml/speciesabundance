@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed unneeded `input_check` code from pipeline. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
 - Set nextflow version 25.10.4 to replace 'latest-everything' to confirm compatibility with next IRIDA-Next nextflow version in `.github/workflows` for nf-test. [PR #27](https://github.com/phac-nml/speciesabundance/pull/27)
 
+### `Modified`
+
+- Workflow to pass meta tags to Bracken process. [PR 31](https://github.com/phac-nml/speciesabundance/pull/31)
+- Fix sample order for `csvtk/merged_topN.csv` to avoid flakey snapshots for `iridanextoutput.json.gz`. [PR 31](https://github.com/phac-nml/speciesabundance/pull/31)
+
 ## 2.2.0 - 2024/09/26
 
 ### `Added`
