@@ -65,7 +65,7 @@ Additionally, you may choose to provide:
 
 - `--taxonomic_level` : to specify the taxonomic level of the bracken abundance estimation.
   - Must be one of : `S`(species)(default), `G`(genus), `O`(order), `F`(family), `P`(phylum), or `K`(kingdom)
-- `--kmer_len` : to specify the kmer length for the bracken distribution file used to estimate the abundance at the specified taxonomic level
+- `--read_len` : to specify the kmer length for the bracken distribution file used to estimate the abundance at the specified taxonomic level
   - Must be one of : 50, 75, 100 (default), 150, 200, 250, or 300
   - Selecting a lower k-mer length enhances sensitivity, while a higher k-mer length increases specificity.
 - `--top_n` : to specify the number of top results to keep and include in the metadata for IRIDA Next.

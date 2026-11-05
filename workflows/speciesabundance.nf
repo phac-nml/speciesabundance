@@ -103,7 +103,7 @@ workflow SpAnce {
     // Create channels for single value parameters
     ch_taxonomic_level = Channel.value(params.taxonomic_level)
     ch_top_n = Channel.value(params.top_n)
-    ch_kmer_len = Channel.value(params.kmer_len)
+    ch_read_len = Channel.value(params.read_len)
 
     FASTP_TRIM (
         input
@@ -120,7 +120,7 @@ workflow SpAnce {
         KRAKEN2.out.report_txt,
         bracken_database,
         ch_taxonomic_level,
-        ch_kmer_len
+        ch_read_len
     )
     ch_versions = ch_versions.mix(BRACKEN.out.versions)
 
@@ -247,11 +247,13 @@ def select_kraken_database(database, kraken2_db) {
 def select_bracken_database(database, bracken_db) {
 
     if (database) {
-        bracken_database = Channel.value(file(database))
+        path = "${database}/database${params.read_len}mers.kmer_distrib"
+        bracken_database = Channel.value(file(path))
         log.debug "Selecting Bracken database ${bracken_database} from '--database'."
     }
     else if (bracken_db) {
-        bracken_database = Channel.value(file(bracken_db))
+        path = "${bracken_db}/database${params.read_len}mers.kmer_distrib"
+        bracken_database = Channel.value(file(path))
         log.debug "Selecting Braken2 database ${bracken_database} from '--bracken_db'."
     }
     else {

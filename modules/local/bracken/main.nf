@@ -9,7 +9,7 @@ process BRACKEN {
     tuple val(meta), path(report_txt)
     path(database)
     val(taxonomic_level)
-    val(kmer_len)
+    val(read_len)
 
     output:
     tuple val(meta), path("*_bracken.txt"),                     emit: bracken_reports
@@ -30,13 +30,13 @@ process BRACKEN {
     """
     bracken \\
         ${args} \\
-        -d ${bracken_db} \\
+        -d . \\
         -t $task.cpus \\
         -i ${report_txt} \\
         -w ${meta.id}_${taxonomic_level}_bracken.txt \\
         -o ${meta.id}_${taxonomic_level}_bracken_abundances_unsorted.tsv \\
         -l ${taxonomic_level} \\
-        -r ${kmer_len}
+        -r ${read_len}
 
 
     # generate header to be used when adjusting the bracken report and abundances for unclassified reads in ADJUST_BRACKEN
