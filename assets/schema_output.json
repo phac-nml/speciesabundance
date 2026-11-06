@@ -1,0 +1,106 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/phac-nml/speciesabundance/main/assets/schema_output.json",
+    "title": "Species Abundance Output Schema",
+    "description": "The Species Abundance-specific schema used for validating IRIDA Next JSON output data",
+    "type": "object",
+    "properties": {
+        "files": {
+            "type": "object",
+            "properties": {
+                "global": {
+                    "type": "array",
+                    "items": {
+                        "properties": {
+                            "path": {
+                                "anyOf": [
+                                    {
+                                        "pattern": "^.*failure/.*failures_report.csv$",
+                                        "description": ""
+                                    }
+                                ]
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "uniqueItems": true
+                },
+                "samples": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "type": "array",
+                            "items": {
+                                "properties": {
+                                    "path": {
+                                        "anyOf": [
+                                            {
+                                                "pattern": "^.*fastp/.*.fastp.html$",
+                                                "description": ""
+                                            },
+                                            {
+                                                "pattern": "^.*adjust/.*_bracken_abundances.csv$",
+                                                "description": ""
+                                            },
+                                            {
+                                                "pattern": "^.*krona/.*.krona.html$",
+                                                "description": ""
+                                            }
+                                        ]
+                                    }
+                                },
+                                "additionalProperties": false
+                            },
+                            "uniqueItems": true
+                        }
+                    }
+                }
+            }
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "samples": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "type": "object",
+                            "properties": {
+                                "taxonomy_level": {
+                                    "description": "The taxonomy level used by Bracken."
+                                },
+                                "unclassified_name": {
+                                    "description": "The category for unclassified reads. Will contain 'unclassified'."
+                                },
+                                "unclassified_ncbi_taxonomy_id": {
+                                    "description": "The NCBI taxonomy ID assigned to unclassified reads."
+                                },
+                                "unclassified_num_assigned_reads": {
+                                    "description": "The number of unclassified reads."
+                                },
+                                "unclassified_fraction_total_reads": {
+                                    "description": "The total fraction of unclassified reads."
+                                }
+                            },
+                            "patternProperties": {
+                                "abundance_\\d+_name": {
+                                    "description": "The name of the nth most abundant species."
+                                },
+                                "abundance_\\d+_ncbi_taxonomy_id": {
+                                    "description": "The NCBI taxonomic ID of the nth most abundance species."
+                                },
+                                "abundance_\\d+_num_assigned_reads": {
+                                    "description": "The number of reads assigned as the nth most abundant species."
+                                },
+                                "abundance_\\d+_fraction_total_reads": {
+                                    "description": "The total fraction of reads assigned as the nth most abundant species."
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
