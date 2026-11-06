@@ -7,7 +7,7 @@ process BRACKEN {
 
     input:
     tuple val(meta), path(report_txt)
-    path(database)
+    path(database), name: "bracken_db/*"
     val(taxonomic_level)
     val(read_len)
 
@@ -30,7 +30,7 @@ process BRACKEN {
     """
     bracken \\
         ${args} \\
-        -d . \\
+        -d bracken_db/ \\
         -t $task.cpus \\
         -i ${report_txt} \\
         -w ${meta.id}_${taxonomic_level}_bracken.txt \\
