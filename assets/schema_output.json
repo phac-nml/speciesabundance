@@ -94,7 +94,7 @@
                                 },
                                 "abundance_\\d+_fraction_total_reads": {
                                     "description": "The total fraction of reads assigned as the nth most abundant species."
-                                },
+                                }
                             },
                             "additionalProperties": false
                         }
