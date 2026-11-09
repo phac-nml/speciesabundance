@@ -19,6 +19,11 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Set up Java
+      uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: "21"
     - name: Setup Nextflow
       uses: nf-core/setup-nextflow@v2
       with:
