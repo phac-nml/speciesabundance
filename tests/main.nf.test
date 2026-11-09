@@ -19,6 +19,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/output").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // check FASTP_TRIM JSON outputs from paired and single reads
             def fastp_JSON_paired = path("$launchDir/output/fastp/A1.fastp.json").json
 
@@ -160,6 +163,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/output").exists()
 
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             // check FASTP_TRIM JSON outputs from paired and single reads
             def fastp_JSON_paired = path("$launchDir/output/fastp/A1.fastp.json").json
 
@@ -295,6 +301,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/output").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // check FASTP_TRIM JSON outputs from paired and single reads
             def fastp_JSON_paired = path("$launchDir/output/fastp/A1__sample1.fastp.json").json
@@ -438,6 +447,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/output").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
         }
     }
 
@@ -490,6 +502,9 @@ nextflow_pipeline {
             assert workflow.success
             assert path("$launchDir/output").exists()
             assert !path("$launchDir/output/bracken").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
         }
     }
 
@@ -524,6 +539,9 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/output").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
 
             // check failures_report csv file
             assert path("$launchDir/output/failure/failures_report.csv").exists()
@@ -571,6 +589,10 @@ nextflow_pipeline {
         then {
             assert workflow.success
             assert path("$launchDir/output").exists()
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
             assert path("$launchDir/output/fastp").exists() == false
             assert path("$launchDir/output/kraken").exists() == false
             assert path("$launchDir/output/bracken").exists() == false
