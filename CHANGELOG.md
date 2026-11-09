@@ -19,11 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updating `custom/dumpsoftwareversions` and `csvtk/concat` nf-core modules to latest versions. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
 - Removed unneeded `input_check` code from pipeline. [PR #26](https://github.com/phac-nml/speciesabundance/pull/26)
 - Set nextflow version 25.10.4 to replace 'latest-everything' to confirm compatibility with next IRIDA-Next nextflow version in `.github/workflows` for nf-test. [PR #27](https://github.com/phac-nml/speciesabundance/pull/27)
+- Changed the parameter `kmer_len` to `read_len` to more accurately reflect its use in Bracken. [PR 33](https://github.com/phac-nml/speciesabundance/pull/33)
 
 ### `Modified`
 
 - Workflow to pass meta tags to Bracken process. [PR 31](https://github.com/phac-nml/speciesabundance/pull/31)
 - Fix sample order for `csvtk/merged_topN.csv` to avoid flakey snapshots for `iridanextoutput.json.gz`. [PR 31](https://github.com/phac-nml/speciesabundance/pull/31)
+- Database passed to Braken process to only include relevant files (i.e. database{read_length}mers.kmer_distrib) to reduce file-transfer requirements when run on Azure. [PR 33](https://github.com/phac-nml/speciesabundance/pull/33)
 
 ## 2.2.0 - 2024/09/26
 
