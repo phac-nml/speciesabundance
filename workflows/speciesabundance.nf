@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryLog; paramsSummaryMap; fromSamplesheet  } from 'plugin/nf-validation'
+include { paramsSummaryMap; paramsSummaryLog; samplesheetToList } from 'plugin/nf-schema'
 
 def logo = NfcoreTemplate.logo(workflow, params.monochrome_logs)
 def citation = '\n' + WorkflowMain.citation(workflow) + '\n'
@@ -26,12 +26,6 @@ WorkflowSpeciesabundance.initialise(params, log)
     IMPORT LOCAL MODULES/SUBWORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
-//
-// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
-//
-
-include { INPUT_CHECK      } from '../subworkflows/local/input_check'
 
 //
 // MODULES: Locally developed modules
@@ -73,7 +67,7 @@ workflow SpAnce {
 
     // Create a new channel of metadata from a sample sheet
     // NB: `input` corresponds to `params.input` and associated sample sheet schema
-    input = Channel.fromSamplesheet("input")
+    input = Channel.fromList(samplesheetToList(params.input, "assets/schema_input.json"))
         .map { meta, fastq_1, fastq_2 ->
             // Set meta.id to meta.irida_id if sample_name is not provided in the samplesheet
             if (!meta.id) {
@@ -109,7 +103,7 @@ workflow SpAnce {
     // Create channels for single value parameters
     ch_taxonomic_level = Channel.value(params.taxonomic_level)
     ch_top_n = Channel.value(params.top_n)
-    ch_kmer_len = Channel.value(params.kmer_len)
+    ch_read_len = Channel.value(params.read_len)
 
     FASTP_TRIM (
         input
@@ -126,7 +120,7 @@ workflow SpAnce {
         KRAKEN2.out.report_txt,
         bracken_database,
         ch_taxonomic_level,
-        ch_kmer_len
+        ch_read_len
     )
     ch_versions = ch_versions.mix(BRACKEN.out.versions)
 
@@ -173,11 +167,18 @@ workflow SpAnce {
 
     // Continue with pipeline to adjust for unclassified reads and re-estimated total reads
 
+    // Join by sample ID: independent queue channels may emit results in different orders.
+    adjust_inputs = KRAKEN2.out.report_txt
+        .map { meta, report_txt -> tuple(meta.id, meta, report_txt) }
+        .join(BRACKEN.out.bracken_reports.map { meta, report_txt -> tuple(meta.id, report_txt) })
+        .join(BRACKEN.out.bracken_output_tsv.map { meta, output_tsv -> tuple(meta.id, output_tsv) })
+        .join(BRACKEN.out.header_csv.map { meta, header_csv -> tuple(meta.id, header_csv) })
+        .map { id, meta, report_txt, bracken_report, bracken_output_tsv, header_csv ->
+            tuple(meta, report_txt, bracken_report, bracken_output_tsv, header_csv)
+        }
+
     ADJUST_BRACKEN (
-        KRAKEN2.out.report_txt,
-        BRACKEN.out.bracken_reports,
-        BRACKEN.out.bracken_output_tsv,
-        BRACKEN.out.header_csv,
+        adjust_inputs,
         ch_taxonomic_level
     )
     ch_versions = ch_versions.mix(ADJUST_BRACKEN.out.versions)
@@ -190,11 +191,14 @@ workflow SpAnce {
     ch_versions = ch_versions.mix(TOP_N.out.versions)
 
     csv_files = TOP_N.out.topN
-    ch_csvs = csv_files.map{
-        meta, topN -> topN
-        }.collect().map{
-            topN -> [ [id:"merged_topN", irida_id: "sample"], topN]
-        }
+    ch_csvs = csv_files
+        .toSortedList { a, b -> a[0].id <=> b[0].id }
+        .map { items ->
+            [
+                [id: "merged_topN", irida_id: "sample"],
+                items.collect { meta, topN -> topN }
+            ]
+    }
 
     CSVTK_CONCAT (
         ch_csvs,
@@ -243,11 +247,13 @@ def select_kraken_database(database, kraken2_db) {
 def select_bracken_database(database, bracken_db) {
 
     if (database) {
-        bracken_database = Channel.value(file(database))
+        path = "${database}/database${params.read_len}mers.kmer_distrib"
+        bracken_database = Channel.value(file(path))
         log.debug "Selecting Bracken database ${bracken_database} from '--database'."
     }
     else if (bracken_db) {
-        bracken_database = Channel.value(file(bracken_db))
+        path = "${bracken_db}/database${params.read_len}mers.kmer_distrib"
+        bracken_database = Channel.value(file(path))
         log.debug "Selecting Braken2 database ${bracken_database} from '--bracken_db'."
     }
     else {

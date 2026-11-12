@@ -14,7 +14,7 @@ The input to the pipeline is a standard sample sheet (passed as `--input samples
 | ------- | --------------- | --------------- |
 | SampleA | file_1.fastq.gz | file_2.fastq.gz |
 
-An [example samplesheet](../assets/samplesheet_minimal.csv) has been provided with the pipeline.
+An [example samplesheet](../assets/samplesheet_minimal.csv) has been provided with the pipeline. Or as a JSON, see the [example JSON sample sheet](../assets/samplesheet.json) provided with the pipeline.
 
 The structure of this file is defined in [assets/schema_input.json](assets/schema_input.json). Validation of the sample sheet is performed by [nf-validation](https://nextflow-io.github.io/nf-validation/).
 
@@ -65,7 +65,7 @@ Additionally, you may choose to provide:
 
 - `--taxonomic_level` : to specify the taxonomic level of the bracken abundance estimation.
   - Must be one of : `S`(species)(default), `G`(genus), `O`(order), `F`(family), `P`(phylum), or `K`(kingdom)
-- `--kmer_len` : to specify the kmer length for the bracken distribution file used to estimate the abundance at the specified taxonomic level
+- `--read_len` : to specify the read length for the bracken distribution file used to estimate the abundance at the specified taxonomic level
   - Must be one of : 50, 75, 100 (default), 150, 200, 250, or 300
   - Selecting a lower k-mer length enhances sensitivity, while a higher k-mer length increases specificity.
 - `--top_n` : to specify the number of top results to keep and include in the metadata for IRIDA Next.
