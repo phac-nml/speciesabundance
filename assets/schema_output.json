@@ -45,6 +45,10 @@
                                             {
                                                 "pattern": "^.*krona/.*.krona.html$",
                                                 "description": ""
+                                            },
+                                            {
+                                                "pattern": "^.*kraken2/.*_kraken2_report.txt$",
+                                                "description": ""
                                             }
                                         ]
                                     }
