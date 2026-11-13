@@ -14,6 +14,9 @@
                     "path": "adjust/A1_S_bracken_abundances.csv"
                 },
                 {
+                    "path": "kraken2/A1_kraken2_report.txt"
+                },
+                {
                     "path": "fastp/A1.fastp.html"
                 }
             ],
@@ -25,6 +28,9 @@
                     "path": "adjust/B2_S_bracken_abundances.csv"
                 },
                 {
+                    "path": "kraken2/B2_kraken2_report.txt"
+                },
+                {
                     "path": "fastp/B2.fastp.html"
                 }
             ],
@@ -34,6 +40,9 @@
                 },
                 {
                     "path": "adjust/C3_S_bracken_abundances.csv"
+                },
+                {
+                    "path": "kraken2/C3_kraken2_report.txt"
                 },
                 {
                     "path": "fastp/C3.fastp.html"

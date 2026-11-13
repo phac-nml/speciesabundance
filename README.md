@@ -133,6 +133,7 @@ An example of the what the contents of the IRIDA Next JSON file looks like for t
         "samples": {
             "sampleID": [
                 {"path": "adjust/sampleID_S_bracken_abundances.csv"},
+                {"path": "kraken/sampleID_kraken2_report.txt"},
                 {"path": "krona/sampleID.krona.html"},
                 {"path": "fastp/sampleID.fastp.html"}
             ]
