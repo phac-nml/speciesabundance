@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Workflow to pass meta tags to Bracken process. [PR 31](https://github.com/phac-nml/speciesabundance/pull/31)
 - Fix sample order for `csvtk/merged_topN.csv` to avoid flakey snapshots for `iridanextoutput.json.gz`. [PR 31](https://github.com/phac-nml/speciesabundance/pull/31)
 - Database passed to Braken process to only include relevant files (i.e. database{read_length}mers.kmer_distrib) to reduce file-transfer requirements when run on Azure. [PR 33](https://github.com/phac-nml/speciesabundance/pull/33)
+- Added `/kraken2/{sample}_kraken2_report.txt` to the `results/iridanext.output.json.gz`. [PR 34](https://github.com/phac-nml/speciesabundance/pull/34)
 
 ## 2.2.0 - 2024/09/26
 
