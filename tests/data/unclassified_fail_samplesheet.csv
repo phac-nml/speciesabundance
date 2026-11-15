@@ -1,0 +1,2 @@
+sample,sample_name,fastq_1,fastq_2
+SAMPLE1,A1,https://raw.githubusercontent.com/phac-nml/speciesabundance/dev/tests/data/fastq/test_unclassified_R1.fastq.gz,

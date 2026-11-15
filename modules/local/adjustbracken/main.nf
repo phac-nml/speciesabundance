@@ -18,10 +18,7 @@ process ADJUST_BRACKEN {
         'biocontainers/python:3.8.3' }"
 
     input:
-    tuple val(meta), path(report_txt)
-    tuple val(meta), path(bracken_reports)
-    tuple val(meta), path(bracken_output_tsv)
-    tuple val(meta), path(header_csv)
+    tuple val(meta), path(report_txt), path(bracken_reports), path(bracken_output_tsv), path(header_csv)
     val(taxonomic_level)
 
     output:
