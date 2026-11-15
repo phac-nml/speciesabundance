@@ -508,6 +508,56 @@ nextflow_pipeline {
         }
     }
 
+    test("No classified KRAKEN2 output passed to BRACKEN (failure)") {
+        tag "pipeline_failure"
+        tag "unclassified_bracken"
+
+        when {
+            params {
+                input = "$projectDir/tests/data/unclassified_fail_samplesheet.csv"
+                database = "$projectDir/tests/data/minidb"
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert path("$launchDir/output").exists()
+            assert !path("$launchDir/output/bracken").exists()
+            assert !path("$launchDir/output/csvtk/merged_topN.csv").exists()
+            assert path("$launchDir/output/fastp/A1.fastp.json").exists()
+            assert path("$launchDir/output/fastp/A1.fastp.html").exists()
+            assert path("$launchDir/output/fastp/A1_trimmed.fastq.gz").exists()
+
+            // check failure_report
+            assert path("$launchDir/output/failure/failures_report.csv").exists()
+
+            def lines = path("$launchDir/output/failure/failures_report.csv").readLines()
+
+            assert lines.size() == 2
+            assert lines.contains("sample,module,error_message")
+            assert lines.contains("A1,BRACKEN,The reads may have failed to classify against the selected Kraken2 database OR the database directory may be missing the Bracken distribution files")
+
+            def combined_stdout = workflow.stdout.join(",")
+            assert combined_stdout.contains("JSON did not match schema") == false
+
+            // check IRIDA Next JSON output
+
+            def iridanext_json = path("$launchDir/output/iridanext.output.json").json
+            def iridanext_global = iridanext_json.files.global
+            def iridanext_samples = iridanext_json.files.samples
+            def iridanext_metadata = iridanext_json.metadata.samples
+
+            // global output file
+            assert iridanext_global.findAll {it.path == "failure/failures_report.csv" }.size() == 1
+
+            // samples output files
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "fastp/A1.fastp.html" }.size() == 1
+            assert iridanext_samples.SAMPLE1.findAll { it.path == "kraken2/A1_kraken2_report.txt" }.size() == 1
+            assert iridanext_metadata.isEmpty()
+        }
+    }
+
     test ("Test schema validation of database parameters check for file existance"){
         tag "fail_validation"
 

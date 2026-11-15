@@ -193,6 +193,7 @@ workflow SpAnce {
     csv_files = TOP_N.out.topN
     ch_csvs = csv_files
         .toSortedList { a, b -> a[0].id <=> b[0].id }
+        .filter { items -> !items.isEmpty() }
         .map { items ->
             [
                 [id: "merged_topN", irida_id: "sample"],
